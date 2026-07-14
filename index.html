@@ -8,65 +8,56 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-  :root{
-    --bg:#0c1620; --bg2:#122130; --panel:#152838; --line:#263d52;
-    --ink:#eaf1f5; --muted:#89a2b4; --gold:#f2b43d; --flamme:#e2503b; --ice:#74bccd; --ok:#5fc27e;
-  }
-  html[data-theme="light"]{
-    --bg:#f3efe7; --bg2:#ffffff; --panel:#faf7f1; --line:#ded7c8;
-    --ink:#1b2733; --muted:#5e7180; --gold:#a9761a; --flamme:#c23b27; --ice:#2c7a90; --ok:#3c9159;
-  }
+  :root{--bg:#0c1620;--bg2:#122130;--panel:#152838;--line:#263d52;--ink:#eaf1f5;--muted:#89a2b4;--gold:#f2b43d;--flamme:#e2503b;--ice:#74bccd;--ok:#5fc27e;}
+  html[data-theme="light"]{--bg:#f3efe7;--bg2:#ffffff;--panel:#faf7f1;--line:#ded7c8;--ink:#1b2733;--muted:#5e7180;--gold:#a9761a;--flamme:#c23b27;--ice:#2c7a90;--ok:#3c9159;}
   html{background:var(--bg)}
-  .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px}
-  .theme-toggle{font-family:'Inter';font-weight:600;font-size:.76rem;color:var(--muted);background:var(--bg2);border:1px solid var(--line);border-radius:999px;padding:8px 14px;cursor:pointer;white-space:nowrap;transition:all .15s}
-  .theme-toggle:hover{border-color:var(--gold);color:var(--ink)}
   *{box-sizing:border-box;margin:0;padding:0}
-  html{-webkit-text-size-adjust:100%}
-  body{background:var(--bg); color:var(--ink); font-family:'Inter',system-ui,sans-serif; line-height:1.5;
-    background-image:linear-gradient(rgba(38,61,82,.35) 1px,transparent 1px),linear-gradient(90deg,rgba(38,61,82,.25) 1px,transparent 1px);
-    background-size:100% 46px, 46px 100%;}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;line-height:1.5;
+    background-image:linear-gradient(rgba(38,61,82,.35) 1px,transparent 1px),linear-gradient(90deg,rgba(38,61,82,.25) 1px,transparent 1px);background-size:100% 46px,46px 100%;}
   .wrap{max-width:960px;margin:0 auto;padding:clamp(20px,4vw,44px) clamp(16px,4vw,32px) 60px}
+  .topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+  .toprt{display:flex;gap:8px;align-items:center}
+  .langsel{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+  .langsel button{font-family:'Inter';font-weight:700;font-size:.72rem;color:var(--muted);background:var(--bg2);border:none;padding:8px 12px;cursor:pointer}
+  .langsel button[aria-pressed="true"]{background:var(--gold);color:#1a1206}
+  .theme-toggle{font-family:'Inter';font-weight:600;font-size:.76rem;color:var(--muted);background:var(--bg2);border:1px solid var(--line);border-radius:999px;padding:8px 14px;cursor:pointer;white-space:nowrap}
+  .theme-toggle:hover{border-color:var(--gold);color:var(--ink)}
   .eyebrow{font-family:'Barlow Condensed';font-weight:600;letter-spacing:.28em;text-transform:uppercase;font-size:.8rem;color:var(--gold)}
   h1{font-family:'Barlow Condensed';font-weight:700;line-height:.92;font-size:clamp(2.6rem,9vw,5.2rem);letter-spacing:-.01em;margin:.15em 0 .1em}
   h1 .sub{display:block;color:var(--ink)}
-  .route{font-family:'JetBrains Mono';font-size:clamp(.72rem,2.4vw,.9rem);color:var(--muted);letter-spacing:.02em;margin-top:.4em}
+  .event{margin-top:6px;color:var(--gold);font-weight:700;letter-spacing:.02em;font-family:'JetBrains Mono';font-size:clamp(.72rem,2.4vw,.9rem)}
+  .route{font-family:'JetBrains Mono';font-size:clamp(.72rem,2.4vw,.9rem);color:var(--muted);letter-spacing:.02em;margin-top:.3em}
   .route b{color:var(--ice);font-weight:700}
-
   .profile{margin:26px 0 8px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,#0f1e2b,#0c1824);overflow:hidden;position:relative}
   .profile svg{display:block;width:100%;height:auto}
   .prof-cap{position:absolute;top:10px;left:14px;font-family:'Barlow Condensed';font-weight:600;letter-spacing:.18em;text-transform:uppercase;font-size:.7rem;color:#89a2b4}
-
   .panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:clamp(18px,3vw,26px);margin-top:22px}
   .panel-title{font-family:'Barlow Condensed';font-weight:600;letter-spacing:.16em;text-transform:uppercase;font-size:.82rem;color:var(--muted);margin-bottom:16px}
   .fields3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
-  @media(max-width:560px){.fields3{grid-template-columns:1fr 1fr}.fields3 .full{grid-column:1/-1}}
+  @media(max-width:560px){.fields3{grid-template-columns:1fr 1fr}}
   label{display:block;font-size:.78rem;color:var(--muted);margin-bottom:7px;font-weight:500}
-  .inp{display:flex;align-items:baseline;gap:8px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;transition:border-color .15s}
+  .inp{display:flex;align-items:baseline;gap:8px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
   .inp:focus-within{border-color:var(--gold)}
-  .inp input{background:none;border:none;color:var(--ink);font-family:'JetBrains Mono';font-weight:700;font-size:1.5rem;width:100%;outline:none}
-  .inp.sm input{font-size:1.15rem}
+  .inp input{background:none;border:none;color:var(--ink);font-family:'JetBrains Mono';font-weight:700;font-size:1.15rem;width:100%;outline:none}
   .inp .unit{font-family:'JetBrains Mono';color:var(--muted);font-size:.9rem;font-weight:500}
-  input[type=time]{color-scheme:dark}
-  .inp select{background:none;border:none;color:var(--ink);font-family:'JetBrains Mono';font-weight:700;font-size:1.15rem;width:100%;outline:none;appearance:none;cursor:pointer}
+  .inp select{background:none;border:none;color:var(--ink);font-family:'JetBrains Mono';font-weight:700;font-size:1.05rem;width:100%;outline:none;appearance:none;cursor:pointer}
   .inp select option{background:#122130;color:#eaf1f5}
   .obj{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px}
-  .obj button{font-family:'Inter';font-weight:600;font-size:.82rem;color:var(--muted);background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:12px 6px;cursor:pointer;transition:all .15s;line-height:1.25}
+  .obj button{font-family:'Inter';font-weight:600;font-size:.82rem;color:var(--muted);background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:12px 6px;cursor:pointer;line-height:1.25}
   .obj button small{display:block;font-weight:400;font-size:.68rem;opacity:.7;margin-top:2px}
-  .obj button:hover{border-color:var(--muted)}
   .obj button[aria-pressed="true"]{background:var(--gold);color:#1a1206;border-color:var(--gold)}
-
   .results{margin-top:26px}
   .total{display:flex;flex-wrap:wrap;align-items:flex-end;gap:6px 28px;border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:6px}
-  .total .big{font-family:'Barlow Condensed';font-weight:700;font-size:clamp(3rem,12vw,5rem);line-height:.85;color:var(--gold);letter-spacing:-.01em}
+  .total .big{font-family:'Barlow Condensed';font-weight:700;font-size:clamp(3rem,12vw,5rem);line-height:.85;color:var(--gold)}
   .total .meta{font-size:.82rem;color:var(--muted);padding-bottom:8px}
   .total .meta b{color:var(--ice);font-family:'JetBrains Mono';font-weight:700}
-
   .timeline{display:flex;flex-direction:column}
   .col{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:start;padding:16px 4px;border-bottom:1px solid var(--line)}
   .col .idx{font-family:'Barlow Condensed';font-weight:700;font-size:1.5rem;color:var(--line);width:26px;text-align:center;padding-top:2px}
   .col.key .idx{color:var(--flamme)}
-  .col .name{font-family:'Barlow Condensed';font-weight:600;font-size:1.35rem;letter-spacing:.01em}
+  .col .name{font-family:'Barlow Condensed';font-weight:600;font-size:1.35rem}
   .col .spec{font-family:'JetBrains Mono';font-size:.72rem;color:var(--muted);margin-top:1px}
   .col .cue{font-size:.74rem;color:var(--ice);margin-top:3px;font-style:italic}
   .col .nums{text-align:right;white-space:nowrap;padding-top:2px}
@@ -81,17 +72,12 @@
   .liaison .ls{font-family:'JetBrains Mono';font-size:.68rem;color:var(--line)}
   .liaison .lt{text-align:right;white-space:nowrap;font-family:'JetBrains Mono';font-size:.76rem;color:var(--muted)}
   .liaison .lp{font-family:'JetBrains Mono';font-size:.68rem;color:var(--muted);opacity:.7}
-
-  .ravito{margin-top:6px;font-size:.72rem;color:var(--ink);background:rgba(116,188,205,.09);
-    border:1px solid rgba(116,188,205,.28);border-radius:7px;padding:5px 9px;display:inline-block}
+  .ravito{margin-top:6px;font-size:.72rem;color:var(--ink);background:rgba(116,188,205,.09);border:1px solid rgba(116,188,205,.28);border-radius:7px;padding:5px 9px;display:inline-block}
   .ravito .rk{font-family:'JetBrains Mono';color:var(--ice);font-weight:700}
-  .ravito+.ravito{margin-left:6px}
-  .barrier{margin-top:7px;font-size:.72rem;font-family:'JetBrains Mono';padding:5px 9px;border-radius:7px;display:inline-block;
-    background:rgba(226,80,59,.1);border:1px solid rgba(226,80,59,.3);color:#f0a99e}
+  .barrier{margin-top:7px;font-size:.72rem;font-family:'JetBrains Mono';padding:5px 9px;border-radius:7px;display:inline-block;background:rgba(226,80,59,.1);border:1px solid rgba(226,80,59,.3);color:#f0a99e}
   .barrier b{color:var(--flamme)} .barrier.ok{background:rgba(95,194,126,.1);border-color:rgba(95,194,126,.3);color:#b6e6c6}
-  .barrier.ok b{color:var(--ok)} .barrier .mrg{opacity:.85}
+  .barrier.ok b{color:var(--ok)}
   .rzone{grid-column:2/-1}
-
   .nutri-sub{font-size:.86rem;color:var(--muted);margin:-6px 0 18px}
   .nutri-sub b{color:var(--gold);font-family:'JetBrains Mono';font-weight:700}
   .sliders{margin-top:20px;display:grid;gap:18px}
@@ -100,497 +86,379 @@
   .slider-row .sval{font-family:'JetBrains Mono';font-weight:700;color:var(--gold);font-size:1.1rem}
   .slider-row .sval small{color:var(--muted);font-weight:500;font-size:.72rem}
   input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:6px;background:var(--bg2);outline:none;border:1px solid var(--line);accent-color:var(--gold)}
-  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;border-radius:50%;background:var(--gold);border:3px solid #0c1620;cursor:pointer;box-shadow:0 0 0 1px var(--gold)}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;border-radius:50%;background:var(--gold);border:3px solid #0c1620;cursor:pointer}
   input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--gold);border:3px solid #0c1620;cursor:pointer}
   .gauge-wrap{margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
   .gauge-top{display:flex;justify-content:space-between;align-items:baseline;font-family:'JetBrains Mono';font-size:.8rem;color:var(--muted);margin-bottom:8px}
   .gauge-top b{color:var(--ink);font-weight:700}
   .gauge{position:relative;height:26px;background:var(--bg2);border:1px solid var(--line);border-radius:8px;overflow:hidden}
-  .gauge-fill{height:100%;width:0;background:linear-gradient(90deg,#c9902f,var(--gold));transition:width .25s ease,background .25s}
+  .gauge-fill{height:100%;width:0;background:linear-gradient(90deg,#c9902f,var(--gold));transition:width .25s,background .25s}
   .gauge.short .gauge-fill{background:linear-gradient(90deg,#b23a2c,var(--flamme))}
   .gauge.good .gauge-fill{background:linear-gradient(90deg,#3f9a5e,var(--ok))}
   .verdict{margin-top:16px;font-size:.92rem;font-weight:500;color:var(--ink)}
   .verdict .em{font-family:'JetBrains Mono';font-weight:700}
   .verdict.short .em{color:var(--flamme)} .verdict.good .em{color:var(--ok)} .verdict.over .em{color:var(--gold)}
   .sodium{margin-top:14px;font-size:.78rem;color:var(--muted)} .sodium b{color:var(--ice)}
-  .weather .wtitle-row{display:flex;justify-content:space-between;align-items:center}
-  .wrefresh{background:none;border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:5px 10px;font-size:.72rem;cursor:pointer;font-family:'Inter'}
-  .wrefresh:hover{border-color:var(--gold);color:var(--gold)}
-  .wgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
-  @media(max-width:520px){.wgrid{grid-template-columns:1fr}}
-  .wcard{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:14px}
-  .wcard .wloc{font-size:.8rem;color:var(--muted);font-weight:500;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
-  .wcard .wloc span{font-family:'JetBrains Mono';font-size:.68rem;opacity:.75}
-  .wcard .wtemp{font-family:'Barlow Condensed';font-weight:700;font-size:2rem;color:var(--ink);margin-top:4px;line-height:1}
-  .wcard .wtemp .mn{color:var(--ice)} .wcard .wtemp .sep{color:var(--muted);font-weight:500} .wcard .wtemp .mx{color:var(--gold)}
-  .wcard .wcond{font-size:.78rem;color:var(--muted);margin-top:6px}
-  .wadvice{margin-top:14px;font-size:.84rem;color:var(--ink);background:rgba(242,180,61,.08);border:1px solid rgba(242,180,61,.28);border-radius:8px;padding:12px 14px;line-height:1.45}
-  .wadvice b{color:var(--gold)}
-  .wmeta{margin-top:10px;font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono'}
-  .wloading,.werror{font-size:.85rem;color:var(--muted);padding:8px 0}
-  .werror b{color:var(--flamme)}
-  .foot{margin-top:26px;font-size:.72rem;color:var(--muted);line-height:1.6} .foot b{color:var(--ice)}
-  /* actions */
   .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
-  .actbtn{font-family:'Inter';font-weight:600;font-size:.86rem;color:var(--ink);background:var(--bg2);
-    border:1px solid var(--line);border-radius:10px;padding:12px 18px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:8px}
+  .actbtn{font-family:'Inter';font-weight:600;font-size:.86rem;color:var(--ink);background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:12px 18px;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
   .actbtn:hover{border-color:var(--gold);color:var(--gold)}
   .actbtn.prim{background:var(--gold);color:#1a1206;border-color:var(--gold)}
-  .actbtn.prim:hover{filter:brightness(1.06);color:#1a1206}
-  /* modale sticker */
-  .modal{position:fixed;inset:0;background:rgba(6,12,18,.82);display:none;align-items:flex-start;justify-content:center;
-    padding:24px 12px;overflow:auto;z-index:50}
+  .foot{margin-top:26px;font-size:.72rem;color:var(--muted);line-height:1.6} .foot b{color:var(--ice)}
+  .modal{position:fixed;inset:0;background:rgba(6,12,18,.82);display:none;align-items:flex-start;justify-content:center;padding:24px 12px;overflow:auto;z-index:50}
   .modal.open{display:flex}
   .sheet{background:#fff;color:#111;border-radius:12px;max-width:560px;width:100%;padding:18px}
-  .sheet h3{font-family:'Barlow Condensed';font-weight:700;font-size:1.4rem;color:#111;margin-bottom:2px}
+  .sheet h3{font-family:'Barlow Condensed';font-weight:700;font-size:1.4rem;color:#111}
   .sheet p.hint{font-size:.78rem;color:#555;margin-bottom:12px}
   .sheet .close{float:right;border:none;background:#eee;border-radius:8px;padding:6px 12px;cursor:pointer;font-weight:600}
   .sticker-print{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-  /* le sticker lui-même (35mm ~132px @96dpi) */
   .tt{width:132px;border:1px dashed #999;border-radius:6px;overflow:hidden;font-family:Arial,sans-serif}
   .tt .h{background:#1c5e8c;color:#fff;text-align:center;padding:5px 3px}
-  .tt .h b{font-size:11px;letter-spacing:.5px;display:block}
-  .tt .h small{font-size:7px;opacity:.9}
-  .tt .r{padding:4px 5px;border-bottom:1px solid #ddd;font-size:8px;line-height:1.15}
-  .tt .r.k{background:#fff4d6} .tt .r.c{background:#fbe9e9} .tt .r.d{background:#eef4fa} .tt .r.f{background:#f5f5f5}
-  .tt .r .km{font-weight:700;color:#111;font-size:8.5px}
-  .tt .r .w{font-weight:700;color:#c8641a;font-size:10px}
-  .tt .r.k .w{color:#c81c36}
-  .tt .r .rav{color:#1c6e8c;font-weight:700}
-  .tt .r .nm{color:#666}
-  .tt .foot{background:#111;color:#fff;text-align:center;font-size:6.5px;padding:4px 3px;font-style:italic;line-height:1.3}
-  @media print{
-    body{background:#fff !important}
-    .topbar,.actions,.panel .obj,.modal{display:none !important}
-    .foot{color:#333 !important}
-    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  }
-
+  .tt .h b{font-size:11px;display:block}.tt .h small{font-size:7px;opacity:.9}
+  .tt .r{padding:4px 5px;border-bottom:1px solid #ddd;font-size:8px;line-height:1.15;display:flex;justify-content:space-between}
+  .tt .r.k{background:#fff4d6}.tt .r.c{background:#fbe9e9}.tt .r.d{background:#eef4fa}.tt .r.f{background:#f5f5f5}
+  .tt .r .km{font-weight:700;color:#111}.tt .r .w{font-weight:700;color:#c8641a}.tt .r.k .w{color:#c81c36}
+  .tt .r .rav{color:#1c6e8c;font-weight:700;font-size:7px}.tt .r .nm{color:#666;font-size:7px}
+  .tt .foot2{background:#111;color:#fff;text-align:center;font-size:6.5px;padding:4px 3px;font-style:italic;line-height:1.3}
+  @media print{body{background:#fff!important}.topbar,.actions,.panel .obj,.modal{display:none!important}}
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 <div class="wrap">
-
-  <div class="topbar"><div class="eyebrow">SAS to Summit · Roadbook officiel</div><button id="themeBtn" class="theme-toggle" aria-label="Changer le thème">☀ Mode clair</button></div>
+  <div class="topbar">
+    <div class="eyebrow" id="eyebrow"></div>
+    <div class="toprt">
+      <div class="langsel"><button data-l="fr">FR</button><button data-l="en">EN</button></div>
+      <button id="themeBtn" class="theme-toggle"></button>
+    </div>
+  </div>
   <h1>SAS to<span class="sub">Summit</span></h1>
-  <div class="route" style="margin-top:6px;color:var(--gold);font-weight:700;letter-spacing:.02em">L'ÉTAPE DU TOUR 2026</div>
-  <div class="route"><b>Le Bourg-d'Oisans</b> → <b>Alpe d'Huez</b> · 170 km · 5 400 m D+ · 4 cols · dim. 19 juillet</div>
-
-  <div class="profile">
-    <div class="prof-cap">Profil de l'étape reine</div>
-    <svg viewBox="0 0 1000 320" preserveAspectRatio="none" role="img" aria-label="Profil détaillé de l'étape avec ravitos">
+  <div class="event">L'ÉTAPE DU TOUR 2026</div>
+  <div class="route" id="route"></div>
+  <div class="profile"><div class="prof-cap" id="profcap"></div>
+    <svg viewBox="0 0 1000 320" preserveAspectRatio="none" role="img" aria-label="profil">
       <defs><linearGradient id="fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f2b43d" stop-opacity="0.28"/><stop offset="1" stop-color="#f2b43d" stop-opacity="0.02"/></linearGradient></defs>
       <path d="M0,278.4 L85,268.0 L100,243.3 L115,214.6 L135,220.0 L174,157.7 L191,152.9 L209,136.1 L226,116.0 L306,238.0 L403,287.6 L471,278.0 L521,203.9 L541,176.1 L568,194.0 L606,175.4 L626,128.6 L650,89.2 L676,47.0 L729,117.0 L806,250.0 L871,236.3 L900,196.7 L947,124.1 L971,157.6 L1000,142.0 L1000,320 L0,320 Z" fill="url(#fill)"/>
       <path d="M0,278.4 L85,268.0 L100,243.3 L115,214.6 L135,220.0 L174,157.7 L191,152.9 L209,136.1 L226,116.0 L306,238.0 L403,287.6 L471,278.0 L521,203.9 L541,176.1 L568,194.0 L606,175.4 L626,128.6 L650,89.2 L676,47.0 L729,117.0 L806,250.0 L871,236.3 L900,196.7 L947,124.1 L971,157.6 L1000,142.0" fill="none" stroke="#f2b43d" stroke-width="2" stroke-linejoin="round"/>
-      <g font-family="Barlow Condensed"><circle cx="226" cy="116.0" r="4" fill="#f2b43d"/><text x="226" y="107.0" fill="#eaf1f5" font-size="14" font-weight="600" text-anchor="middle">Croix de Fer</text><text x="226" y="94.0" fill="#f2b43d" font-size="10.5" text-anchor="middle" font-family="JetBrains Mono">2067 m</text><circle cx="541" cy="176.1" r="4" fill="#f2b43d"/><text x="541" y="167.1" fill="#eaf1f5" font-size="14" font-weight="600" text-anchor="middle">Télégraphe</text><text x="541" y="154.1" fill="#f2b43d" font-size="10.5" text-anchor="middle" font-family="JetBrains Mono">1566 m</text><circle cx="676" cy="47.0" r="4.5" fill="#e2503b"/><text x="676" y="38.0" fill="#eaf1f5" font-size="16" font-weight="700" text-anchor="middle">Galibier</text><text x="676" y="25.0" fill="#e2503b" font-size="10.5" text-anchor="middle" font-family="JetBrains Mono">2642 m</text><circle cx="947" cy="124.1" r="4" fill="#f2b43d"/><text x="947" y="115.1" fill="#eaf1f5" font-size="14" font-weight="600" text-anchor="middle">Sarenne</text><text x="947" y="102.1" fill="#f2b43d" font-size="10.5" text-anchor="middle" font-family="JetBrains Mono">1999 m</text></g>
-      <g><circle cx="226" cy="116.0" r="3" fill="#74bccd" stroke="#0c1620" stroke-width="1"/><text x="226" y="131.0" fill="#74bccd" font-size="9.5" font-weight="700" text-anchor="middle" font-family="JetBrains Mono">R1</text><circle cx="403" cy="287.6" r="3" fill="#74bccd" stroke="#0c1620" stroke-width="1"/><text x="403" y="301.6" fill="#74bccd" font-size="9.5" font-weight="700" text-anchor="middle" font-family="JetBrains Mono">R2</text><circle cx="471" cy="278.0" r="3" fill="#74bccd" stroke="#0c1620" stroke-width="1"/><text x="471" y="292.0" fill="#74bccd" font-size="9.5" font-weight="700" text-anchor="middle" font-family="JetBrains Mono">R3</text><circle cx="606" cy="175.4" r="3" fill="#74bccd" stroke="#0c1620" stroke-width="1"/><text x="606" y="189.4" fill="#74bccd" font-size="9.5" font-weight="700" text-anchor="middle" font-family="JetBrains Mono">R4</text><circle cx="676" cy="47.0" r="3" fill="#74bccd" stroke="#0c1620" stroke-width="1"/><text x="676" y="62.0" fill="#74bccd" font-size="9.5" font-weight="700" text-anchor="middle" font-family="JetBrains Mono">R5</text><circle cx="729" cy="117.0" r="3" fill="#74bccd" stroke="#0c1620" stroke-width="1"/><text x="729" y="131.0" fill="#74bccd" font-size="9.5" font-weight="700" text-anchor="middle" font-family="JetBrains Mono">R6</text><circle cx="900" cy="196.7" r="3" fill="#74bccd" stroke="#0c1620" stroke-width="1"/><text x="900" y="210.7" fill="#74bccd" font-size="9.5" font-weight="700" text-anchor="middle" font-family="JetBrains Mono">R7</text><circle cx="1000" cy="142.0" r="3" fill="#74bccd" stroke="#0c1620" stroke-width="1"/><text x="996" y="156.0" fill="#74bccd" font-size="9.5" font-weight="700" text-anchor="end" font-family="JetBrains Mono">🏁</text></g>
+      <g font-family="Barlow Condensed"><circle cx="226" cy="116.0" r="4" fill="#f2b43d"/><text x="226" y="107.0" fill="#eaf1f5" font-size="14" font-weight="600" text-anchor="middle">Croix de Fer</text><text x="226" y="94.0" fill="#f2b43d" font-size="10.5" text-anchor="middle" font-family="JetBrains Mono">2067 m</text><circle cx="541" cy="176.1" r="4" fill="#f2b43d"/><text x="541" y="167.1" fill="#eaf1f5" font-size="14" font-weight="600" text-anchor="middle">Télégraphe</text><text x="541" y="154.1" fill="#f2b43d" font-size="10.5" text-anchor="middle" font-family="JetBrains Mono">1566 m</text><circle cx="676" cy="47.0" r="4.5" fill="#e2503b"/><text x="676" y="38.0" fill="#eaf1f5" font-size="16" font-weight="700" text-anchor="middle">Galibier</text><text x="676" y="25.0" fill="#e2503b" font-size="10.5" text-anchor="middle" font-family="JetBrains Mono">2642 m</text><circle cx="947" cy="124.1" r="4" fill="#f2b43d"/><text x="947" y="115.1" fill="#eaf1f5" font-size="14" font-weight="600" text-anchor="middle">Sarenne</text><text x="947" y="102.1" fill="#f2b43d" font-size="10.5" text-anchor="middle" font-family="JetBrains Mono">1999 m</text></g><g><circle cx="226" cy="116.0" r="3" fill="#74bccd" stroke="#0c1620" stroke-width="1"/><text x="226" y="131.0" fill="#74bccd" font-size="9.5" font-weight="700" text-anchor="middle" font-family="JetBrains Mono">R1</text><circle cx="403" cy="287.6" r="3" fill="#74bccd" stroke="#0c1620" stroke-width="1"/><text x="403" y="301.6" fill="#74bccd" font-size="9.5" font-weight="700" text-anchor="middle" font-family="JetBrains Mono">R2</text><circle cx="471" cy="278.0" r="3" fill="#74bccd" stroke="#0c1620" stroke-width="1"/><text x="471" y="292.0" fill="#74bccd" font-size="9.5" font-weight="700" text-anchor="middle" font-family="JetBrains Mono">R3</text><circle cx="606" cy="175.4" r="3" fill="#74bccd" stroke="#0c1620" stroke-width="1"/><text x="606" y="189.4" fill="#74bccd" font-size="9.5" font-weight="700" text-anchor="middle" font-family="JetBrains Mono">R4</text><circle cx="676" cy="47.0" r="3" fill="#74bccd" stroke="#0c1620" stroke-width="1"/><text x="676" y="62.0" fill="#74bccd" font-size="9.5" font-weight="700" text-anchor="middle" font-family="JetBrains Mono">R5</text><circle cx="729" cy="117.0" r="3" fill="#74bccd" stroke="#0c1620" stroke-width="1"/><text x="729" y="131.0" fill="#74bccd" font-size="9.5" font-weight="700" text-anchor="middle" font-family="JetBrains Mono">R6</text><circle cx="900" cy="196.7" r="3" fill="#74bccd" stroke="#0c1620" stroke-width="1"/><text x="900" y="210.7" fill="#74bccd" font-size="9.5" font-weight="700" text-anchor="middle" font-family="JetBrains Mono">R7</text><circle cx="1000" cy="142.0" r="3" fill="#74bccd" stroke="#0c1620" stroke-width="1"/><text x="996" y="156.0" fill="#74bccd" font-size="9.5" font-weight="700" text-anchor="end" font-family="JetBrains Mono">ARR</text></g>
     </svg>
   </div>
 
-  <div class="panel weather" id="weatherPanel">
-    <div class="wtitle-row"><div class="panel-title" style="margin-bottom:0">Météo prévue — dimanche 19 juillet</div>
-      <button class="wrefresh" id="wRefresh">↻ Actualiser</button></div>
-    <div id="weatherBody"><div class="wloading">Chargement des prévisions…</div></div>
-  </div>
-
   <div class="panel">
-    <div class="panel-title">Tes données</div>
+    <div class="panel-title" id="dataTitle"></div>
     <div class="fields3">
-      <div><label for="ftp">Ta FTP (seuil)</label><div class="inp sm"><input id="ftp" type="number" inputmode="numeric" value="250" min="100" max="500"><span class="unit">w</span></div></div>
-      <div><label for="kg">Ton poids</label><div class="inp sm"><input id="kg" type="number" inputmode="numeric" value="75" min="40" max="130"><span class="unit">kg</span></div></div>
-      <div><label for="sas">Ton SAS de départ</label><div class="inp sm"><select id="sas"></select></div></div>
+      <div><label id="labFtp"></label><div class="inp"><input id="ftp" type="number" inputmode="numeric" value="250" min="100" max="500"><span class="unit">w</span></div></div>
+      <div><label id="labKg"></label><div class="inp"><input id="kg" type="number" inputmode="numeric" value="75" min="40" max="130"><span class="unit">kg</span></div></div>
+      <div><label id="labSas"></label><div class="inp"><select id="sas"></select></div></div>
       <input id="start" type="hidden" value="07:45">
     </div>
-    <div style="margin-top:16px">
-      <label>Ton objectif sur la journée</label>
+    <div style="margin-top:16px"><label id="goalTitle"></label>
       <div class="obj" id="obj">
-        <button data-o="chill" aria-pressed="false">Finir tranquille<small>marge de sécurité</small></button>
-        <button data-o="diesel" aria-pressed="true">Gérer en diesel<small>régulier, sans exploser</small></button>
-        <button data-o="perf" aria-pressed="false">Performer<small>viser le chrono</small></button>
+        <button data-o="chill"><span id="o1"></span><small id="o1s"></small></button>
+        <button data-o="diesel" aria-pressed="true"><span id="o2"></span><small id="o2s"></small></button>
+        <button data-o="perf"><span id="o3"></span><small id="o3s"></small></button>
       </div>
     </div>
   </div>
 
   <div class="results">
-    <div class="total">
-      <div class="big" id="totalTime">—</div>
-      <div class="meta">temps roulé estimé (hors arrêts)<br>arrivée vers <b id="arriveClock">—</b> · moyenne <b id="avgWkg">—</b> W/kg en montée</div>
-    </div>
+    <div class="total"><div class="big" id="totalTime">—</div><div class="meta" id="totalMeta"></div></div>
     <div class="timeline" id="timeline"></div>
   </div>
 
   <div class="panel">
-    <div class="panel-title">Ravitaillement — que faut-il emporter ?</div>
-    <div class="nutri-sub">Sur <b id="nDur">—</b> de course, il te faut ≈ <b id="nNeed">—</b> de glucides. 7 ravitos sur le parcours (eau + solides), mais emporte tes propres gels/iso pour tenir ta cadence entre les ravitos.</div>
+    <div class="panel-title" id="nutTitle"></div>
+    <div class="nutri-sub" id="nutSub"></div>
     <div class="fields3">
-      <div><label for="gph">Cible glucides / heure</label><div class="inp sm"><input id="gph" type="number" inputmode="numeric" value="75" min="20" max="120"><span class="unit">g/h</span></div></div>
-      <div><label for="gGel">Glucides / gel ou barre</label><div class="inp sm"><input id="gGel" type="number" inputmode="numeric" value="45" min="5" max="80"><span class="unit">g</span></div></div>
-      <div><label for="gBidon">Glucides / bidon iso</label><div class="inp sm"><input id="gBidon" type="number" inputmode="numeric" value="90" min="0" max="150"><span class="unit">g</span></div></div>
+      <div><label id="labGph"></label><div class="inp"><input id="gph" type="number" inputmode="numeric" value="75" min="20" max="120"><span class="unit">g/h</span></div></div>
+      <div><label id="labGel"></label><div class="inp"><input id="gGel" type="number" inputmode="numeric" value="45" min="5" max="80"><span class="unit">g</span></div></div>
+      <div><label id="labBidon"></label><div class="inp"><input id="gBidon" type="number" inputmode="numeric" value="90" min="0" max="150"><span class="unit">g</span></div></div>
     </div>
     <div class="sliders">
-      <div class="slider-row"><div class="shead"><span class="slabel">Gels / barres à emporter</span><span class="sval"><span id="nGelV">10</span> <small>unités</small></span></div><input type="range" id="nGel" min="0" max="24" value="10"></div>
-      <div class="slider-row"><div class="shead"><span class="slabel">Bidons iso (bus sur toute la course)</span><span class="sval"><span id="nBidonV">5</span> <small>bidons</small></span></div><input type="range" id="nBidon" min="0" max="12" value="5"></div>
+      <div class="slider-row"><div class="shead"><span class="slabel" id="slabGel"></span><span class="sval"><span id="nGelV">10</span> <small id="unGel"></small></span></div><input type="range" id="nGel" min="0" max="24" value="10"></div>
+      <div class="slider-row"><div class="shead"><span class="slabel" id="slabBidon"></span><span class="sval"><span id="nBidonV">5</span> <small id="unBid"></small></span></div><input type="range" id="nBidon" min="0" max="12" value="5"></div>
     </div>
     <div class="gauge-wrap">
-      <div class="gauge-top"><span>emporté : <b id="nCarried">—</b></span><span id="nGph">—</span></div>
+      <div class="gauge-top"><span id="gCarried"></span><span id="nGph"></span></div>
       <div class="gauge" id="gauge"><div class="gauge-fill" id="gaugeFill"></div></div>
-      <div class="verdict" id="verdict">—</div>
-      <div class="sodium">Pense au <b>sodium</b> (électrolytes / pastilles de sel) en plus des glucides — important sur une longue épreuve par forte chaleur. Aux ravitos : remplis directement tes bidons, garde 2 bidons max sur le vélo. <b>Emporte un 2e bidon vide</b> ou une éco-cup (aucun contenant distribué).</div>
+      <div class="verdict" id="verdict"></div>
+      <div class="sodium" id="sodium"></div>
     </div>
   </div>
 
   <div class="actions">
-    <button class="actbtn prim" id="pdfBtn">📄 Télécharger le plan (PDF)</button>
-    <button class="actbtn" id="stickerBtn">🏷️ Générer le sticker cadre</button>
+    <button class="actbtn prim" id="pdfBtn"></button>
+    <button class="actbtn" id="stickerBtn"></button>
   </div>
 
-  <div class="foot">
-    <b>Barrières horaires.</b> 4 points de coupure (rouge = en retard sur l'estimation, vert = dans les temps, selon ton heure de départ). Temps limite total : <b>11h45</b> pour rejoindre l'arrivée. Une voiture-balai ferme la course.
-    <br><br>
-    <b>Comment lire.</b> Les watts sont tes cibles <b>en montée</b>. Le <b style="color:var(--gold)">passage</b> (or) est l'heure estimée au sommet de chaque col. Lignes grises = descentes/vallées, avec les ravitos (bleu). Après le Sarenne, c'est une descente jusqu'à l'Alpe d'Huez (dernière bosse : Rif Nel 700 m à 7,5 %).
-    <br><br>
-    <b>Le temps est une estimation</b> (modèle physique, vélo ~8 kg) — descentes, vent et groupes le font varier. <b>+20 à 40 min d'arrêts ravitos</b> non inclus. Pace à la puissance et au ressenti, jamais à la FC quand il fait chaud.
-  </div>
+  <div class="foot" id="foot"></div>
 </div>
 
-<script>
-const SEG = [
-  {type:'flat', name:"Vallée de départ", from:0, to:14.5, speed:30},
-  {type:'climb', name:"Croix de Fer", from:14.5, to:38.5, grad:5.2, delta:-0.03, key:false,
-    cue:"24 km : doit te paraître trop facile. C'est voulu.",
-    ravitos:[{k:"R1", km:38.5, t:"sommet · eau, barres, pâtes de fruit, bananes"}],
-    barrier:{km:38.5, time:"11:28", label:"Croix de Fer"}},
-  {type:'descent', name:"Descente + vallée de Maurienne", from:38.5, to:80, speed:38,
-    ravitos:[{k:"R2", km:68.5, t:"Saint-Jean · eau, Gel 100, solides"},{k:"R3", km:80, t:"Saint-Michel · eau, coca, pétillante"}],
-    barrier:{km:80, time:"13:15", label:"Saint-Michel"}},
-  {type:'climb', name:"Télégraphe", from:80, to:92, grad:7.1, delta:0.00, key:false,
-    cue:"Régulier. Enchaîne direct sur le Galibier."},
-  {type:'descent', name:"Descente sur Valloire", from:92, to:97.3, speed:32},
-  {type:'climb', name:"Galibier", from:97.3, to:115, grad:6.9, delta:-0.02, key:true,
-    cue:"2642 m : laisse les watts baisser dans le haut.",
-    ravitos:[{k:"R4", km:103, t:"Valloire · eau, coca, Beaufort, solides"},{k:"R5", km:115, t:"sommet · eau, sirops, jus de raisin"}],
-    barrier:{km:103, time:"15:36", label:"Valloire"}},
-  {type:'descent', name:"Descente Lautaret → Le Chambon", from:115, to:148, speed:40,
-    ravitos:[{k:"R6", km:124, t:"Col du Lautaret · eau, Gel 100, solides"}]},
-  {type:'climb', name:"Sarenne", from:148, to:161, grad:7.3, delta:-0.04, key:true,
-    cue:"Pied à 11 %. Survie, tu es déjà loin.",
-    ravitos:[{k:"R7", km:153, t:"Clavans · eau, saucisson, pain d'épice, madeleines"}],
-    barrier:{km:149, time:"18:10", label:"pied du Sarenne"}},
-  {type:'descent', name:"Descente du Sarenne → Alpe d'Huez", from:161, to:170, speed:26,
-    ravitos:[{k:"🏁", km:170, t:"Arrivée · Pasta Party"}]}
-];
-const BASE = {chill:0.68, diesel:0.75, perf:0.80};
-let obj = "diesel", totalSec = 0;
+<div class="modal" id="stickerModal"><div class="sheet">
+  <button class="close" id="mClose"></button>
+  <h3 id="mTitle"></h3><p class="hint" id="mHint"></p>
+  <div class="sticker-print" id="stickerContent"></div>
+  <div style="text-align:center;margin-top:14px"><button class="actbtn prim" id="stickerPdfBtn"></button></div>
+</div></div>
 
-function climbSpeed(power, mass, gradPct){
-  const g=9.81, Crr=0.005, rho=1.2, CdA=0.34, eff=0.97;
-  const grade=gradPct/100, sin=grade/Math.sqrt(1+grade*grade), cos=1/Math.sqrt(1+grade*grade);
-  const P=power*eff; let v=4;
-  for(let i=0;i<80;i++){const f=0.5*rho*CdA*v*v*v+v*mass*g*(sin+Crr*cos)-P;const fp=1.5*rho*CdA*v*v+mass*g*(sin+Crr*cos);v=v-f/fp;if(v<0.6)v=0.6;}
-  return v;
-}
-function fmtDur(sec){const h=Math.floor(sec/3600),m=Math.round((sec%3600)/60);return m===60?`${h+1}h00`:`${h}h${String(m).padStart(2,'0')}`;}
-function fmtClock(sec){sec=((sec%86400)+86400)%86400;const h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60);return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;}
-// SAS : SAS1=06:30, +8.333 min / SAS, ancré sur SAS10=07:45
-function sasToClock(n){const sec=(6*3600+30*60)+(n-1)*500;const h=Math.floor(sec/3600),m=Math.round((sec%3600)/60);return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;}
-(function initSas(){const sel=document.getElementById('sas');let opts='';for(let n=1;n<=17;n++){const sel10=n===10?' selected':'';opts+=`<option value="${n}"${sel10}>SAS ${n} — ~${sasToClock(n)}</option>`;}sel.innerHTML=opts;
-  sel.addEventListener('change',()=>{document.getElementById('start').value=sasToClock(+sel.value);compute();});})();
-function parseStart(){const v=document.getElementById('start').value||"07:45";const[a,b]=v.split(':').map(Number);return (a*3600+b*60);}
+<script>
+var L={
+ fr:{eyebrow:"SAS to Summit · Roadbook officiel",theme_light:"☀ Mode clair",theme_dark:"☾ Mode sombre",
+  cols:"4 cols",date:"dim. 19 juillet",profcap:"Profil de l'étape reine",dataTitle:"Tes données",
+  labFtp:"Ta FTP (seuil)",labKg:"Ton poids",labSas:"Ton SAS de départ",goalTitle:"Ton objectif sur la journée",
+  o1:"Finir tranquille",o1s:"marge de sécurité",o2:"Gérer en diesel",o2s:"régulier, sans exploser",o3:"Performer",o3s:"viser le chrono",
+  metaLine:"temps roulé estimé (hors arrêts)",metaArr:"arrivée vers",metaAvg1:"moyenne",metaAvg2:"W/kg en montée",
+  nutTitle:"Ravitaillement — que faut-il emporter ?",
+  nutSub:"Sur {dur} de course, il te faut ≈ {need} de glucides. 7 ravitos sur le parcours (eau + solides), mais emporte tes propres gels/iso pour tenir ta cadence entre les ravitos.",
+  labGph:"Cible glucides / heure",labGel:"Glucides / gel ou barre",labBidon:"Glucides / bidon iso",
+  slabGel:"Gels / barres à emporter",slabBidon:"Bidons iso (bus sur toute la course)",unGel:"unités",unBid:"bidons",
+  gCarried:"emporté : {c}",gGph:"soit {n} g/h",
+  vShort:"Il te manque {miss} g — soit ~{n} gels de plus pour couvrir ton besoin.",
+  vGood:"Parfait : tu couvres {pct}% du besoin ({gph} g/h). ✓",
+  vOver:"Large : {pct}% du besoin ({gph} g/h). Tu peux alléger ou garder la marge.",
+  sodium:"Pense au <b>sodium</b> (électrolytes / pastilles de sel) en plus des glucides — important sur une longue épreuve par forte chaleur. Aux ravitos : remplis directement tes bidons, garde 2 bidons max sur le vélo. <b>Emporte un 2e bidon vide</b> ou une éco-cup.",
+  btnPdf:"📄 Télécharger le plan (PDF)",btnSticker:"🏷️ Générer le sticker cadre",
+  tlCol:"col ≈",tlPass:"passage",tlRecup:"récup + ravito",tlMargin:"marge +",tlLate:"RETARD ",
+  tlBarr:"Barrière {label} (km {km}) {time} · tu passes ~{pass} ({m})",
+  busy:"Génération…",
+  foot:"<b>Barrières horaires.</b> 4 points de coupure (rouge = en retard sur l'estimation, vert = dans les temps, selon ton heure de départ). Temps limite total : <b>11h45</b> pour rejoindre l'arrivée.<br><br><b>Comment lire.</b> Les watts sont tes cibles <b>en montée</b>. Le <b style='color:var(--gold)'>passage</b> (or) est l'heure estimée au sommet de chaque col. Lignes grises = descentes/vallées, avec les ravitos (bleu). Après le Sarenne, c'est une descente jusqu'à l'Alpe d'Huez (Rif Nel 700 m à 7,5 %).<br><br><b>Le temps est une estimation</b> (modèle physique, vélo ~8 kg). +20 à 40 min d'arrêts ravitos non inclus. Pace à la puissance et au ressenti, jamais à la FC quand il fait chaud.",
+  mTitle:"Sticker top-tube",mClose:"Fermer ✕",mDl:"📄 Télécharger le sticker (PDF)",
+  mHint:"Basé sur tes réglages (FTP + objectif). Largeur ~35 mm. Découpe, plastifie, colle sur le cadre. 2 exemplaires.",
+  stValley:"Vallee",stWarm:"echauffe",stDesc:"desc",stDrink:"boire",stMantra1:"Croix Fer & Galibier : se retenir.",stMantra2:"Pace watts pas FC · 60-80g+sel/h",
+  stNote:"Largeur 35 mm · imprimer à 100% (taille réelle) · découper, plastifier, coller sur le top-tube.",
+  pdfMoving:"Temps roulé estimé :",pdfArr:"arrivée ~",pdfStart:"Départ",pdfNut:"Ravitaillement",
+  pdfNutLine:"Besoin ~{need} g de glucides ({gph} g/h) · emporté {c} g. Ajouter du sodium/électrolytes.",
+  pdfN1:"Estimation (modèle physique, vélo ~8 kg). Descentes, vent et groupes font varier. +20 à 40 min d'arrêts ravitos non inclus.",
+  pdfN2:"Pace à la puissance et au ressenti, jamais à la FC quand il fait chaud. Barrières = heures limites (temps total 11h45).",
+  pdfN3:"Après le Sarenne : descente jusqu'à l'Alpe d'Huez (dernière bosse Rif Nel 700 m à 7,5 %)."},
+ en:{eyebrow:"SAS to Summit · Official roadbook",theme_light:"☀ Light mode",theme_dark:"☾ Dark mode",
+  cols:"4 climbs",date:"Sun 19 July",profcap:"Queen stage profile",dataTitle:"Your data",
+  labFtp:"Your FTP (threshold)",labKg:"Your weight",labSas:"Your start wave",goalTitle:"Your goal for the day",
+  o1:"Finish safely",o1s:"safety margin",o2:"Diesel pacing",o2s:"steady, don't blow up",o3:"Perform",o3s:"chase the clock",
+  metaLine:"estimated moving time (excl. stops)",metaArr:"arrival around",metaAvg1:"avg",metaAvg2:"W/kg on climbs",
+  nutTitle:"Nutrition — what to carry?",
+  nutSub:"Over {dur}, you need ≈ {need} of carbs. 7 aid stations on course (water + food), but carry your own gels/iso to keep your intake between them.",
+  labGph:"Target carbs / hour",labGel:"Carbs / gel or bar",labBidon:"Carbs / iso bottle",
+  slabGel:"Gels / bars to carry",slabBidon:"Iso bottles (over the whole race)",unGel:"units",unBid:"bottles",
+  gCarried:"carried: {c}",gGph:"= {n} g/h",
+  vShort:"You're short {miss} g — about {n} more gels to cover your need.",
+  vGood:"Perfect: you cover {pct}% of the need ({gph} g/h). ✓",
+  vOver:"Plenty: {pct}% of the need ({gph} g/h). You can lighten up or keep the margin.",
+  sodium:"Add <b>sodium</b> (electrolytes / salt tabs) on top of carbs — key on a long event in the heat. At aid stations: refill your bottles, keep 2 bottles max on the bike. <b>Bring a 2nd empty bottle</b> or an eco-cup.",
+  btnPdf:"📄 Download plan (PDF)",btnSticker:"🏷️ Generate frame sticker",
+  tlCol:"climb ≈",tlPass:"at",tlRecup:"recovery + aid",tlMargin:"margin +",tlLate:"LATE ",
+  tlBarr:"Cut-off {label} (km {km}) {time} · you pass ~{pass} ({m})",
+  busy:"Generating…",
+  foot:"<b>Time cut-offs.</b> 4 checkpoints (red = behind the estimate, green = within time, based on your start time). Overall time limit: <b>11h45</b> to reach the finish.<br><br><b>How to read.</b> Watts are your targets <b>on climbs</b>. The <b style='color:var(--gold)'>pass time</b> (gold) is the estimated clock time at each summit. Grey lines = descents/valleys, with aid stations (blue). After Sarenne it's a descent to Alpe d'Huez (Rif Nel 700 m at 7.5%).<br><br><b>Times are estimates</b> (physics model, ~8 kg bike). +20 to 40 min of aid-station stops not included. Pace by power and feel, never by heart rate in the heat.",
+  mTitle:"Top-tube sticker",mClose:"Close ✕",mDl:"📄 Download sticker (PDF)",
+  mHint:"Based on your settings (FTP + goal). ~35 mm wide. Cut, laminate, stick on the frame. 2 copies.",
+  stValley:"Valley",stWarm:"warm up",stDesc:"desc",stDrink:"drink",stMantra1:"Croix de Fer & Galibier: hold back.",stMantra2:"Pace by power not HR · 60-80g+salt/h",
+  stNote:"35 mm wide · print at 100% (actual size) · cut, laminate, stick on the top-tube.",
+  pdfMoving:"Estimated moving time:",pdfArr:"arrival ~",pdfStart:"Start",pdfNut:"Nutrition",
+  pdfNutLine:"Need ~{need} g of carbs ({gph} g/h) · carrying {c} g. Add sodium/electrolytes.",
+  pdfN1:"Estimate (physics model, ~8 kg bike). Descents, wind and groups vary it. +20 to 40 min of aid stops not included.",
+  pdfN2:"Pace by power and feel, never by HR in the heat. Cut-offs = time limits (overall limit 11h45).",
+  pdfN3:"After Sarenne: descent to Alpe d'Huez (last kicker Rif Nel 700 m at 7.5%)."}
+};
+var lang='fr'; try{if(localStorage.getItem('edt-lang')==='en')lang='en';}catch(e){}
+function t(k){return (L[lang]&&L[lang][k]!=null)?L[lang][k]:L.fr[k];}
+function fmtn(s,o){return s.replace(/\{(\w+)\}/g,function(_,k){return o[k]!=null?o[k]:'';});}
+
+var SEG=[
+ {type:'flat',name:{fr:"Vallée de départ",en:"Valley start"},from:0,to:14.5,speed:30},
+ {type:'climb',name:"Croix de Fer",from:14.5,to:38.5,grad:5.2,delta:-0.03,key:false,
+   cue:{fr:"24 km : doit te paraître trop facile. C'est voulu.",en:"24 km: should feel too easy. That's the point."},
+   ravitos:[{k:"R1",km:38.5,t:{fr:"sommet · eau, barres, pâtes de fruit, bananes",en:"summit · water, bars, fruit paste, bananas"}}],
+   barrier:{km:38.5,time:"11:28",label:{fr:"Croix de Fer",en:"Croix de Fer"}}},
+ {type:'descent',name:{fr:"Descente + vallée de Maurienne",en:"Descent + Maurienne valley"},from:38.5,to:80,speed:38,
+   ravitos:[{k:"R2",km:68.5,t:{fr:"Saint-Jean · eau, Gel 100, solides",en:"Saint-Jean · water, Gel 100, food"}},{k:"R3",km:80,t:{fr:"Saint-Michel · eau, coca, pétillante",en:"Saint-Michel · water, coke, sparkling"}}],
+   barrier:{km:80,time:"13:15",label:{fr:"Saint-Michel",en:"Saint-Michel"}}},
+ {type:'climb',name:"Télégraphe",from:80,to:92,grad:7.1,delta:0.00,key:false,
+   cue:{fr:"Régulier. Enchaîne direct sur le Galibier.",en:"Steady. Straight into the Galibier."}},
+ {type:'descent',name:{fr:"Descente sur Valloire",en:"Descent to Valloire"},from:92,to:97.3,speed:32},
+ {type:'climb',name:"Galibier",from:97.3,to:115,grad:6.9,delta:-0.02,key:true,
+   cue:{fr:"2642 m : laisse les watts baisser dans le haut.",en:"2642 m: let the watts drop near the top."},
+   ravitos:[{k:"R4",km:103,t:{fr:"Valloire · eau, coca, Beaufort, solides",en:"Valloire · water, coke, cheese, food"}},{k:"R5",km:115,t:{fr:"sommet · eau, sirops, jus de raisin",en:"summit · water, cordials, grape juice"}}],
+   barrier:{km:103,time:"15:36",label:{fr:"Valloire",en:"Valloire"}}},
+ {type:'descent',name:{fr:"Descente Lautaret → Le Chambon",en:"Lautaret descent → Le Chambon"},from:115,to:148,speed:40,
+   ravitos:[{k:"R6",km:124,t:{fr:"Col du Lautaret · eau, Gel 100, solides",en:"Col du Lautaret · water, Gel 100, food"}}]},
+ {type:'climb',name:"Sarenne",from:148,to:161,grad:7.3,delta:-0.04,key:true,
+   cue:{fr:"Pied à 11 %. Survie, tu es déjà loin.",en:"11% at the foot. Survival, you're already deep in."},
+   ravitos:[{k:"R7",km:153,t:{fr:"Clavans · eau, saucisson, pain d'épice, madeleines",en:"Clavans · water, sausage, gingerbread, cakes"}}],
+   barrier:{km:149,time:"18:10",label:{fr:"pied du Sarenne",en:"foot of Sarenne"}}},
+ {type:'descent',name:{fr:"Descente du Sarenne → Alpe d'Huez",en:"Sarenne descent → Alpe d'Huez"},from:161,to:170,speed:26,
+   ravitos:[{k:"ARR",km:170,t:{fr:"Arrivée · Pasta Party",en:"Finish · Pasta Party"}}]}
+];
+var BASE={chill:0.68,diesel:0.75,perf:0.80};
+var obj="diesel", totalSec=0;
+function NM(x){return typeof x==='string'?x:x[lang];}
+
+function climbSpeed(power,mass,gradPct){var g=9.81,Crr=0.005,rho=1.2,CdA=0.34,eff=0.97;var grade=gradPct/100,sin=grade/Math.sqrt(1+grade*grade),cos=1/Math.sqrt(1+grade*grade);var P=power*eff,v=4;for(var i=0;i<80;i++){var f=0.5*rho*CdA*v*v*v+v*mass*g*(sin+Crr*cos)-P;var fp=1.5*rho*CdA*v*v+mass*g*(sin+Crr*cos);v=v-f/fp;if(v<0.6)v=0.6;}return v;}
+function fmtDur(s){var h=Math.floor(s/3600),m=Math.round((s%3600)/60);return m===60?(h+1)+"h00":h+"h"+String(m).padStart(2,'0');}
+function fmtClock(s){s=((s%86400)+86400)%86400;var h=Math.floor(s/3600),m=Math.floor((s%3600)/60);return String(h).padStart(2,'0')+":"+String(m).padStart(2,'0');}
+function parseStart(){var v=document.getElementById('start').value||"07:45";var p=v.split(':').map(Number);return p[0]*3600+p[1]*60;}
+function sasToClock(n){var sec=(6*3600+30*60)+(n-1)*500,h=Math.floor(sec/3600),m=Math.round((sec%3600)/60);return String(h).padStart(2,'0')+":"+String(m).padStart(2,'0');}
 
 function compute(){
-  const ftp=Math.max(60,+document.getElementById('ftp').value||0);
-  const kg=Math.max(35,+document.getElementById('kg').value||0);
-  const mass=kg+8, base=BASE[obj], startSec=parseStart();
-
-  // pre-compute each segment speed (m/s) + cumulative start times
-  let cum=0, wkgSum=0, nClimb=0, idx=0, html="";
-  const segCalc = SEG.map(s=>{
-    let spd;
-    if(s.type==='climb'){const pct=Math.max(0.55,base+s.delta);const w=Math.round(ftp*pct);spd=climbSpeed(w,mass,s.grad);return {...s,pct,w,spd,startCum:0};}
-    else {spd=s.speed/3.6;return {...s,spd,startCum:0};}
-  });
-  // helper: cumulative sec at a given km (interpolate within containing segment)
-  function cumAt(km){let c=0;for(const s of segCalc){const segLen=(s.to-s.from)*1000;const segT=segLen/s.spd;if(km<=s.to+1e-6){const within=Math.max(0,(km-s.from))*1000/s.spd;return c+within;}c+=segT;}return c;}
-
-  segCalc.forEach(s=>{
-    const segLen=(s.to-s.from)*1000, t=segLen/s.spd; s.startCum=cum; cum+=t;
-    const ravHtml=(s.ravitos||[]).map(r=>`<div class="ravito"><span class="rk">${r.k}</span> km ${r.km} · ${r.t}</div>`).join(' ');
-    let barHtml="";
-    if(s.barrier){
-      const passSec=startSec+cumAt(s.barrier.km);
-      const[bh,bm]=s.barrier.time.split(':').map(Number); const barSec=bh*3600+bm*60;
-      const ok=passSec<=barSec; const marg=Math.abs(barSec-passSec);
-      barHtml=`<div class="barrier ${ok?'ok':''}">⛔ Barrière ${s.barrier.label} (km ${s.barrier.km}) — <b>${s.barrier.time}</b> · tu passes ~${fmtClock(passSec)} <span class="mrg">(${ok?'marge +':'RETARD '}${fmtDur(marg)})</span></div>`;
-    }
-    const extra=(ravHtml||barHtml)?`<div class="rzone">${ravHtml}${barHtml}</div>`:"";
-    if(s.type==='climb'){
-      wkgSum+=s.w/kg; nClimb++; idx++;
-      html+=`<div class="col ${s.key?'key':''}"><div class="idx">${idx}</div>
-        <div><div class="name">${s.name}</div><div class="spec">${(s.to-s.from).toFixed(1)} km · ${s.grad}% · ${Math.round(s.pct*100)}% FTP</div><div class="cue">${s.cue}</div>${extra}</div>
-        <div class="nums"><div class="w">${s.w}<span class="u">w</span></div><div class="wkg">${(s.w/kg).toFixed(1)} W/kg</div><div class="t">col ≈ ${fmtDur(t)}</div><div class="pass">passage ${fmtClock(startSec+cum)}</div></div></div>`;
+  var ftp=Math.max(60,+document.getElementById('ftp').value||0);
+  var kg=Math.max(35,+document.getElementById('kg').value||0);
+  var mass=kg+8,base=BASE[obj],startSec=parseStart();
+  var segc=SEG.map(function(s){var spd;if(s.type==='climb'){var pct=Math.max(0.55,base+s.delta);var w=Math.round(ftp*pct);spd=climbSpeed(w,mass,s.grad);return Object.assign({},s,{pct:pct,w:w,spd:spd});}spd=s.speed/3.6;return Object.assign({},s,{spd:spd});});
+  function cumAt(km){var c=0;for(var i=0;i<segc.length;i++){var s=segc[i];var segT=(s.to-s.from)*1000/s.spd;if(km<=s.to+1e-6)return c+Math.max(0,(km-s.from))*1000/s.spd;c+=segT;}return c;}
+  var cum=0,wkgSum=0,nClimb=0,idx=0,html="";
+  segc.forEach(function(s){
+    var t2=(s.to-s.from)*1000/s.spd; cum+=t2;
+    var rav=(s.ravitos||[]).map(function(r){return '<div class="ravito"><span class="rk">'+r.k+'</span> km '+r.km+' · '+r.t[lang]+'</div>';}).join(' ');
+    var bar="";
+    if(s.barrier){var ps=startSec+cumAt(s.barrier.km);var p=s.barrier.time.split(':').map(Number);var bs=p[0]*3600+p[1]*60;var ok=ps<=bs;var m=(ok?t('tlMargin'):t('tlLate'))+fmtDur(Math.abs(bs-ps));
+      bar='<div class="barrier '+(ok?'ok':'')+'">⛔ '+fmtn(t('tlBarr'),{label:NM(s.barrier.label),km:s.barrier.km,time:'<b>'+s.barrier.time+'</b>',pass:fmtClock(ps),m:m})+'</div>';}
+    var extra=(rav||bar)?'<div class="rzone">'+rav+bar+'</div>':"";
+    if(s.type==='climb'){wkgSum+=s.w/kg;nClimb++;idx++;
+      html+='<div class="col '+(s.key?'key':'')+'"><div class="idx">'+idx+'</div><div><div class="name">'+NM(s.name)+'</div><div class="spec">'+(s.to-s.from).toFixed(1)+' km · '+s.grad+'% · '+Math.round(s.pct*100)+'% FTP</div><div class="cue">'+s.cue[lang]+'</div>'+extra+'</div><div class="nums"><div class="w">'+s.w+'<span class="u">w</span></div><div class="wkg">'+(s.w/kg).toFixed(1)+' W/kg</div><div class="t">'+t('tlCol')+' '+fmtDur(t2)+'</div><div class="pass">'+t('tlPass')+' '+fmtClock(startSec+cum)+'</div></div></div>';
     } else {
-      html+=`<div class="liaison"><div class="dot">↓</div>
-        <div><div class="ln">${s.name}</div><div class="ls">${(s.to-s.from).toFixed(1)} km · récup + ravito</div>${extra}</div>
-        <div class="lt">≈ ${fmtDur(t)}<div class="lp">passage ${fmtClock(startSec+cum)}</div></div></div>`;
+      html+='<div class="liaison"><div class="dot">↓</div><div><div class="ln">'+NM(s.name)+'</div><div class="ls">'+(s.to-s.from).toFixed(1)+' km · '+t('tlRecup')+'</div>'+extra+'</div><div class="lt">≈ '+fmtDur(t2)+'<div class="lp">'+t('tlPass')+' '+fmtClock(startSec+cum)+'</div></div></div>';
     }
   });
   document.getElementById('timeline').innerHTML=html;
   document.getElementById('totalTime').textContent=fmtDur(cum);
-  document.getElementById('arriveClock').textContent=fmtClock(startSec+cum);
-  document.getElementById('avgWkg').textContent=(wkgSum/nClimb).toFixed(1);
+  document.getElementById('totalMeta').innerHTML=t('metaLine')+'<br>'+t('metaArr')+' <b>'+fmtClock(startSec+cum)+'</b> · '+t('metaAvg1')+' <b>'+(wkgSum/(nClimb||1)).toFixed(1)+'</b> '+t('metaAvg2');
   totalSec=cum; computeNutrition();
 }
 function computeNutrition(){
-  const hrs=totalSec/3600;
-  const gph=Math.max(0,+document.getElementById('gph').value||0);
-  const gGel=Math.max(0,+document.getElementById('gGel').value||0);
-  const gBidon=Math.max(0,+document.getElementById('gBidon').value||0);
-  const nGel=+document.getElementById('nGel').value, nBidon=+document.getElementById('nBidon').value;
-  document.getElementById('nGelV').textContent=nGel; document.getElementById('nBidonV').textContent=nBidon;
-  const need=Math.round(gph*hrs), carried=nGel*gGel+nBidon*gBidon, realGph=hrs>0?carried/hrs:0, cover=need>0?carried/need:0;
-  document.getElementById('nDur').textContent=fmtDur(totalSec);
-  document.getElementById('nNeed').textContent=need+' g';
-  document.getElementById('nCarried').textContent=carried+' g';
-  document.getElementById('nGph').textContent='soit '+Math.round(realGph)+' g/h';
-  const fill=document.getElementById('gaugeFill'),gauge=document.getElementById('gauge'),v=document.getElementById('verdict');
-  fill.style.width=Math.min(cover,1)*100+'%'; gauge.classList.remove('short','good'); v.classList.remove('short','good','over');
-  const miss=need-carried, perGel=gGel||45;
-  if(cover<0.9){gauge.classList.add('short');v.classList.add('short');v.innerHTML=`Il te manque <span class="em">${miss} g</span> — soit ~${Math.ceil(miss/perGel)} gels de plus pour couvrir ton besoin.`;}
-  else if(cover<=1.15){gauge.classList.add('good');v.classList.add('good');v.innerHTML=`Parfait : tu couvres <span class="em">${Math.round(cover*100)}%</span> du besoin (${Math.round(realGph)} g/h). ✓`;}
-  else{v.classList.add('over');v.innerHTML=`Large : <span class="em">${Math.round(cover*100)}%</span> du besoin (${Math.round(realGph)} g/h). Tu peux alléger ou garder la marge.`;}
+  var hrs=totalSec/3600;
+  var gph=Math.max(0,+document.getElementById('gph').value||0);
+  var gGel=Math.max(0,+document.getElementById('gGel').value||0);
+  var gBidon=Math.max(0,+document.getElementById('gBidon').value||0);
+  var nGel=+document.getElementById('nGel').value,nBidon=+document.getElementById('nBidon').value;
+  document.getElementById('nGelV').textContent=nGel;document.getElementById('nBidonV').textContent=nBidon;
+  var need=Math.round(gph*hrs),carried=nGel*gGel+nBidon*gBidon,realGph=hrs>0?carried/hrs:0,cover=need>0?carried/need:0;
+  document.getElementById('nutSub').innerHTML=fmtn(t('nutSub'),{dur:'<b>'+fmtDur(totalSec)+'</b>',need:'<b>'+need+' g</b>'});
+  document.getElementById('gCarried').innerHTML=fmtn(t('gCarried'),{c:'<b>'+carried+' g</b>'});
+  document.getElementById('nGph').textContent=fmtn(t('gGph'),{n:Math.round(realGph)});
+  var fill=document.getElementById('gaugeFill'),gauge=document.getElementById('gauge'),v=document.getElementById('verdict');
+  fill.style.width=Math.min(cover,1)*100+'%';gauge.classList.remove('short','good');v.classList.remove('short','good','over');
+  var miss=need-carried,perGel=gGel||45;
+  if(cover<0.9){gauge.classList.add('short');v.classList.add('short');v.innerHTML=fmtn(t('vShort'),{miss:'<span class="em">'+miss+'</span>',n:Math.ceil(miss/perGel)});}
+  else if(cover<=1.15){gauge.classList.add('good');v.classList.add('good');v.innerHTML=fmtn(t('vGood'),{pct:'<span class="em">'+Math.round(cover*100)+'</span>',gph:Math.round(realGph)});}
+  else{v.classList.add('over');v.innerHTML=fmtn(t('vOver'),{pct:'<span class="em">'+Math.round(cover*100)+'</span>',gph:Math.round(realGph)});}
 }
-document.getElementById('obj').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;obj=b.dataset.o;[...document.querySelectorAll('#obj button')].forEach(x=>x.setAttribute('aria-pressed',x===b));compute();});
-['ftp','kg','start'].forEach(id=>document.getElementById(id).addEventListener('input',compute));
-['gph','gGel','gBidon','nGel','nBidon'].forEach(id=>document.getElementById(id).addEventListener('input',computeNutrition));
-(function(){var root=document.documentElement,btn=document.getElementById('themeBtn'),saved=null;
-try{saved=localStorage.getItem('edt-theme')}catch(e){}
-function apply(t){root.setAttribute('data-theme',t);btn.textContent=(t==='light')?'☾ Mode sombre':'☀ Mode clair';try{localStorage.setItem('edt-theme',t)}catch(e){}}
-apply(saved==='light'?'light':'dark');
-btn.addEventListener('click',function(){apply(root.getAttribute('data-theme')==='light'?'dark':'light')});})();
-function buildSticker(){
-  const ftp=Math.max(60,+document.getElementById('ftp').value||0), base=BASE[obj];
-  const rows=[];
-  rows.push({t:'f',km:'0-14',nm:'Vallee',w:'echauffe',rav:''});
-  SEG.forEach(s=>{
-    if(s.type==='climb'){
-      const pct=Math.max(0.55,base+s.delta), w=Math.round(ftp*pct);
-      const rav=(s.ravitos||[]).map(r=>r.k).join(' ');
-      rows.push({t:s.key?'k':'c',km:`${Math.round(s.from)}-${Math.round(s.to)}`,nm:s.name,w:w+'w',rav});
-    } else {
-      const rav=(s.ravitos||[]).map(r=>r.k+' k'+r.km).join(' ');
-      if(rav) rows.push({t:'d',km:`${Math.round(s.from)}-${Math.round(s.to)}`,nm:'desc',w:'boire',rav});
-    }
-  });
-  const one=`<div class="tt"><div class="h"><b>ETAPE DU TOUR</b><small>170km/5400m · watts@FTP${ftp}</small></div>`+
-    rows.map(r=>`<div class="r ${r.t}"><div><span class="km">${r.km}</span> <span class="nm">${r.nm}</span> ${r.rav?`<span class="rav">${r.rav}</span>`:''}</div><div class="w">${r.w}</div></div>`).join('')+
-    `<div class="foot">Croix Fer & Galibier: se retenir.<br>Pace watts pas FC · 60-80g+sel/h</div></div>`;
-  document.getElementById('stickerContent').innerHTML=one+one;
-}
-document.getElementById('stickerBtn').addEventListener('click',()=>{buildSticker();document.getElementById('stickerModal').classList.add('open');});
 
-// ---- données structurées (mêmes calculs que l'affichage) ----
+// ---- PDF ----
 function computePlanData(){
-  const ftp=Math.max(60,+document.getElementById('ftp').value||0);
-  const kg=Math.max(35,+document.getElementById('kg').value||0);
-  const mass=kg+8, base=BASE[obj], startSec=parseStart();
-  const segc=SEG.map(s=>{let spd;if(s.type==='climb'){const pct=Math.max(0.55,base+s.delta);const w=Math.round(ftp*pct);spd=climbSpeed(w,mass,s.grad);return{...s,pct,w,spd};}spd=s.speed/3.6;return{...s,spd};});
-  function cumAt(km){let c=0;for(const s of segc){const segT=(s.to-s.from)*1000/s.spd;if(km<=s.to+1e-6)return c+Math.max(0,(km-s.from))*1000/s.spd;c+=segT;}return c;}
-  let cum=0,rows=[],wkgSum=0,nClimb=0,idx=0;
-  segc.forEach(s=>{
-    const t=(s.to-s.from)*1000/s.spd; cum+=t;
-    let bar=null;
-    if(s.barrier){const ps=startSec+cumAt(s.barrier.km);const[bh,bm]=s.barrier.time.split(':').map(Number);const bs=bh*3600+bm*60;bar={ok:ps<=bs,margin:Math.abs(bs-ps),time:s.barrier.time,km:s.barrier.km,label:s.barrier.label,pass:ps};}
-    const rav=(s.ravitos||[]).map(r=>({k:r.k,km:r.km,t:r.t}));
-    if(s.type==='climb'){idx++;nClimb++;wkgSum+=s.w/kg;rows.push({type:'climb',idx,name:s.name,from:s.from,to:s.to,grad:s.grad,pct:s.pct,w:s.w,wkg:s.w/kg,key:s.key,cue:s.cue,tSec:t,passSec:startSec+cum,rav,bar});}
-    else rows.push({type:'liaison',name:s.name,from:s.from,to:s.to,tSec:t,passSec:startSec+cum,rav,bar});
+  var ftp=Math.max(60,+document.getElementById('ftp').value||0),kg=Math.max(35,+document.getElementById('kg').value||0),mass=kg+8,base=BASE[obj],startSec=parseStart();
+  var segc=SEG.map(function(s){var spd;if(s.type==='climb'){var pct=Math.max(0.55,base+s.delta);var w=Math.round(ftp*pct);spd=climbSpeed(w,mass,s.grad);return Object.assign({},s,{pct:pct,w:w,spd:spd});}spd=s.speed/3.6;return Object.assign({},s,{spd:spd});});
+  function cumAt(km){var c=0;for(var i=0;i<segc.length;i++){var s=segc[i];var segT=(s.to-s.from)*1000/s.spd;if(km<=s.to+1e-6)return c+Math.max(0,(km-s.from))*1000/s.spd;c+=segT;}return c;}
+  var cum=0,rows=[],wkgSum=0,nClimb=0,idx=0;
+  segc.forEach(function(s){var t2=(s.to-s.from)*1000/s.spd;cum+=t2;var bar=null;
+    if(s.barrier){var ps=startSec+cumAt(s.barrier.km);var p=s.barrier.time.split(':').map(Number);var bs=p[0]*3600+p[1]*60;bar={ok:ps<=bs,margin:Math.abs(bs-ps),time:s.barrier.time,km:s.barrier.km,label:NM(s.barrier.label),pass:ps};}
+    var rav=(s.ravitos||[]).map(function(r){return {k:r.k,km:r.km,t:r.t[lang]};});
+    if(s.type==='climb'){idx++;nClimb++;wkgSum+=s.w/kg;rows.push({type:'climb',idx:idx,name:NM(s.name),from:s.from,to:s.to,grad:s.grad,pct:s.pct,w:s.w,wkg:s.w/kg,key:s.key,cue:s.cue[lang],tSec:t2,passSec:startSec+cum,rav:rav,bar:bar});}
+    else rows.push({type:'liaison',name:NM(s.name),from:s.from,to:s.to,tSec:t2,passSec:startSec+cum,rav:rav,bar:bar});
   });
-  const nutri={need:0,carried:0,gph:+document.getElementById('gph').value||0};
-  nutri.need=Math.round(nutri.gph*(cum/3600));
+  var nutri={gph:+document.getElementById('gph').value||0};nutri.need=Math.round(nutri.gph*(cum/3600));
   nutri.carried=(+document.getElementById('nGel').value)*(+document.getElementById('gGel').value||0)+(+document.getElementById('nBidon').value)*(+document.getElementById('gBidon').value||0);
-  return {ftp,kg,obj,startSec,totalSec:cum,arrival:startSec+cum,avgWkg:wkgSum/(nClimb||1),rows,nutri};
+  return {ftp:ftp,kg:kg,startSec:startSec,totalSec:cum,arrival:startSec+cum,avgWkg:wkgSum/(nClimb||1),rows:rows,nutri:nutri};
 }
-function objLabel(o){return o==='chill'?'Finir tranquille':o==='perf'?'Performer':'Gérer en diesel';}
-function pdfSafe(s){return String(s).replace(/\uD83C\uDFC1/g,'ARR').replace(/\u2192/g,'->').replace(/\u2193/g,'').replace(/[\u2190-\u21FF\u2600-\u27BF]/g,'').replace(/[\uD800-\uDFFF]/g,'').trim();}
-function busy(btn,txt){const o=btn.textContent;btn.textContent=txt;btn.disabled=true;return()=>{btn.textContent=o;btn.disabled=false;};}
-function dl(blob,name){const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},4000);}
-
-// ---- PDF : plan de course ----
+function objLabel(){return t('o'+(obj==='chill'?'1':obj==='diesel'?'2':'3'));}
+function pdfSafe(s){return String(s).replace(/\uD83C\uDFC1/g,'ARR').replace(/\u2248/g,'~').replace(/\u2713/g,'').replace(/\u2192/g,'->').replace(/\u2193/g,'').replace(/[\u2190-\u21FF\u2600-\u27BF]/g,'').replace(/[\uD800-\uDFFF]/g,'').trim();}
+function busy(btn,txt){var o=btn.textContent;btn.textContent=txt;btn.disabled=true;return function(){btn.textContent=o;btn.disabled=false;};}
+function dl(blob,name){var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download=name;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(url);a.remove();},4000);}
+function routeText(){return "Le Bourg-d'Oisans  ->  Alpe d'Huez   ·   170 km · 5400 m D+ · "+t('cols')+" · "+t('date');}
 function generatePlanPDF(){
-  const {jsPDF}=window.jspdf; const d=computePlanData();
-  const doc=new jsPDF({unit:'mm',format:'a4'}); const M=14,W=210; let y=18;
-  const gray=[110,110,110],ink=[20,20,20],gold=[184,120,20],red=[196,44,40],blue=[36,110,140],green=[40,130,80];
-  doc.setFont('helvetica','bold');doc.setFontSize(20);doc.setTextColor(...ink);
-  doc.text("L'Étape du Tour 2026",M,y); y+=6;
-  doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(...gray);
-  doc.text("Le Bourg-d'Oisans  ->  Alpe d'Huez   ·   170 km · 5400 m D+ · 4 cols · dim. 19 juillet",M,y); y+=6;
-  doc.setDrawColor(220,220,220);doc.line(M,y,W-M,y); y+=6;
-  doc.setFontSize(9.5);doc.setTextColor(...ink);
-  doc.text(`FTP ${d.ftp} W  ·  ${d.kg} kg  ·  ${objLabel(d.obj)}  ·  Départ ${fmtClock(d.startSec)}`,M,y); y+=7;
-  doc.setFont('helvetica','bold');doc.setFontSize(15);doc.setTextColor(...gold);
-  doc.text(`Temps roulé estimé : ${fmtDur(d.totalSec)}`,M,y);
-  doc.setFontSize(10);doc.setTextColor(...ink);doc.text(`arrivée ~${fmtClock(d.arrival)}`,W-M,y,{align:'right'}); y+=8;
-
-  d.rows.forEach(r=>{
+  var jsPDF=window.jspdf.jsPDF; var d=computePlanData(); var doc=new jsPDF({unit:'mm',format:'a4'}); var M=14,Wp=210,y=18;
+  var gray=[110,110,110],ink=[20,20,20],gold=[184,120,20],red=[196,44,40],blue=[36,110,140],green=[40,130,80];
+  doc.setFont('helvetica','bold');doc.setFontSize(20);doc.setTextColor.apply(doc,ink);doc.text("SAS to Summit — L'Étape du Tour 2026",M,y);y+=6;
+  doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor.apply(doc,gray);doc.text(pdfSafe(routeText()),M,y);y+=6;
+  doc.setDrawColor(220,220,220);doc.line(M,y,Wp-M,y);y+=6;
+  doc.setFontSize(9.5);doc.setTextColor.apply(doc,ink);doc.text(pdfSafe("FTP "+d.ftp+" W  ·  "+d.kg+" kg  ·  "+objLabel()+"  ·  "+t('pdfStart')+" "+fmtClock(d.startSec)),M,y);y+=7;
+  doc.setFont('helvetica','bold');doc.setFontSize(15);doc.setTextColor.apply(doc,gold);doc.text(pdfSafe(t('pdfMoving')+" "+fmtDur(d.totalSec)),M,y);
+  doc.setFontSize(10);doc.setTextColor.apply(doc,ink);doc.text(pdfSafe(t('pdfArr')+fmtClock(d.arrival)),Wp-M,y,{align:'right'});y+=8;
+  d.rows.forEach(function(r){
     if(y>272){doc.addPage();y=18;}
     if(r.type==='climb'){
-      doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor(...ink);
-      doc.text(pdfSafe(`${r.idx}. ${r.name}`),M,y);
-      doc.setTextColor(...(r.key?red:gold));doc.setFontSize(12);
-      doc.text(`${r.w} W`,W-M,y,{align:'right'}); 
-      doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(...gray);
-      y+=4; doc.text(`${(r.to-r.from).toFixed(1)} km · ${r.grad}% · ${Math.round(r.pct*100)}% FTP`,M,y);
-      doc.text(`${r.wkg.toFixed(1)} W/kg · col ~${fmtDur(r.tSec)} · passage ${fmtClock(r.passSec)}`,W-M,y,{align:'right'});
+      doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor.apply(doc,ink);doc.text(pdfSafe(r.idx+". "+r.name),M,y);
+      doc.setTextColor.apply(doc,r.key?red:gold);doc.text(r.w+" W",Wp-M,y,{align:'right'});
+      doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor.apply(doc,gray);y+=4;
+      doc.text((r.to-r.from).toFixed(1)+" km · "+r.grad+"% · "+Math.round(r.pct*100)+"% FTP",M,y);
+      doc.text(pdfSafe(r.wkg.toFixed(1)+" W/kg · "+t('tlCol')+" "+fmtDur(r.tSec)+" · "+t('tlPass')+" "+fmtClock(r.passSec)),Wp-M,y,{align:'right'});
       if(r.cue){y+=3.6;doc.setTextColor(90,120,150);doc.text(pdfSafe(r.cue),M,y);}
-    } else {
-      doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(...gray);
-      doc.text(pdfSafe(r.name),M,y);
-      doc.text(`~${fmtDur(r.tSec)} · passage ${fmtClock(r.passSec)}`,W-M,y,{align:'right'});
-    }
-    if(r.rav&&r.rav.length){y+=3.8;doc.setFontSize(7.6);doc.setTextColor(...blue);
-      doc.text(pdfSafe(r.rav.map(x=>`${x.k} (km ${x.km}) ${x.t}`).join('   |   ')),M,y);}
-    if(r.bar){y+=3.8;doc.setFontSize(7.6);doc.setTextColor(...(r.bar.ok?green:red));
-      doc.text(pdfSafe(`Barrière ${r.bar.label} (km ${r.bar.km}) ${r.bar.time} - passage ~${fmtClock(r.bar.pass)} (${r.bar.ok?'marge +':'RETARD '}${fmtDur(r.bar.margin)})`),M,y);}
-    y+=6; doc.setDrawColor(235,235,235);doc.line(M,y-2.5,W-M,y-2.5);
+    } else {doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor.apply(doc,gray);doc.text(pdfSafe(r.name),M,y);
+      doc.text(pdfSafe("~"+fmtDur(r.tSec)+" · "+t('tlPass')+" "+fmtClock(r.passSec)),Wp-M,y,{align:'right'});}
+    if(r.rav&&r.rav.length){y+=3.8;doc.setFontSize(7.6);doc.setTextColor.apply(doc,blue);doc.text(pdfSafe(r.rav.map(function(x){return x.k+" (km "+x.km+") "+x.t;}).join("   |   ")),M,y);}
+    if(r.bar){y+=3.8;doc.setFontSize(7.6);doc.setTextColor.apply(doc,r.bar.ok?green:red);doc.text(pdfSafe(fmtn(t('tlBarr'),{label:r.bar.label,km:r.bar.km,time:r.bar.time,pass:fmtClock(r.bar.pass),m:(r.bar.ok?t('tlMargin'):t('tlLate'))+fmtDur(r.bar.margin)})),M,y);}
+    y+=6;doc.setDrawColor(235,235,235);doc.line(M,y-2.5,Wp-M,y-2.5);
   });
-
-  if(y>255){doc.addPage();y=18;}
-  y+=2;doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor(...ink);
-  doc.text("Ravitaillement",M,y);y+=5;
-  doc.setFont('helvetica','normal');doc.setFontSize(8.6);doc.setTextColor(...gray);
-  doc.text(`Besoin ~${d.nutri.need} g de glucides (${d.nutri.gph} g/h) · emporté ${d.nutri.carried} g. Ajouter du sodium/électrolytes.`,M,y);y+=6;
+  if(y>250){doc.addPage();y=18;}y+=2;
+  doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor.apply(doc,ink);doc.text(t('pdfNut'),M,y);y+=5;
+  doc.setFont('helvetica','normal');doc.setFontSize(8.6);doc.setTextColor.apply(doc,gray);doc.text(pdfSafe(fmtn(t('pdfNutLine'),{need:d.nutri.need,gph:d.nutri.gph,c:d.nutri.carried})),M,y);y+=6;
   doc.setFontSize(7.3);doc.setTextColor(140,140,140);
-  const notes=["Estimation (modèle physique, vélo ~8 kg). Descentes, vent et groupes font varier. +20 à 40 min d'arrêts ravitos non inclus.",
-    "Pace à la puissance et au ressenti, jamais à la FC quand il fait chaud. Barrières = heures limites de coupure (temps total 11h45).",
-    "Après le Sarenne : descente jusqu'à l'Alpe d'Huez (dernière bosse Rif Nel 700 m à 7,5 %)."];
-  notes.forEach(n=>{const w=doc.splitTextToSize(n,W-2*M);doc.text(w,M,y);y+=w.length*3.4+1;});
-  dl(doc.output('blob'),'plan-etape-du-tour-2026.pdf');
+  [t('pdfN1'),t('pdfN2'),t('pdfN3')].forEach(function(n){var w=doc.splitTextToSize(pdfSafe(n),Wp-2*M);doc.text(w,M,y);y+=w.length*3.4+1;});
+  dl(doc.output('blob'),'sas-to-summit-plan.pdf');
 }
-
-// ---- PDF : sticker top-tube (2 exemplaires, 35mm) ----
-function stickerRows(){
-  const ftp=Math.max(60,+document.getElementById('ftp').value||0),base=BASE[obj];
-  const rows=[{t:'f',km:'0-14',nm:'Vallee',w:'echauffe',rav:''}];
-  SEG.forEach(s=>{
-    if(s.type==='climb'){const pct=Math.max(0.55,base+s.delta),w=Math.round(ftp*pct);
-      rows.push({t:s.key?'k':'c',km:`${Math.round(s.from)}-${Math.round(s.to)}`,nm:s.name,w:w+'w',rav:(s.ravitos||[]).map(r=>r.k).join(' ')});}
-    else{const rav=(s.ravitos||[]).map(r=>r.k+' k'+r.km).join(' ');
-      if(rav)rows.push({t:'d',km:`${Math.round(s.from)}-${Math.round(s.to)}`,nm:'desc',w:'boire',rav});}
-  });
-  return {ftp,rows};
-}
+function stickerRows(){var ftp=Math.max(60,+document.getElementById('ftp').value||0),base=BASE[obj];var rows=[{t:'f',km:'0-14',nm:t('stValley'),w:t('stWarm'),rav:''}];
+  SEG.forEach(function(s){if(s.type==='climb'){var pct=Math.max(0.55,base+s.delta),w=Math.round(ftp*pct);rows.push({t:s.key?'k':'c',km:Math.round(s.from)+'-'+Math.round(s.to),nm:NM(s.name),w:w+'w',rav:(s.ravitos||[]).map(function(r){return r.k;}).join(' ')});}
+    else{var rav=(s.ravitos||[]).map(function(r){return r.k+' k'+r.km;}).join(' ');if(rav)rows.push({t:'d',km:Math.round(s.from)+'-'+Math.round(s.to),nm:t('stDesc'),w:t('stDrink'),rav:rav});}});
+  return {ftp:ftp,rows:rows};}
 function generateStickerPDF(){
-  const {jsPDF}=window.jspdf; const {ftp,rows}=stickerRows();
-  const doc=new jsPDF({unit:'mm',format:'a4'});
-  const SW=35,GAP=10,x0=(210-(SW*2+GAP))/2, yTop=16;
-  const bg={k:[255,244,214],c:[251,233,233],d:[238,244,250],f:[245,245,245]};
-  function strip(x){
-    let y=yTop;
-    doc.setFillColor(28,94,140);doc.rect(x,y,SW,12,'F');
-    doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(9);
-    doc.text("ETAPE DU TOUR",x+SW/2,y+5,{align:'center'});
-    doc.setFontSize(5.5);doc.text(`170km/5400m · FTP${ftp}`,x+SW/2,y+9,{align:'center'});
-    y+=12;
-    rows.forEach(r=>{
-      const h=9; doc.setFillColor(...bg[r.t]);doc.rect(x,y,SW,h,'F');
-      if(r.t==='k'){doc.setFillColor(28,94,140);doc.rect(x,y,1.2,h,'F');}
-      doc.setTextColor(20,20,20);doc.setFont('helvetica','bold');doc.setFontSize(7);
-      doc.text(r.km,x+2.3,y+3.6);
-      doc.setFont('helvetica','normal');doc.setFontSize(5);doc.setTextColor(110,110,110);
-      doc.text(pdfSafe(r.nm),x+2.3,y+6.2);
-      doc.setFont('helvetica','bold');doc.setFontSize(7.5);doc.setTextColor(...(r.t==='k'?[200,28,54]:[200,100,26]));
-      doc.text(r.w,x+2.3,y+8.6);
+  var jsPDF=window.jspdf.jsPDF;var sr=stickerRows();var doc=new jsPDF({unit:'mm',format:'a4'});
+  var SW=35,GAP=10,x0=(210-(SW*2+GAP))/2,yTop=16;var bg={k:[255,244,214],c:[251,233,233],d:[238,244,250],f:[245,245,245]};
+  function strip(x){var y=yTop;doc.setFillColor(28,94,140);doc.rect(x,y,SW,12,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(9);doc.text("ETAPE DU TOUR",x+SW/2,y+5,{align:'center'});doc.setFontSize(5.5);doc.text("170km/5400m · FTP"+sr.ftp,x+SW/2,y+9,{align:'center'});y+=12;
+    sr.rows.forEach(function(r){var h=9;doc.setFillColor.apply(doc,bg[r.t]);doc.rect(x,y,SW,h,'F');if(r.t==='k'){doc.setFillColor(28,94,140);doc.rect(x,y,1.2,h,'F');}
+      doc.setTextColor(20,20,20);doc.setFont('helvetica','bold');doc.setFontSize(7);doc.text(r.km,x+2.3,y+3.6);
+      doc.setFont('helvetica','normal');doc.setFontSize(5);doc.setTextColor(110,110,110);doc.text(pdfSafe(r.nm),x+2.3,y+6.2);
+      doc.setFont('helvetica','bold');doc.setFontSize(7.5);doc.setTextColor.apply(doc,r.t==='k'?[200,28,54]:[200,100,26]);doc.text(r.w,x+2.3,y+8.6);
       if(r.rav){doc.setFontSize(5.2);doc.setTextColor(28,110,140);doc.text(pdfSafe(r.rav),x+SW-1.6,y+8.6,{align:'right'});}
-      doc.setDrawColor(210,210,210);doc.line(x,y+h,x+SW,y+h);
-      y+=h;
-    });
-    doc.setFillColor(17,17,17);doc.rect(x,y,SW,8,'F');
-    doc.setTextColor(255,255,255);doc.setFont('helvetica','italic');doc.setFontSize(5);
-    doc.text("Croix Fer & Galibier : se retenir.",x+SW/2,y+3,{align:'center'});
-    doc.text("Pace watts pas FC · 60-80g+sel/h",x+SW/2,y+5.6,{align:'center'});
-    // cadre pointillé
-    doc.setDrawColor(150,150,150);doc.setLineDashPattern([1,1],0);doc.rect(x,yTop,SW,(y+8)-yTop);doc.setLineDashPattern([],0);
-  }
+      doc.setDrawColor(210,210,210);doc.line(x,y+h,x+SW,y+h);y+=h;});
+    doc.setFillColor(17,17,17);doc.rect(x,y,SW,8,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','italic');doc.setFontSize(5);
+    doc.text(pdfSafe(t('stMantra1')),x+SW/2,y+3,{align:'center'});doc.text(pdfSafe(t('stMantra2')),x+SW/2,y+5.6,{align:'center'});
+    doc.setDrawColor(150,150,150);doc.setLineDashPattern([1,1],0);doc.rect(x,yTop,SW,(y+8)-yTop);doc.setLineDashPattern([],0);}
   strip(x0);strip(x0+SW+GAP);
-  doc.setTextColor(120,120,120);doc.setFont('helvetica','normal');doc.setFontSize(8);
-  doc.text("Largeur 35 mm · imprimer à 100% (taille réelle) · découper, plastifier, coller sur le top-tube.",105,yTop+120,{align:'center'});
-  dl(doc.output('blob'),'sticker-etape-du-tour.pdf');
+  doc.setTextColor(120,120,120);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.text(pdfSafe(t('stNote')),105,yTop+120,{align:'center'});
+  dl(doc.output('blob'),'sas-to-summit-sticker.pdf');
 }
-document.getElementById('pdfBtn').addEventListener('click',function(){const done=busy(this,'Génération…');try{generatePlanPDF();}catch(e){alert('Erreur PDF : '+e.message);}setTimeout(done,600);});
-document.addEventListener('click',function(e){var t=(e.target.closest&&e.target.closest('#stickerPdfBtn'));if(!t)return;var done=busy(t,'Génération…');try{generateStickerPDF();}catch(err){alert('Erreur PDF : '+err.message);}setTimeout(done,600);});
+function buildStickerPreview(){var sr=stickerRows();
+  var one='<div class="tt"><div class="h"><b>ETAPE DU TOUR</b><small>170km/5400m · FTP'+sr.ftp+'</small></div>'+
+    sr.rows.map(function(r){return '<div class="r '+r.t+'"><div><span class="km">'+r.km+'</span> <span class="nm">'+r.nm+'</span> '+(r.rav?'<span class="rav">'+r.rav+'</span>':'')+'</div><div class="w">'+r.w+'</div></div>';}).join('')+
+    '<div class="foot2">'+t('stMantra1')+'<br>'+t('stMantra2')+'</div></div>';
+  document.getElementById('stickerContent').innerHTML=one+one;}
 
-// ---- MÉTÉO (Open-Meteo, sans clé, à jour à chaque ouverture) ----
-var RACE_DATE="2026-07-19";
-var WPTS=[{lab:"Plaine · Bourg-d'Oisans",m:"720 m",lat:45.0547,lon:6.0303,elev:720,icon:"🌡️"},
-          {lab:"Sommets · Galibier",m:"2642 m",lat:45.0644,lon:6.4078,elev:2642,icon:"🏔️"}];
-function wmo(c){
-  if(c===0)return"☀️ Ciel clair";
-  if(c===1)return"🌤️ Peu nuageux";
-  if(c===2)return"⛅ Nuageux";
-  if(c===3)return"☁️ Couvert";
-  if(c===45||c===48)return"🌫️ Brouillard";
-  if(c>=51&&c<=57)return"🌦️ Bruine";
-  if(c>=61&&c<=67)return"🌧️ Pluie";
-  if(c>=71&&c<=77)return"🌨️ Neige";
-  if(c>=80&&c<=82)return"🌦️ Averses";
-  if(c>=95)return"⛈️ Orages";
-  return"—";
+// ---- application de la langue ----
+function setText(id,k){var e=document.getElementById(id);if(e)e.textContent=t(k);}
+function applyLang(){
+  document.documentElement.setAttribute('lang',lang);
+  setText('eyebrow','eyebrow');setText('profcap','profcap');setText('dataTitle','dataTitle');
+  setText('labFtp','labFtp');setText('labKg','labKg');setText('labSas','labSas');setText('goalTitle','goalTitle');
+  setText('o1','o1');setText('o1s','o1s');setText('o2','o2');setText('o2s','o2s');setText('o3','o3');setText('o3s','o3s');
+  setText('nutTitle','nutTitle');setText('labGph','labGph');setText('labGel','labGel');setText('labBidon','labBidon');
+  setText('slabGel','slabGel');setText('slabBidon','slabBidon');setText('unGel','unGel');setText('unBid','unBid');
+  setText('pdfBtn','btnPdf');setText('stickerBtn','btnSticker');setText('stickerPdfBtn','mDl');
+  setText('mTitle','mTitle');setText('mClose','mClose');setText('mHint','mHint');
+  document.getElementById('sodium').innerHTML=t('sodium');
+  document.getElementById('foot').innerHTML=t('foot');
+  document.getElementById('route').innerHTML="<b>Le Bourg-d'Oisans</b> → <b>Alpe d'Huez</b> · 170 km · 5 400 m D+ · "+t('cols')+" · "+t('date');
+  document.getElementById('themeBtn').textContent=(document.documentElement.getAttribute('data-theme')==='light')?t('theme_dark'):t('theme_light');
+  // SAS options
+  var sel=document.getElementById('sas');var cur=sel.value||'10';var o='';for(var n=1;n<=17;n++){o+='<option value="'+n+'"'+(String(n)===String(cur)?' selected':'')+'>SAS '+n+' — ~'+sasToClock(n)+'</option>';}sel.innerHTML=o;
+  document.querySelectorAll('.langsel button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.l===lang);});
+  try{localStorage.setItem('edt-lang',lang);}catch(e){}
+  compute();
 }
-async function fetchPoint(p){
-  var u="https://api.open-meteo.com/v1/forecast?latitude="+p.lat+"&longitude="+p.lon+"&elevation="+p.elev+
-    "&daily=temperature_2m_max,temperature_2m_min,weathercode,precipitation_probability_max,windspeed_10m_max"+
-    "&timezone=Europe%2FParis&start_date="+RACE_DATE+"&end_date="+RACE_DATE;
-  var r=await fetch(u); var j=await r.json();
-  if(!j.daily||!j.daily.temperature_2m_max)throw new Error(j.reason||"indisponible");
-  return {max:Math.round(j.daily.temperature_2m_max[0]),min:Math.round(j.daily.temperature_2m_min[0]),
-    code:j.daily.weathercode[0],pop:j.daily.precipitation_probability_max?j.daily.precipitation_probability_max[0]:null,
-    wind:j.daily.windspeed_10m_max?Math.round(j.daily.windspeed_10m_max[0]):null};
-}
-async function loadWeather(){
-  var body=document.getElementById('weatherBody');
-  body.innerHTML='<div class="wloading">Chargement des prévisions…</div>';
-  try{
-    var res=await Promise.all(WPTS.map(fetchPoint));
-    var cards=WPTS.map((p,i)=>{var d=res[i];
-      return '<div class="wcard"><div class="wloc">'+p.icon+' '+p.lab+' <span>'+p.m+'</span></div>'+
-        '<div class="wtemp"><span class="mn">'+d.min+'°</span><span class="sep"> / </span><span class="mx">'+d.max+'°</span></div>'+
-        '<div class="wcond">'+wmo(d.code)+(d.wind!=null?' · vent '+d.wind+' km/h':'')+(d.pop!=null?' · pluie '+d.pop+'%':'')+'</div></div>';
-    }).join('');
-    // conseil dynamique
-    var vMax=res[0].max, sMin=res[1].min, sMax=res[1].max, pop=Math.max(res[0].pop||0,res[1].pop||0), wind=res[1].wind||0;
-    var adv=[];
-    if(vMax>=30)adv.push('<b>Forte chaleur en vallée ('+vMax+'°)</b> : hydratation ++ et sodium, et pace à la puissance — pas à la FC qui grimpera.');
-    else if(vMax>=25)adv.push('Chaleur modérée en vallée ('+vMax+'°) : reste régulier sur l\'hydratation et le sel.');
-    else adv.push('Températures clémentes en vallée ('+vMax+'°).');
-    if(sMax<=10||wind>=30)adv.push('Il fera froid et/ou venteux en altitude (Galibier '+sMin+'-'+sMax+'°) : prévois un coupe-vent pour la descente du Galibier.');
-    else adv.push('Sommets frais mais gérables ('+sMin+'-'+sMax+'° au Galibier) : un coupe-vent léger pour les descentes reste utile.');
-    if(pop>=40)adv.push('Risque de pluie ('+pop+'%) : prudence dans les descentes, pense au coupe-vent imperméable.');
-    var now=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
-    body.innerHTML='<div class="wgrid">'+cards+'</div><div class="wadvice">'+adv.join(' ')+'</div>'+
-      '<div class="wmeta">Prévision pour le 19 juil · actualisée à '+now+' · source Open-Meteo</div>';
-  }catch(e){
-    body.innerHTML='<div class="werror"><b>Prévisions indisponibles pour le moment.</b> '+
-      'Soit la date est encore trop lointaine (dispo à ~16 jours de la course), soit l\'aperçu bloque l\'accès réseau — '+
-      'ça marchera sur la version en ligne. <button class="wrefresh" onclick="loadWeather()" style="margin-top:8px">↻ Réessayer</button></div>';
-  }
-}
-document.getElementById('wRefresh').addEventListener('click',loadWeather);
-loadWeather();
 
-compute();
+// ---- events ----
+(function initSas(){var sel=document.getElementById('sas');sel.addEventListener('change',function(){document.getElementById('start').value=sasToClock(+sel.value);compute();});})();
+document.getElementById('obj').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;obj=b.dataset.o;var bs=document.querySelectorAll('#obj button');for(var i=0;i<bs.length;i++)bs[i].setAttribute('aria-pressed',bs[i]===b);compute();});
+['ftp','kg'].forEach(function(id){document.getElementById(id).addEventListener('input',compute);});
+['gph','gGel','gBidon','nGel','nBidon'].forEach(function(id){document.getElementById(id).addEventListener('input',computeNutrition);});
+document.querySelectorAll('.langsel button').forEach(function(b){b.addEventListener('click',function(){lang=b.dataset.l;applyLang();});});
+document.getElementById('pdfBtn').addEventListener('click',function(){var done=busy(this,t('busy'));try{generatePlanPDF();}catch(e){alert('PDF error: '+e.message);}setTimeout(done,600);});
+document.getElementById('stickerBtn').addEventListener('click',function(){buildStickerPreview();document.getElementById('stickerModal').classList.add('open');});
+document.getElementById('mClose').addEventListener('click',function(){document.getElementById('stickerModal').classList.remove('open');});
+document.addEventListener('click',function(e){var tt=(e.target.closest&&e.target.closest('#stickerPdfBtn'));if(!tt)return;var done=busy(tt,t('busy'));try{generateStickerPDF();}catch(err){alert('PDF error: '+err.message);}setTimeout(done,600);});
+(function initTheme(){var root=document.documentElement,btn=document.getElementById('themeBtn'),saved=null;try{saved=localStorage.getItem('edt-theme');}catch(e){}
+  function ap(th){root.setAttribute('data-theme',th);btn.textContent=(th==='light')?t('theme_dark'):t('theme_light');try{localStorage.setItem('edt-theme',th);}catch(e){}}
+  ap(saved==='light'?'light':'dark');
+  btn.addEventListener('click',function(){ap(root.getAttribute('data-theme')==='light'?'dark':'light');});})();
+
+applyLang();
 </script>
-
-<div class="modal" id="stickerModal">
-  <div class="sheet">
-    <button class="close" onclick="document.getElementById('stickerModal').classList.remove('open')">Fermer ✕</button>
-    <h3>Sticker top-tube</h3>
-    <p class="hint">Basé sur tes réglages (FTP + objectif). Imprime cette fenêtre (Ctrl/Cmd+P), largeur ~35 mm. Découpe, plastifie, colle sur le cadre. 2 exemplaires.</p>
-    <div class="sticker-print" id="stickerContent"></div>
-    <div style="text-align:center;margin-top:14px">
-      <button class="actbtn prim" id="stickerPdfBtn">📄 Télécharger le sticker (PDF)</button>
-    </div>
-  </div>
-</div>
-
 </body>
 </html>
