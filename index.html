@@ -144,6 +144,13 @@
   .st-orient button[aria-pressed="true"]{background:#1c5e8c;color:#fff}
   .st-size{font-family:Arial,sans-serif;font-size:12px;color:#333;display:flex;align-items:center;gap:6px}
   .st-size input{width:56px;font-family:Arial,sans-serif;font-size:13px;font-weight:700;padding:6px 8px;border:1px solid #ccc;border-radius:8px}
+  .gx-dev{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:4px 0 14px}
+  .gx-dev button{font-family:Arial,sans-serif;font-weight:700;font-size:13px;color:#555;background:#f2f2f2;border:1px solid #ccc;border-radius:8px;padding:9px 14px;cursor:pointer}
+  .gx-dev button[aria-pressed="true"]{background:#1c5e8c;color:#fff;border-color:#1c5e8c}
+  .gx-note{font-family:Arial,sans-serif;font-size:13px;color:#333;line-height:1.5;background:#f4f7fa;border:1px solid #dbe4ec;border-radius:8px;padding:12px 14px;min-height:1em}
+  .gx-note b{color:#1c5e8c}
+  .gx-note .warn{color:#c23b27;font-weight:700}
+  .gx-msg{font-family:Arial,sans-serif;font-size:12px;color:#777;text-align:center;margin-top:10px;min-height:1em}
   .ttl{border:1px dashed #999;border-radius:6px;overflow-x:auto;max-width:100%;font-family:Arial,sans-serif}
   .ttl .hh{background:#1c5e8c;color:#fff;text-align:center;font-size:8px;font-weight:700;padding:4px}
   .ttl .lrow{display:flex}
@@ -154,6 +161,8 @@
   .ttl .c .w{font-weight:700;color:#c8641a;font-size:10px}.ttl .c.k .w{color:#c81c36}
   .ttl .c .rav{color:#1c6e8c;font-weight:700;font-size:6.5px;margin-top:1px}
   .ttl .foot2{background:#111;color:#fff;text-align:center;font-size:7.5px;padding:5px 4px}
+  .tt .r .tm,.ttl .c .tm{color:#777;font-weight:700}
+  .tt .foot2 .sos,.ttl .foot2 .sos{color:#f2c078;font-weight:700}
   @media print{body{background:#fff!important}.topbar,.actions,.actionbar,.panel .obj,.modal{display:none!important}}
   .tabs{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
   .tab{font-family:'Barlow Condensed';font-weight:600;letter-spacing:.05em;text-transform:uppercase;font-size:.92rem;color:var(--muted);background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 20px;cursor:pointer}
@@ -324,6 +333,7 @@
   <div class="actionbar-inner">
     <button class="actbtn prim" id="pdfBtn"></button>
     <button class="actbtn" id="stickerBtn"></button>
+    <button class="actbtn" id="gpxBtn"></button>
   </div>
 </div>
 
@@ -336,6 +346,15 @@
   </div>
   <div class="sticker-print" id="stickerContent"></div>
   <div style="text-align:center;margin-top:14px"><button class="actbtn prim" id="stickerPdfBtn"></button></div>
+</div></div>
+
+<div class="modal" id="gpxModal"><div class="sheet">
+  <button class="close" id="gxClose"></button>
+  <h3 id="gxTitle"></h3><p class="hint" id="gxHint"></p>
+  <div class="gx-dev" id="gxDev"><button data-dev="coros">Coros</button><button data-dev="wahoo">Wahoo</button><button data-dev="garmin">Garmin</button><button data-dev="hammerhead">Hammerhead</button><button data-dev="autre" id="gxAutre"></button></div>
+  <div class="gx-note" id="gxNote"></div>
+  <div class="gx-msg" id="gxMsg"></div>
+  <div style="text-align:center;margin-top:16px"><button class="actbtn prim" id="gxDl"></button></div>
 </div></div>
 
 <script>
@@ -374,7 +393,8 @@ var L={
   wxAdvCool:"Sommets frais ({lo}–{hi}° au Galibier) : un coupe-vent léger reste utile en descente.",
   wxAdvRain:"Risque de pluie ({p}%) : prudence en descente, pense au coupe-vent imperméable.",
   foot:"<b>Barrières horaires.</b> 4 points de coupure (rouge = en retard sur l'estimation, vert = dans les temps, selon l'heure de départ). Temps limite total : <b>11h45</b> pour rejoindre l'arrivée.<br><br><b>Comment lire.</b> Les watts sont les cibles <b>en montée</b>. Le <b style='color:var(--gold)'>passage</b> (or) est l'heure estimée au sommet de chaque col. Lignes grises = descentes/vallées, avec les ravitos (bleu). Après le Sarenne, c'est une descente jusqu'à l'Alpe d'Huez (Rif Nel 700 m à 7,5 %).<br><br><b>Le temps est une estimation</b> (modèle physique, vélo ~8 kg). +20 à 40 min d'arrêts ravitos non inclus. Pace à la puissance et au ressenti, jamais à la FC quand il fait chaud.<br><br><b>Horaires SAS.</b> Officiels (roadbook) : départs échelonnés toutes les 7 min 30, du SAS 0 (6h30) au SAS 16 (8h30). Se placer dans le SAS avant sa fermeture.",
-  mTitle:"Générateur de sticker",mClose:"Fermer ✕",mDl:"📄 Télécharger le sticker (PDF)",soP:"Portrait · tube",soL:"Paysage · cintre",mSizeW:"Largeur (mm)",mSizeH:"Hauteur (mm)",stNut1:"≈ {g}/h barres · {b}/h bidons iso",stNut2:"{gph} g/h · {water} L eau/h · sel",stNoteP:"Imprimer à 100 % · découper, plastifier, coller sur le tube.",stNoteL:"Imprimer à 100 % · découper, plastifier, coller sur la potence / le cintre.",
+  mTitle:"Générateur de sticker",mClose:"Fermer ✕",mDl:"📄 Télécharger le sticker (PDF)",soP:"Portrait · top tube",soL:"Paysage · cintre",stSOS:"SOS +33 9 72 45 60 01",mSizeW:"Largeur (mm)",mSizeH:"Hauteur (mm)",stNut1:"≈ {g}/h barres · {b}/h bidons iso",stNut2:"{gph} g/h · {water} L eau/h · sel",stNoteP:"Imprimer à 100 % · découper, plastifier, coller sur le top tube.",stNoteL:"Imprimer à 100 % · découper, plastifier, coller sur la potence / le cintre.",
+  gpxBtn:"🗺️ Export GPS",gxTitle:"Export GPS perso",gxHint:"Trace + points utiles (ravitos, pied/sommet de col avec cible watts, dangers, barrières), selon les réglages (FTP, SAS, objectif). Choisir le compteur.",gxAutre:"Autre",gxDlGpx:"⬇ Télécharger le GPX",gxDlTcx:"⬇ Télécharger le TCX",gxLoading:"Préparation du fichier…",gxError:"Trace indisponible (fonctionne sur le site en ligne).",gxPied:"pied de col",gxSummit:"sommet",gxAt:"à",gxAim:"viser",gxPass:"passage estimé",gxBarrier:"Barrière",gxBarrierShort:"Barriere",gxDanger:"Danger",gxDangerShort:"Danger",gxNote_coros:"<b>Coros</b> : ouvrir le GPX depuis l'app COROS puis enregistrer la route. Les waypoints s'affichent (page dédiée + distance au prochain).",gxNote_wahoo:"<b>Wahoo</b> : importer le GPX (app ELEMNT, ou via komoot / RideWithGPS). Waypoints affichés sur BOLT 3 / ROAM 3 / ELEMNT ACE ; sur les anciens, en liste de repères.",gxNote_garmin:"<b>Garmin</b> : fichier <b>TCX</b>. Le copier dans le dossier <b>Garmin/NewFiles</b> du compteur (ou l'importer dans Garmin Connect). Les points déclenchent des alertes sur le parcours (ravito, sommet).",gxNote_hammerhead:"<span class='warn'>Hammerhead Karoo</span> : le Karoo n'affiche pas les points d'un GPX chargé directement. Importer d'abord la route dans <b>RideWithGPS</b> (les points sont conservés), puis synchroniser avec le Karoo.",gxNote_autre:"GPX standard avec waypoints, compatible avec la plupart des apps/compteurs qui lisent les waypoints GPX.",
   mHint:"Basé sur les réglages (FTP, objectif, nutrition). Choisir l'orientation et la taille. PDF vectoriel à imprimer à 100 %, à découper et plastifier.",
   stValley:"Vallee",stWarm:"echauffe",stDesc:"desc",stDrink:"boire",stMantra1:"Croix Fer & Galibier : se retenir.",stMantra2:"Pace watts pas FC · 60-80g+sel/h",
   stNote:"Largeur 35 mm · imprimer à 100% (taille réelle) · découper, plastifier, coller sur le top-tube.",
@@ -418,7 +438,8 @@ var L={
   wxAdvCool:"Cool summits ({lo}–{hi}° at the Galibier): a light wind vest still helps on descents.",
   wxAdvRain:"Rain risk ({p}%): careful on descents, bring a waterproof.",
   foot:"<b>Time cut-offs.</b> 4 checkpoints (red = behind the estimate, green = within time, based on your start time). Overall time limit: <b>11h45</b> to reach the finish.<br><br><b>How to read.</b> Watts are your targets <b>on climbs</b>. The <b style='color:var(--gold)'>pass time</b> (gold) is the estimated clock time at each summit. Grey lines = descents/valleys, with aid stations (blue). After Sarenne it's a descent to Alpe d'Huez (Rif Nel 700 m at 7.5%).<br><br><b>Times are estimates</b> (physics model, ~8 kg bike). +20 to 40 min of aid-station stops not included. Pace by power and feel, never by heart rate in the heat.<br><br><b>Wave times.</b> Official (roadbook): starts every 7 min 30 s, from wave 0 (6:30) to wave 16 (8:30). Be in your wave before it closes.",
-  mTitle:"Sticker generator",mClose:"Close ✕",mDl:"📄 Download sticker (PDF)",soP:"Portrait · top-tube",soL:"Landscape · bar",mSizeW:"Width (mm)",mSizeH:"Height (mm)",stNut1:"≈ {g}/h bars · {b}/h iso bottles",stNut2:"{gph} g/h · {water} L water/h · salt",stNoteP:"Print at 100% · cut, laminate, stick on the top-tube.",stNoteL:"Print at 100% · cut, laminate, stick on the stem / bar.",
+  mTitle:"Sticker generator",mClose:"Close ✕",mDl:"📄 Download sticker (PDF)",soP:"Portrait · top tube",soL:"Landscape · bar",stSOS:"SOS +33 9 72 45 60 01",mSizeW:"Width (mm)",mSizeH:"Height (mm)",stNut1:"≈ {g}/h bars · {b}/h iso bottles",stNut2:"{gph} g/h · {water} L water/h · salt",stNoteP:"Print at 100% · cut, laminate, stick on the top-tube.",stNoteL:"Print at 100% · cut, laminate, stick on the stem / bar.",
+  gpxBtn:"🗺️ GPS export",gxTitle:"Custom GPS export",gxHint:"Route + useful points (aid stations, climb foot/summit with power target, hazards, cut-offs), based on your settings (FTP, wave, goal). Pick your head unit.",gxAutre:"Other",gxDlGpx:"⬇ Download GPX",gxDlTcx:"⬇ Download TCX",gxLoading:"Preparing file…",gxError:"Route unavailable (works on the live site).",gxPied:"climb foot",gxSummit:"summit",gxAt:"at",gxAim:"aim",gxPass:"est. pass",gxBarrier:"Cut-off",gxBarrierShort:"Cut-off",gxDanger:"Hazard",gxDangerShort:"Hazard",gxNote_coros:"<b>Coros</b>: open the GPX from the COROS app, then save the route. Waypoints show up (dedicated page + distance to next).",gxNote_wahoo:"<b>Wahoo</b>: import the GPX (ELEMNT app, or via komoot / RideWithGPS). Waypoints show on BOLT 3 / ROAM 3 / ELEMNT ACE; on older units, in the cue list.",gxNote_garmin:"<b>Garmin</b>: <b>TCX</b> file. Copy it into the <b>Garmin/NewFiles</b> folder (or import in Garmin Connect). Points trigger on-course alerts (aid station, summit).",gxNote_hammerhead:"<span class='warn'>Hammerhead Karoo</span>: the Karoo does not show points from a directly-loaded GPX. First import the route into <b>RideWithGPS</b> (points are kept), then sync to the Karoo.",gxNote_autre:"Standard GPX with waypoints, works with most apps/units that read GPX waypoints.",
   mHint:"Based on your settings (FTP, goal, nutrition). Pick orientation and size. Vector PDF to print at 100%, then cut and laminate.",
   stValley:"Valley",stWarm:"warm up",stDesc:"desc",stDrink:"drink",stMantra1:"Croix de Fer & Galibier: hold back.",stMantra2:"Pace by power not HR · 60-80g+salt/h",
   stNote:"35 mm wide · print at 100% (actual size) · cut, laminate, stick on the top-tube.",
@@ -451,11 +472,11 @@ var SEG=[
    barrier:{km:103,time:"15:36",label:{fr:"Valloire",en:"Valloire"}}},
  {type:'descent',name:{fr:"Descente Lautaret → Le Chambon",en:"Lautaret descent → Le Chambon"},from:115,to:148,speed:40,
    ravitos:[{k:"R6",km:124,t:{fr:"Col du Lautaret · eau, Gel 100, solides",en:"Col du Lautaret · water, Gel 100, food"}}]},
- {type:'climb',name:"Sarenne",from:148,to:161,grad:7.3,delta:-0.04,key:true,
+ {type:'climb',name:"Sarenne",from:148,to:161,grad:7.3,delta:-0.04,key:true,warn:{fr:"pied à 11%",en:"11% foot"},
    cue:{fr:"Pied à 11 %. Survie, déjà loin dans la course.",en:"11% at the foot. Survival, you're already deep in."},
    ravitos:[{k:"R7",km:153,t:{fr:"Clavans · eau, saucisson, pain d'épice, madeleines",en:"Clavans · water, sausage, gingerbread, cakes"}}],
    barrier:{km:149,time:"18:10",label:{fr:"pied du Sarenne",en:"foot of Sarenne"}}},
- {type:'descent',name:{fr:"Descente du Sarenne → Alpe d'Huez",en:"Sarenne descent → Alpe d'Huez"},from:161,to:170,speed:26,
+ {type:'descent',name:{fr:"Descente du Sarenne → Alpe d'Huez",en:"Sarenne descent → Alpe d'Huez"},from:161,to:170,speed:26,warn:{fr:"final Rif Nel 7,5%",en:"final Rif Nel 7.5%"},
    ravitos:[{k:"ARR",km:170,t:{fr:"Arrivée · Pasta Party",en:"Finish · Pasta Party"}}]}
 ];
 var BASE={chill:0.68,diesel:0.75,perf:0.80};
@@ -661,33 +682,35 @@ function generatePlanPDF(){
 var stOrient='portrait';
 var stDim={portrait:38,landscape:28}; // portrait = largeur mm ; landscape = hauteur mm
 function stickerCells(){
-  var ftp=Math.max(60,+document.getElementById('ftp').value||0),base=baseIntensity();
+  var ftp=Math.max(60,+document.getElementById('ftp').value||0),kg=Math.max(35,+document.getElementById('kg').value||0),base=baseIntensity();
+  var segc=currentSegc(),startSec=parseStart();
   var cells=[{t:'f',km:'0-14',nm:t('stValley'),w:t('stWarm'),rav:''}];
-  SEG.forEach(function(s){var rav=(s.ravitos||[]).map(function(r){return r.k+' km'+Math.round(r.km);}).join('  ');
-    if(s.type==='climb'){var pct=Math.max(0.55,base+s.delta),w=Math.round(ftp*pct);cells.push({t:s.key?'k':'c',km:Math.round(s.from)+'-'+Math.round(s.to),nm:NM(s.name),w:w+'w',rav:rav});}
-    else if(rav){cells.push({t:'d',km:Math.round(s.from)+'-'+Math.round(s.to),nm:t('stDesc'),w:t('stDrink'),rav:rav});}});
+  SEG.forEach(function(s){var rav=(s.ravitos||[]).map(function(r){return r.k+' km'+Math.round(r.km);}).join('  ');var wn=s.warn?' · '+s.warn[lang]:'';
+    if(s.type==='climb'){var pct=Math.max(0.55,base+s.delta),w=Math.round(ftp*pct),spd=climbSpeed(w,kg+8,s.grad),t2=(s.to-s.from)*1000/spd;cells.push({t:s.key?'k':'c',km:Math.round(s.from)+'-'+Math.round(s.to),nm:NM(s.name)+wn,w:w+'w',tm:fmtDur(t2),pass:fmtClock(startSec+cumSecAt(segc,s.to)),rav:rav});}
+    else if(rav){cells.push({t:'d',km:Math.round(s.from)+'-'+Math.round(s.to),nm:t('stDesc')+wn,w:t('stDrink'),rav:rav});}});
   var hrs=(totalSec||0)/3600||1,nGel=+document.getElementById('nGel').value||0,nBidon=+document.getElementById('nBidon').value||0,gph=+document.getElementById('gph').value||0;
   var nutri={l1:fmtn(t('stNut1'),{g:(nGel/hrs).toFixed(1),b:(nBidon/hrs).toFixed(1)}),l2:fmtn(t('stNut2'),{gph:gph,water:waterLPerH().toFixed(1)})};
   return {ftp:ftp,cells:cells,nutri:nutri};}
 var STBG={k:[255,244,214],c:[251,233,233],d:[238,244,250],f:[245,245,245]};
 function drawStickerPortrait(doc,sc){
-  var W=stDim.portrait,f=W/35,GAP=10,hdr=12*f,rowH=9*f,foot=10*f,yTop=16;
+  var W=stDim.portrait,f=W/35,GAP=10,hdr=12*f,rowH=9*f,foot=13*f,yTop=16;
   var totalH=hdr+sc.cells.length*rowH+foot,copies=(W*2+GAP<=200)?2:1,x0=(210-(W*copies+GAP*(copies-1)))/2;
   function strip(x){var y=yTop;
     doc.setFillColor(28,94,140);doc.rect(x,y,W,hdr,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(9*f);doc.text("ETAPE DU TOUR",x+W/2,y+5*f,{align:'center'});doc.setFontSize(5.5*f);doc.text("170km/5400m · FTP"+sc.ftp,x+W/2,y+9*f,{align:'center'});y+=hdr;
     sc.cells.forEach(function(r){doc.setFillColor.apply(doc,STBG[r.t]);doc.rect(x,y,W,rowH,'F');if(r.t==='k'){doc.setFillColor(28,94,140);doc.rect(x,y,1.2*f,rowH,'F');}
       doc.setTextColor(20,20,20);doc.setFont('helvetica','bold');doc.setFontSize(7*f);doc.text(r.km,x+2.3*f,y+3.6*f);
+      if(r.tm){doc.setFont('helvetica','normal');doc.setFontSize(5.4*f);doc.setTextColor(120,120,120);doc.text(r.tm+(r.pass?' · '+r.pass:''),x+W-1.6*f,y+3.6*f,{align:'right'});}
       doc.setFont('helvetica','normal');doc.setFontSize(5*f);doc.setTextColor(110,110,110);doc.text(pdfSafe(r.nm),x+2.3*f,y+6.2*f);
       doc.setFont('helvetica','bold');doc.setFontSize(7.5*f);doc.setTextColor.apply(doc,r.t==='k'?[200,28,54]:[200,100,26]);doc.text(r.w,x+2.3*f,y+8.6*f);
       if(r.rav){doc.setFont('helvetica','normal');doc.setFontSize(5*f);doc.setTextColor(28,110,140);doc.text(pdfSafe(r.rav),x+W-1.6*f,y+8.6*f,{align:'right'});}
       doc.setDrawColor(210,210,210);doc.line(x,y+rowH,x+W,y+rowH);y+=rowH;});
-    doc.setFillColor(17,17,17);doc.rect(x,y,W,foot,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(5.6*f);doc.text(pdfSafe(sc.nutri.l1),x+W/2,y+4*f,{align:'center'});doc.setFont('helvetica','normal');doc.setFontSize(5*f);doc.text(pdfSafe(sc.nutri.l2),x+W/2,y+7.4*f,{align:'center'});
+    doc.setFillColor(17,17,17);doc.rect(x,y,W,foot,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(5.6*f);doc.text(pdfSafe(sc.nutri.l1),x+W/2,y+3.8*f,{align:'center'});doc.setFont('helvetica','normal');doc.setFontSize(5*f);doc.text(pdfSafe(sc.nutri.l2),x+W/2,y+7*f,{align:'center'});doc.setFontSize(4.8*f);doc.setTextColor(240,190,120);doc.text(pdfSafe(t('stSOS')),x+W/2,y+10.6*f,{align:'center'});
     doc.setDrawColor(150,150,150);doc.setLineDashPattern([1,1],0);doc.rect(x,yTop,W,totalH);doc.setLineDashPattern([],0);}
   for(var c=0;c<copies;c++)strip(x0+c*(W+GAP));
   doc.setTextColor(120,120,120);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.text(pdfSafe(t('stNoteP')),105,yTop+totalH+9,{align:'center'});}
 function drawStickerLandscape(doc,sc){
   var H=stDim.landscape,n=sc.cells.length,cellW=Math.min(H*0.92,192/n);if(cellW<13)cellW=13;
-  var top=H*0.16,bot=H*0.2,mid=H-top-bot,totalW=cellW*n,x0=(210-totalW)/2;if(x0<9)x0=9;
+  var top=H*0.15,bot=H*0.3,mid=H-top-bot,totalW=cellW*n,x0=(210-totalW)/2;if(x0<9)x0=9;
   var copies=(2*H+16<=250)?2:1;
   function band(y0){
     doc.setFillColor(28,94,140);doc.rect(x0,y0,totalW,top,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(Math.min(top*2.1,7));doc.text("ETAPE DU TOUR · 170km/5400m · FTP"+sc.ftp,x0+totalW/2,y0+top*0.7,{align:'center'});
@@ -695,11 +718,12 @@ function drawStickerLandscape(doc,sc){
     sc.cells.forEach(function(r,i){var cx=x0+i*cellW;doc.setFillColor.apply(doc,STBG[r.t]);doc.rect(cx,cy,cellW,mid,'F');if(r.t==='k'){doc.setFillColor(28,94,140);doc.rect(cx,cy,cellW,1.1,'F');}
       var px=cx+1.5;
       doc.setTextColor(20,20,20);doc.setFont('helvetica','bold');doc.setFontSize(Math.min(H*0.16,5.5));doc.text(r.km,px,cy+mid*0.26);
+      if(r.tm){doc.setFont('helvetica','normal');doc.setFontSize(Math.min(H*0.115,4.2));doc.setTextColor(120,120,120);doc.text(r.tm+(r.pass?' · '+r.pass:''),cx+cellW-1.5,cy+mid*0.26,{align:'right'});}
       doc.setFont('helvetica','normal');doc.setFontSize(Math.min(H*0.14,4.8));doc.setTextColor(110,110,110);var nm=doc.splitTextToSize(pdfSafe(r.nm),cellW-2.4);doc.text(nm[0],px,cy+mid*0.48);
       doc.setFont('helvetica','bold');doc.setFontSize(Math.min(H*0.26,9));doc.setTextColor.apply(doc,r.t==='k'?[200,28,54]:[200,100,26]);doc.text(r.w,px,cy+mid*0.76);
       if(r.rav){doc.setFont('helvetica','normal');doc.setFontSize(Math.min(H*0.12,4.2));doc.setTextColor(28,110,140);var rv=doc.splitTextToSize(pdfSafe(r.rav),cellW-2.4);doc.text(rv[0],px,cy+mid*0.95);}
       doc.setDrawColor(255,255,255);doc.setLineWidth(0.3);doc.line(cx+cellW,cy,cx+cellW,cy+mid);doc.setLineWidth(0.2);});
-    var by=cy+mid;doc.setFillColor(17,17,17);doc.rect(x0,by,totalW,bot,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(Math.min(bot*1.4,6.5));doc.text(pdfSafe(sc.nutri.l1+"    ·    "+sc.nutri.l2),x0+totalW/2,by+bot*0.68,{align:'center'});
+    var by=cy+mid;doc.setFillColor(17,17,17);doc.rect(x0,by,totalW,bot,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(Math.min(bot*0.9,6));doc.text(pdfSafe(sc.nutri.l1+"    ·    "+sc.nutri.l2),x0+totalW/2,by+bot*0.42,{align:'center'});doc.setFont('helvetica','normal');doc.setFontSize(Math.min(bot*0.8,5.4));doc.setTextColor(240,190,120);doc.text(pdfSafe(t('stSOS')),x0+totalW/2,by+bot*0.82,{align:'center'});
     doc.setDrawColor(150,150,150);doc.setLineDashPattern([1,1],0);doc.rect(x0,y0,totalW,H);doc.setLineDashPattern([],0);}
   var yy=18;for(var c=0;c<copies;c++){band(yy);yy+=H+12;}
   doc.setTextColor(120,120,120);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.text(pdfSafe(t('stNoteL')),105,yy+2,{align:'center'});}
@@ -709,12 +733,12 @@ function generateStickerPDF(){var jsPDF=window.jspdf.jsPDF,doc=new jsPDF({unit:'
 function buildStickerPreview(){var sc=stickerCells(),box=document.getElementById('stickerContent');
   if(stOrient==='portrait'){
     var one='<div class="tt"><div class="h"><b>ÉTAPE DU TOUR</b><small>170km/5400m · FTP'+sc.ftp+'</small></div>'+
-      sc.cells.map(function(r){return '<div class="r '+r.t+'"><div><span class="km">'+r.km+'</span> <span class="nm">'+r.nm+'</span> '+(r.rav?'<span class="rav">'+r.rav+'</span>':'')+'</div><div class="w">'+r.w+'</div></div>';}).join('')+
-      '<div class="foot2">'+sc.nutri.l1+'<br>'+sc.nutri.l2+'</div></div>';
+      sc.cells.map(function(r){return '<div class="r '+r.t+'"><div><span class="km">'+r.km+'</span>'+(r.tm?' <span class="tm">'+r.tm+(r.pass?' · '+r.pass:'')+'</span>':'')+' <span class="nm">'+r.nm+'</span> '+(r.rav?'<span class="rav">'+r.rav+'</span>':'')+'</div><div class="w">'+r.w+'</div></div>';}).join('')+
+      '<div class="foot2">'+sc.nutri.l1+'<br>'+sc.nutri.l2+'<br><span class="sos">'+t('stSOS')+'</span></div></div>';
     box.innerHTML=one+one;
   }else{
-    var cells=sc.cells.map(function(r){return '<div class="c '+r.t+'"><div class="km">'+r.km+'</div><div class="nm">'+r.nm+'</div><div class="w">'+r.w+'</div>'+(r.rav?'<div class="rav">'+r.rav+'</div>':'')+'</div>';}).join('');
-    box.innerHTML='<div class="ttl"><div class="hh"><b>ÉTAPE DU TOUR</b> · 170km/5400m · FTP'+sc.ftp+'</div><div class="lrow">'+cells+'</div><div class="foot2">'+sc.nutri.l1+' · '+sc.nutri.l2+'</div></div>';
+    var cells=sc.cells.map(function(r){return '<div class="c '+r.t+'"><div class="km">'+r.km+(r.tm?' <span class="tm">'+r.tm+(r.pass?' · '+r.pass:'')+'</span>':'')+'</div><div class="nm">'+r.nm+'</div><div class="w">'+r.w+'</div>'+(r.rav?'<div class="rav">'+r.rav+'</div>':'')+'</div>';}).join('');
+    box.innerHTML='<div class="ttl"><div class="hh"><b>ÉTAPE DU TOUR</b> · 170km/5400m · FTP'+sc.ftp+'</div><div class="lrow">'+cells+'</div><div class="foot2">'+sc.nutri.l1+' · '+sc.nutri.l2+'<br><span class="sos">'+t('stSOS')+'</span></div></div>';
   }}
 function stSyncControls(){var isP=stOrient==='portrait';
   var bp=document.getElementById('soP'),bl=document.getElementById('soL');if(bp){bp.setAttribute('aria-pressed',isP);bl.setAttribute('aria-pressed',!isP);}
@@ -798,6 +822,7 @@ function applyLang(){
   setText('slabGel','slabGel');setText('slabBidon','slabBidon');setText('unGel','unGel');setText('unBid','unBid');
   setText('pdfBtn','btnPdf');setText('stickerBtn','btnSticker');setText('stickerPdfBtn','mDl');
   setText('mTitle','mTitle');setText('mClose','mClose');setText('mHint','mHint');setText('soP','soP');setText('soL','soL');stSyncControls();
+  setText('gpxBtn','gpxBtn');setText('gxTitle','gxTitle');setText('gxAutre','gxAutre');document.getElementById('gxHint').textContent=t('gxHint');gxSync();
   document.getElementById('sodium').innerHTML=t('sodium');
   document.getElementById('foot').innerHTML=t('foot');
   document.getElementById('route').innerHTML="<b>Le Bourg-d'Oisans</b> → <b>Alpe d'Huez</b> · 170 km · 5 400 m D+ · "+t('cols')+" · "+t('date');
@@ -817,6 +842,51 @@ function applyLang(){
   try{localStorage.setItem('edt-lang',lang);}catch(e){}
   compute();
 }
+
+// ---- Export GPS perso (GPX enrichi / TCX Garmin) ----
+var gxDev='coros',TRACK=null;
+var COLALT={"Croix de Fer":2067,"Télégraphe":1566,"Galibier":2642,"Sarenne":1999};
+function xesc(s){return String(s).replace(/[&<>]/g,function(c){return c==='&'?'&amp;':c==='<'?'&lt;':'&gt;';});}
+function gxHav(a,b){var R=6371000,r=Math.PI/180,d1=(b.lat-a.lat)*r,d2=(b.lon-a.lon)*r,x=Math.sin(d1/2)*Math.sin(d1/2)+Math.cos(a.lat*r)*Math.cos(b.lat*r)*Math.sin(d2/2)*Math.sin(d2/2);return 2*R*Math.asin(Math.sqrt(x));}
+function fetchTrack(){if(TRACK)return Promise.resolve(TRACK);
+  return fetch('etape-du-tour-2026.gpx').then(function(r){if(!r.ok)throw new Error('http '+r.status);return r.text();}).then(function(x){
+    var pts=[],re=/<trkpt lat="([-\d.]+)" lon="([-\d.]+)">\s*<ele>([-\d.]+)<\/ele>(?:\s*<time>([^<]+)<\/time>)?/g,m;
+    while((m=re.exec(x))){pts.push({lat:+m[1],lon:+m[2],ele:+m[3],time:m[4]||'',cum:0});}
+    if(!pts.length)throw new Error('no trkpt');
+    for(var i=1;i<pts.length;i++)pts[i].cum=pts[i-1].cum+gxHav(pts[i-1],pts[i]);
+    TRACK={pts:pts,raw:x};return TRACK;});}
+function llAtKm(km){var pts=TRACK.pts,d=km*1000,L=pts[pts.length-1];if(d<=0)return {lat:pts[0].lat,lon:pts[0].lon,ele:pts[0].ele,idx:0};if(d>=L.cum)return {lat:L.lat,lon:L.lon,ele:L.ele,idx:pts.length-1};
+  var lo=1,hi=pts.length-1;while(lo<hi){var mid=(lo+hi)>>1;if(pts[mid].cum<d)lo=mid+1;else hi=mid;}
+  var b=pts[lo],a=pts[lo-1],f=(b.cum-a.cum)?(d-a.cum)/(b.cum-a.cum):0;
+  return {lat:a.lat+(b.lat-a.lat)*f,lon:a.lon+(b.lon-a.lon)*f,ele:a.ele+(b.ele-a.ele)*f,idx:lo};}
+function buildWpts(){
+  var ftp=Math.max(60,+document.getElementById('ftp').value||0),base=baseIntensity(),segc=currentSegc(),startSec=parseStart(),out=[];
+  SEG.forEach(function(s){
+    if(s.type==='climb'){var pct=Math.max(0.55,base+s.delta),w=Math.round(ftp*pct),nm=NM(s.name),alt=COLALT[nm];
+      out.push({km:s.from,sym:'Summit',pt:'Summit',lab:nm,name:nm+' - '+t('gxPied'),desc:(s.to-s.from).toFixed(1)+' km '+t('gxAt')+' '+s.grad+'% - '+t('gxAim')+' '+w+' W ('+Math.round(pct*100)+'% FTP)'+(s.cue?' - '+s.cue[lang]:'')});
+      out.push({km:s.to,sym:'Summit',pt:'Summit',lab:nm,name:nm+' - '+t('gxSummit')+(alt?' '+alt+' m':''),desc:t('gxPass')+' '+fmtClock(startSec+cumSecAt(segc,s.to))+(s.barrier?' - '+t('gxBarrier')+' '+s.barrier.time:'')});}
+    (s.ravitos||[]).forEach(function(r){out.push({km:r.km,sym:(r.k==='ARR'?'Flag, Blue':'Water Source'),pt:'Water',lab:r.k,name:r.k+' - km '+Math.round(r.km),desc:r.t[lang]});});
+    if(s.warn){var wk=s.type==='climb'?s.from+0.2:s.to-0.8;out.push({km:wk,sym:'Danger Area',pt:'Danger',lab:t('gxDangerShort'),name:t('gxDanger')+' - '+s.warn[lang],desc:NM(s.name)});}
+    if(s.barrier)out.push({km:s.barrier.km,sym:'Flag, Blue',pt:'Generic',lab:t('gxBarrierShort'),name:t('gxBarrier')+' '+NM(s.barrier.label)+' '+s.barrier.time,desc:'km '+s.barrier.km});
+  });
+  out.sort(function(a,b){return a.km-b.km;});return out;}
+function buildGPX(w){
+  var W=w.map(function(p){var ll=llAtKm(p.km);return '  <wpt lat="'+ll.lat.toFixed(6)+'" lon="'+ll.lon.toFixed(6)+'">\n    <ele>'+ll.ele.toFixed(1)+'</ele>\n    <name>'+xesc(p.name)+'</name>\n    <desc>'+xesc(p.desc)+'</desc>\n    <sym>'+p.sym+'</sym>\n  </wpt>';}).join('\n');
+  var trk=(TRACK.raw.match(/<trk>[\s\S]*?<\/trk>/)||['<trk></trk>'])[0];
+  return '<?xml version="1.0" encoding="UTF-8"?>\n<gpx version="1.1" creator="SAS to Summit - Etape du Tour 2026" xmlns="http://www.topografix.com/GPX/1/1">\n  <metadata><name>Etape du Tour 2026 - perso</name></metadata>\n'+W+'\n  '+trk+'\n</gpx>\n';}
+function buildTCX(w){
+  var pts=TRACK.pts,L=pts[pts.length-1],T0='2026-07-19T00:00:00Z';
+  var tp=pts.map(function(p){return '        <Trackpoint><Time>'+(p.time||T0)+'</Time><Position><LatitudeDegrees>'+p.lat.toFixed(6)+'</LatitudeDegrees><LongitudeDegrees>'+p.lon.toFixed(6)+'</LongitudeDegrees></Position><AltitudeMeters>'+p.ele.toFixed(1)+'</AltitudeMeters><DistanceMeters>'+p.cum.toFixed(1)+'</DistanceMeters></Trackpoint>';}).join('\n');
+  var cp=w.map(function(p){var ll=llAtKm(p.km),n=pts[ll.idx]||pts[0];return '      <CoursePoint><Name>'+xesc(p.lab.slice(0,14))+'</Name><Time>'+(n.time||T0)+'</Time><Position><LatitudeDegrees>'+ll.lat.toFixed(6)+'</LatitudeDegrees><LongitudeDegrees>'+ll.lon.toFixed(6)+'</LongitudeDegrees></Position><PointType>'+p.pt+'</PointType><Notes>'+xesc(p.name+' - '+p.desc)+'</Notes></CoursePoint>';}).join('\n');
+  return '<?xml version="1.0" encoding="UTF-8"?>\n<TrainingCenterDatabase xmlns="http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2">\n  <Courses>\n    <Course>\n      <Name>Etape 2026</Name>\n      <Lap>\n        <TotalTimeSeconds>0</TotalTimeSeconds>\n        <DistanceMeters>'+L.cum.toFixed(1)+'</DistanceMeters>\n        <BeginPosition><LatitudeDegrees>'+pts[0].lat.toFixed(6)+'</LatitudeDegrees><LongitudeDegrees>'+pts[0].lon.toFixed(6)+'</LongitudeDegrees></BeginPosition>\n        <EndPosition><LatitudeDegrees>'+L.lat.toFixed(6)+'</LatitudeDegrees><LongitudeDegrees>'+L.lon.toFixed(6)+'</LongitudeDegrees></EndPosition>\n        <Intensity>Active</Intensity>\n      </Lap>\n      <Track>\n'+tp+'\n      </Track>\n'+cp+'\n    </Course>\n  </Courses>\n</TrainingCenterDatabase>\n';}
+function generateExport(){var msg=document.getElementById('gxMsg');msg.textContent=t('gxLoading');
+  return fetchTrack().then(function(){var w=buildWpts(),blob,name;
+    if(gxDev==='garmin'){blob=new Blob([buildTCX(w)],{type:'application/vnd.garmin.tcx+xml'});name='etape-2026-garmin.tcx';}
+    else{blob=new Blob([buildGPX(w)],{type:'application/gpx+xml'});name='etape-2026-'+gxDev+'.gpx';}
+    dl(blob,name);msg.textContent='';}).catch(function(){msg.textContent=t('gxError');});}
+function gxSync(){document.querySelectorAll('#gxDev button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.dev===gxDev);});
+  var n=document.getElementById('gxNote');if(n)n.innerHTML=t('gxNote_'+gxDev);
+  var d=document.getElementById('gxDl');if(d)d.textContent=(gxDev==='garmin')?t('gxDlTcx'):t('gxDlGpx');}
 
 // ---- events ----
 (function initSas(){var sel=document.getElementById('sas');sel.addEventListener('change',function(){document.getElementById('start').value=sasStartStr(+sel.value);updateSasNote();compute();});})();
@@ -839,6 +909,10 @@ document.getElementById('stickerBtn').addEventListener('click',function(){stSync
 document.querySelectorAll('#stickerModal [data-so]').forEach(function(b){b.addEventListener('click',function(){stOrient=b.dataset.so;stSyncControls();buildStickerPreview();});});
 document.getElementById('stSize').addEventListener('input',function(){var mn=stOrient==='portrait'?25:18,mx=stOrient==='portrait'?55:40,v=Math.max(mn,Math.min(mx,+this.value||stDim[stOrient]));stDim[stOrient]=v;buildStickerPreview();});
 document.getElementById('mClose').addEventListener('click',function(){document.getElementById('stickerModal').classList.remove('open');});
+document.getElementById('gpxBtn').addEventListener('click',function(){document.getElementById('gxMsg').textContent='';gxSync();document.getElementById('gpxModal').classList.add('open');fetchTrack().catch(function(){document.getElementById('gxMsg').textContent=t('gxError');});});
+document.getElementById('gxClose').addEventListener('click',function(){document.getElementById('gpxModal').classList.remove('open');});
+document.querySelectorAll('#gxDev button').forEach(function(b){b.addEventListener('click',function(){gxDev=b.dataset.dev;gxSync();});});
+document.getElementById('gxDl').addEventListener('click',function(){var done=busy(this,t('gxLoading'));generateExport().then(done,done);});
 document.addEventListener('click',function(e){var tt=(e.target.closest&&e.target.closest('#stickerPdfBtn'));if(!tt)return;var done=busy(tt,t('busy'));try{generateStickerPDF();}catch(err){alert('PDF error: '+err.message);}setTimeout(done,600);});
 (function initTheme(){var root=document.documentElement,btn=document.getElementById('themeBtn'),saved=null;try{saved=localStorage.getItem('edt-theme');}catch(e){}
   function ap(th){root.setAttribute('data-theme',th);btn.textContent=(th==='light')?t('theme_dark'):t('theme_light');try{localStorage.setItem('edt-theme',th);}catch(e){}}
