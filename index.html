@@ -16,7 +16,7 @@
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;line-height:1.5;
     background-image:linear-gradient(rgba(38,61,82,.35) 1px,transparent 1px),linear-gradient(90deg,rgba(38,61,82,.25) 1px,transparent 1px);background-size:100% 46px,46px 100%;}
-  .wrap{max-width:960px;margin:0 auto;padding:clamp(20px,4vw,44px) clamp(16px,4vw,32px) 60px}
+  .wrap{max-width:960px;margin:0 auto;padding:clamp(20px,4vw,44px) clamp(16px,4vw,32px) 104px}
   .topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
   .toprt{display:flex;gap:8px;align-items:center}
   .langsel{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
@@ -100,6 +100,10 @@
   .verdict.short .em{color:var(--flamme)} .verdict.good .em{color:var(--ok)} .verdict.over .em{color:var(--gold)}
   .sodium{margin-top:14px;font-size:.78rem;color:var(--muted)} .sodium b{color:var(--ice)}
   .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+  .actionbar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--bg2);border-top:1px solid var(--line);box-shadow:0 -8px 26px rgba(0,0,0,.3);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+  .actionbar-inner{max-width:960px;margin:0 auto;padding:12px clamp(16px,4vw,32px);display:flex;gap:10px;justify-content:center}
+  .actionbar .actbtn{box-shadow:0 2px 10px rgba(0,0,0,.15)}
+  @media(max-width:560px){.actionbar-inner{padding:10px 14px}.actionbar-inner .actbtn{flex:1 1 0;justify-content:center;padding:12px 10px}}
   .actbtn{font-family:'Inter';font-weight:600;font-size:.86rem;color:var(--ink);background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:12px 18px;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
   .actbtn:hover{border-color:var(--gold);color:var(--gold)}
   .actbtn.prim{background:var(--gold);color:#1a1206;border-color:var(--gold)}
@@ -119,8 +123,8 @@
   .tt .r .km{font-weight:700;color:#111}.tt .r .w{font-weight:700;color:#c8641a}.tt .r.k .w{color:#c81c36}
   .tt .r .rav{color:#1c6e8c;font-weight:700;font-size:7px}.tt .r .nm{color:#666;font-size:7px}
   .tt .foot2{background:#111;color:#fff;text-align:center;font-size:6.5px;padding:4px 3px;font-style:italic;line-height:1.3}
-  @media print{body{background:#fff!important}.topbar,.actions,.panel .obj,.modal{display:none!important}}
-  .tabs{display:flex;gap:8px;margin-top:22px}
+  @media print{body{background:#fff!important}.topbar,.actions,.actionbar,.panel .obj,.modal{display:none!important}}
+  .tabs{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
   .tab{font-family:'Barlow Condensed';font-weight:600;letter-spacing:.05em;text-transform:uppercase;font-size:.92rem;color:var(--muted);background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 20px;cursor:pointer}
   .tab[aria-pressed="true"]{background:var(--gold);color:#1a1206;border-color:var(--gold)}
   .chk-group h4{font-family:'Barlow Condensed';font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:.8rem;color:var(--gold);margin:18px 0 6px}
@@ -152,6 +156,27 @@
   .wxcard .wxrow b{color:var(--ink);font-weight:700}
   .wxcard .wxrain b{color:var(--ice)}
   .wx-msg{font-size:.88rem;color:var(--muted);padding:10px 0}
+  .wgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px}
+  @media(max-width:520px){.wgrid{grid-template-columns:1fr}}
+  .wcard{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:14px}
+  .wcard .wloc{font-size:.8rem;color:var(--muted);font-weight:500;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  .wcard .wloc span{font-family:'JetBrains Mono';font-size:.68rem;opacity:.75;white-space:nowrap}
+  .wcard .wtemp{font-family:'Barlow Condensed';font-weight:700;font-size:2rem;margin-top:4px;line-height:1}
+  .wcard .wtemp .mn{color:var(--ice)}.wcard .wtemp .sep{color:var(--muted);font-weight:500}.wcard .wtemp .mx{color:var(--gold)}
+  .wcard .wcond{font-size:.76rem;color:var(--muted);margin-top:6px}
+  .wadvice{margin-top:14px;font-size:.84rem;color:var(--ink);background:rgba(242,180,61,.08);border:1px solid rgba(242,180,61,.28);border-radius:8px;padding:12px 14px;line-height:1.5}
+  .wadvice b{color:var(--gold)}
+  .wmeta{margin-top:10px;font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono';display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
+  .wxlink{background:none;border:none;color:var(--ice);font-family:'JetBrains Mono';font-size:.68rem;cursor:pointer;padding:0;text-decoration:underline}
+  .wxlink:hover{color:var(--gold)}
+  .info-item{display:flex;gap:12px;padding:11px 4px;border-bottom:1px solid var(--line)}
+  .info-item:last-child{border-bottom:none}
+  .info-ic{font-size:1.15rem;line-height:1.35;flex:0 0 auto}
+  .info-t{font-family:'Barlow Condensed';font-weight:600;letter-spacing:.05em;text-transform:uppercase;font-size:.86rem;color:var(--gold)}
+  .info-d{font-size:.84rem;color:var(--ink);margin-top:2px;line-height:1.45}
+  .info-d b{color:var(--ice);font-family:'JetBrains Mono';font-weight:700}
+  .chk-hint{display:block;font-size:.74rem;color:var(--muted);margin-top:2px;font-weight:400}
+  .chk-item.done .chk-hint{text-decoration:none}
 </style>
 </head>
 <body>
@@ -175,9 +200,17 @@
     </svg>
   </div>
 
-  <div class="tabs"><button class="tab" data-tab="plan" aria-pressed="true" id="tabPlan"></button><button class="tab" data-tab="check" id="tabCheck"></button></div>
+  <div class="tabs"><button class="tab" data-tab="plan" aria-pressed="true" id="tabPlan"></button><button class="tab" data-tab="nutri" id="tabNutri"></button><button class="tab" data-tab="weather" id="tabWx"></button><button class="tab" data-tab="check" id="tabCheck"></button></div>
 
   <div id="viewPlan">
+  <div class="panel" id="wxSumPanel">
+    <div class="wx-head">
+      <div><div class="panel-title" id="wxSumTitle" style="margin-bottom:5px"></div><div class="nutri-sub" id="wxSumSub" style="margin:0"></div></div>
+      <div class="wx-upd"><span id="wxSumUpd"></span><button id="wxSumRefresh"></button></div>
+    </div>
+    <div class="wx-msg" id="wxSumMsg"></div>
+    <div id="wxSumBody"></div>
+  </div>
   <div class="panel">
     <div class="panel-title" id="dataTitle"></div>
     <div class="fields3">
@@ -201,45 +234,50 @@
     <div class="timeline" id="timeline"></div>
   </div>
 
-  <div class="panel" id="wxPanel">
-    <div class="wx-head">
-      <div><div class="panel-title" id="wxTitle" style="margin-bottom:5px"></div><div class="nutri-sub" id="wxSub" style="margin:0"></div></div>
-      <div class="wx-upd"><span id="wxUpd"></span><button id="wxRefresh"></button></div>
-    </div>
-    <div class="wx-msg" id="wxMsg"></div>
-    <div class="wxgrid" id="wxGrid"></div>
-  </div>
-
-  <div class="panel">
-    <div class="panel-title" id="nutTitle"></div>
-    <div class="nutri-sub" id="nutSub"></div>
-    <div class="fields3">
-      <div><label id="labGph"></label><div class="inp"><input id="gph" type="number" inputmode="numeric" value="75" min="20" max="120"><span class="unit">g/h</span></div></div>
-      <div><label id="labGel"></label><div class="inp"><input id="gGel" type="number" inputmode="numeric" value="45" min="5" max="80"><span class="unit">g</span></div></div>
-      <div><label id="labBidon"></label><div class="inp"><input id="gBidon" type="number" inputmode="numeric" value="90" min="0" max="150"><span class="unit">g</span></div></div>
-    </div>
-    <div class="sliders">
-      <div class="slider-row"><div class="shead"><span class="slabel" id="slabGel"></span><span class="sval"><span id="nGelV">10</span> <small id="unGel"></small></span></div><input type="range" id="nGel" min="0" max="24" value="10"></div>
-      <div class="slider-row"><div class="shead"><span class="slabel" id="slabBidon"></span><span class="sval"><span id="nBidonV">5</span> <small id="unBid"></small></span></div><input type="range" id="nBidon" min="0" max="12" value="5"></div>
-    </div>
-    <div class="gauge-wrap">
-      <div class="gauge-top"><span id="gCarried"></span><span id="nGph"></span></div>
-      <div class="gauge" id="gauge"><div class="gauge-fill" id="gaugeFill"></div></div>
-      <div class="verdict" id="verdict"></div>
-      <div class="sodium" id="sodium"></div>
-      <div class="wxnote" id="wxNote"></div>
-    </div>
-  </div>
-
-  <div class="actions">
-    <button class="actbtn prim" id="pdfBtn"></button>
-    <button class="actbtn" id="stickerBtn"></button>
-  </div>
-
   <div class="foot" id="foot"></div>
   </div>
+  <div id="viewNutrition" style="display:none">
+    <div class="panel">
+      <div class="panel-title" id="nutTitle"></div>
+      <div class="nutri-sub" id="nutSub"></div>
+      <div class="fields3">
+        <div><label id="labGph"></label><div class="inp"><input id="gph" type="number" inputmode="numeric" value="75" min="20" max="120"><span class="unit">g/h</span></div></div>
+        <div><label id="labGel"></label><div class="inp"><input id="gGel" type="number" inputmode="numeric" value="45" min="5" max="80"><span class="unit">g</span></div></div>
+        <div><label id="labBidon"></label><div class="inp"><input id="gBidon" type="number" inputmode="numeric" value="90" min="0" max="150"><span class="unit">g</span></div></div>
+      </div>
+      <div class="sliders">
+        <div class="slider-row"><div class="shead"><span class="slabel" id="slabGel"></span><span class="sval"><span id="nGelV">10</span> <small id="unGel"></small></span></div><input type="range" id="nGel" min="0" max="24" value="10"></div>
+        <div class="slider-row"><div class="shead"><span class="slabel" id="slabBidon"></span><span class="sval"><span id="nBidonV">5</span> <small id="unBid"></small></span></div><input type="range" id="nBidon" min="0" max="12" value="5"></div>
+      </div>
+      <div class="gauge-wrap">
+        <div class="gauge-top"><span id="gCarried"></span><span id="nGph"></span></div>
+        <div class="gauge" id="gauge"><div class="gauge-fill" id="gaugeFill"></div></div>
+        <div class="verdict" id="verdict"></div>
+        <div class="sodium" id="sodium"></div>
+        <div class="wxnote" id="wxNote"></div>
+      </div>
+    </div>
+  </div>
+  <div id="viewWeather" style="display:none">
+    <div class="panel" id="wxPanel">
+      <div class="wx-head">
+        <div><div class="panel-title" id="wxTitle" style="margin-bottom:5px"></div><div class="nutri-sub" id="wxSub" style="margin:0"></div></div>
+        <div class="wx-upd"><span id="wxUpd"></span><button id="wxRefresh"></button></div>
+      </div>
+      <div class="wx-msg" id="wxMsg"></div>
+      <div class="wxgrid" id="wxGrid"></div>
+    </div>
+  </div>
   <div id="viewCheck" style="display:none">
+    <div class="panel"><div class="panel-title" id="infoTitle"></div><div class="nutri-sub" id="infoIntro"></div><div id="infoList"></div></div>
     <div class="panel"><div class="panel-title" id="chkTitle"></div><div class="nutri-sub" id="chkIntro"></div><div id="chkList"></div><div style="margin-top:16px"><button class="actbtn" id="chkReset"></button></div></div>
+  </div>
+</div>
+
+<div class="actionbar" id="actionBar">
+  <div class="actionbar-inner">
+    <button class="actbtn prim" id="pdfBtn"></button>
+    <button class="actbtn" id="stickerBtn"></button>
   </div>
 </div>
 
@@ -252,8 +290,8 @@
 
 <script>
 var L={
- fr:{eyebrow:"SAS to Summit · Outil de pacing (non officiel)",theme_light:"☀ Mode clair",theme_dark:"☾ Mode sombre",
-  cols:"4 cols",date:"dim. 19 juillet",profcap:"Profil de l'étape reine",dataTitle:"Tes données",
+ fr:{eyebrow:"SAS to Summit · Outil de pacing",theme_light:"☀ Mode clair",theme_dark:"☾ Mode sombre",
+  cols:"4 cols",date:"dim. 19 juillet",profcap:"Profil de l'étape reine",dataTitle:"Données",
   labFtp:"FTP (seuil)",labKg:"Poids",labSas:"SAS de départ",goalTitle:"Objectif de la journée",
   o1:"Finir tranquille",o1s:"marge de sécurité",o2:"Gérer en diesel",o2s:"régulier, sans exploser",o3:"Performer",o3s:"viser le chrono",
   metaLine:"temps roulé estimé (hors arrêts)",metaArr:"arrivée vers",metaAvg1:"moyenne",metaAvg2:"W/kg en montée",
@@ -265,26 +303,35 @@ var L={
   vShort:"Il manque {miss} g — soit ~{n} gels de plus pour couvrir le besoin.",
   vGood:"Parfait : {pct}% du besoin couvert ({gph} g/h). ✓",
   vOver:"Large : {pct}% du besoin ({gph} g/h). Possible d'alléger ou de garder la marge.",
-  sodium:"Pense au <b>sodium</b> (électrolytes / pastilles de sel) en plus des glucides — important sur une longue épreuve par forte chaleur. Aux ravitos : remplir directement les bidons, garder 2 bidons max sur le vélo. <b>Prévoir un 2e bidon vide</b> ou une éco-cup.",
+  sodium:"Penser au <b>sodium</b> (électrolytes / pastilles de sel) en plus des glucides — important sur une longue épreuve par forte chaleur. Aux ravitos : remplir directement les bidons, garder 2 bidons max sur le vélo. <b>Prévoir un 2e bidon vide</b> ou une éco-cup.",
   btnPdf:"📄 Télécharger le plan (PDF)",btnSticker:"🏷️ Générer le sticker cadre",
   tlCol:"col ≈",tlPass:"passage",tlRecup:"récup + ravito",tlMargin:"marge +",tlLate:"RETARD ",
   tlBarr:"Barrière {label} (km {km}) {time} · passage ~{pass} ({m})",
-  busy:"Génération…",labTemp:"Température prévue",tabPlan:"Plan de course",tabCheck:"Checklist",chkTitle:"Checklist d'avant-course",chkIntro:"À cocher avant le départ. Sauvegardé sur cet appareil.",chkReset:"Tout décocher",wxCool:"Conditions fraîches — hydratation normale, sodium standard.",wxWarm:"Chaleur modérée — hydratation soutenue et sodium régulier.",wxHot:"Forte chaleur — hydratation maximale, sodium ++, allure gérée à la puissance (la FC sera élevée).",
-  wxTitle:"Météo du jour de course",wxDate:"dimanche 19 juillet",
-  wxSub:"Prévisions Open-Meteo pour le {date}, à ton heure de passage estimée (varie selon SAS + FTP). Températures corrigées par altitude.",
+  busy:"Génération…",labTemp:"Température prévue",tabPlan:"Plan de course",tabNutri:"Nutrition",tabCheck:"Checklist",chkTitle:"Checklist d'avant-course",chkIntro:"À cocher avant le départ. Sauvegardé sur cet appareil.",chkReset:"Tout décocher",infoTitle:"Infos pratiques",infoIntro:"Rappels du roadbook officiel — horaires, accès, barrières.",wxCool:"Conditions fraîches — hydratation normale, sodium standard.",wxWarm:"Chaleur modérée — hydratation soutenue et sodium régulier.",wxHot:"Forte chaleur — hydratation maximale, sodium ++, allure gérée à la puissance (la FC sera élevée).",
+  wxTitle:"Détail par col — heure de passage",wxDate:"dimanche 19 juillet",tabWx:"Météo",
+  wxSub:"Prévisions Open-Meteo pour le {date}, à l'heure de passage estimée (varie selon SAS + FTP). Températures corrigées par altitude.",
   wxUpd:"maj {t}",wxRefresh:"Actualiser",wxLoading:"Chargement de la météo…",wxError:"Météo indisponible pour l'instant — réessaie.",
   wxAt:"passage ~{t}",wxFeels:"ressenti",wxWind:"vent",wxGust:"raf.",wxRain:"pluie",
-  foot:"<b>Barrières horaires.</b> 4 points de coupure (rouge = en retard sur l'estimation, vert = dans les temps, selon l'heure de départ). Temps limite total : <b>11h45</b> pour rejoindre l'arrivée.<br><br><b>Comment lire.</b> Les watts sont tes cibles <b>en montée</b>. Le <b style='color:var(--gold)'>passage</b> (or) est l'heure estimée au sommet de chaque col. Lignes grises = descentes/vallées, avec les ravitos (bleu). Après le Sarenne, c'est une descente jusqu'à l'Alpe d'Huez (Rif Nel 700 m à 7,5 %).<br><br><b>Le temps est une estimation</b> (modèle physique, vélo ~8 kg). +20 à 40 min d'arrêts ravitos non inclus. Pace à la puissance et au ressenti, jamais à la FC quand il fait chaud.",
+  wxSumTitle:"Météo — {date}",wxSumSub:"Vue d'ensemble du jour de course. Détail heure par heure et col par col dans l'onglet Météo.",
+  wxValley:"🌡️ Vallée · Bourg-d'Oisans",wxSummits:"🏔️ Sommets · Galibier",wxDetail:"Détail par col →",
+  wxAdvHot:"<b>Forte chaleur en vallée ({t}°)</b> : hydratation ++ et sel, pace à la puissance (la FC grimpera).",
+  wxAdvWarm:"Chaleur modérée en vallée ({t}°) : hydratation et sel réguliers.",
+  wxAdvMild:"Températures clémentes en vallée ({t}°).",
+  wxAdvCold:"Froid/vent en altitude ({lo}–{hi}° au Galibier, vent {w} km/h) : <b>coupe-vent obligatoire</b> pour les descentes.",
+  wxAdvCool:"Sommets frais ({lo}–{hi}° au Galibier) : un coupe-vent léger reste utile en descente.",
+  wxAdvRain:"Risque de pluie ({p}%) : prudence en descente, pense au coupe-vent imperméable.",
+  foot:"<b>Barrières horaires.</b> 4 points de coupure (rouge = en retard sur l'estimation, vert = dans les temps, selon l'heure de départ). Temps limite total : <b>11h45</b> pour rejoindre l'arrivée.<br><br><b>Comment lire.</b> Les watts sont les cibles <b>en montée</b>. Le <b style='color:var(--gold)'>passage</b> (or) est l'heure estimée au sommet de chaque col. Lignes grises = descentes/vallées, avec les ravitos (bleu). Après le Sarenne, c'est une descente jusqu'à l'Alpe d'Huez (Rif Nel 700 m à 7,5 %).<br><br><b>Le temps est une estimation</b> (modèle physique, vélo ~8 kg). +20 à 40 min d'arrêts ravitos non inclus. Pace à la puissance et au ressenti, jamais à la FC quand il fait chaud.<br><br><b>Horaires SAS.</b> Estimés (calage : SAS 4 → 7h00, SAS 10 → 7h45, soit ~7,5 min entre SAS). L'horaire officiel figure dans la convocation reçue par mail.",
   mTitle:"Sticker top-tube",mClose:"Fermer ✕",mDl:"📄 Télécharger le sticker (PDF)",
   mHint:"Basé sur les réglages (FTP + objectif). Largeur ~35 mm. Découper, plastifier, coller sur le cadre. 2 exemplaires.",
   stValley:"Vallee",stWarm:"echauffe",stDesc:"desc",stDrink:"boire",stMantra1:"Croix Fer & Galibier : se retenir.",stMantra2:"Pace watts pas FC · 60-80g+sel/h",
   stNote:"Largeur 35 mm · imprimer à 100% (taille réelle) · découper, plastifier, coller sur le top-tube.",
   pdfMoving:"Temps roulé estimé :",pdfArr:"arrivée ~",pdfStart:"Départ",pdfNut:"Ravitaillement",
-  pdfNutLine:"Besoin ~{need} g de glucides ({gph} g/h) · emporté {c} g. Ajouter du sodium/électrolytes.",
+  pdfNutLine:"Besoin ~{need} g de glucides ({gph} g/h) · emporté {c} g.",
+  pdfNutCarry:"À emporter : {nGel} gels/barres · {nBidon} bidons iso. Ajouter du sodium / électrolytes.",
   pdfN1:"Estimation (modèle physique, vélo ~8 kg). Descentes, vent et groupes font varier. +20 à 40 min d'arrêts ravitos non inclus.",
   pdfN2:"Pace à la puissance et au ressenti, jamais à la FC quand il fait chaud. Barrières = heures limites (temps total 11h45).",
   pdfN3:"Après le Sarenne : descente jusqu'à l'Alpe d'Huez (dernière bosse Rif Nel 700 m à 7,5 %)."},
- en:{eyebrow:"SAS to Summit · Pacing tool (unofficial)",theme_light:"☀ Light mode",theme_dark:"☾ Dark mode",
+ en:{eyebrow:"SAS to Summit · Pacing tool",theme_light:"☀ Light mode",theme_dark:"☾ Dark mode",
   cols:"4 climbs",date:"Sun 19 July",profcap:"Queen stage profile",dataTitle:"Your data",
   labFtp:"Your FTP (threshold)",labKg:"Your weight",labSas:"Your start wave",goalTitle:"Your goal for the day",
   o1:"Finish safely",o1s:"safety margin",o2:"Diesel pacing",o2s:"steady, don't blow up",o3:"Perform",o3s:"chase the clock",
@@ -301,18 +348,27 @@ var L={
   btnPdf:"📄 Download plan (PDF)",btnSticker:"🏷️ Generate frame sticker",
   tlCol:"climb ≈",tlPass:"at",tlRecup:"recovery + aid",tlMargin:"margin +",tlLate:"LATE ",
   tlBarr:"Cut-off {label} (km {km}) {time} · you pass ~{pass} ({m})",
-  busy:"Generating…",labTemp:"Forecast temperature",tabPlan:"Race plan",tabCheck:"Checklist",chkTitle:"Pre-race checklist",chkIntro:"Tick off before the start. Saved on this device.",chkReset:"Uncheck all",wxCool:"Cool conditions — normal hydration, standard sodium.",wxWarm:"Moderate heat — steady hydration and regular sodium.",wxHot:"High heat — max hydration, extra sodium, pace by power (HR will run high).",
-  wxTitle:"Race-day weather",wxDate:"Sunday 19 July",
+  busy:"Generating…",labTemp:"Forecast temperature",tabPlan:"Race plan",tabNutri:"Nutrition",tabCheck:"Checklist",chkTitle:"Pre-race checklist",chkIntro:"Tick off before the start. Saved on this device.",chkReset:"Uncheck all",infoTitle:"Practical info",infoIntro:"Reminders from the official roadbook — times, access, cut-offs.",wxCool:"Cool conditions — normal hydration, standard sodium.",wxWarm:"Moderate heat — steady hydration and regular sodium.",wxHot:"High heat — max hydration, extra sodium, pace by power (HR will run high).",
+  wxTitle:"Per-climb detail — at your pass time",wxDate:"Sunday 19 July",tabWx:"Weather",
   wxSub:"Open-Meteo forecast for {date}, at your estimated pass time (varies with wave + FTP). Altitude-adjusted temperatures.",
   wxUpd:"upd {t}",wxRefresh:"Refresh",wxLoading:"Loading weather…",wxError:"Weather unavailable right now — try again.",
   wxAt:"pass ~{t}",wxFeels:"feels",wxWind:"wind",wxGust:"gust",wxRain:"rain",
-  foot:"<b>Time cut-offs.</b> 4 checkpoints (red = behind the estimate, green = within time, based on your start time). Overall time limit: <b>11h45</b> to reach the finish.<br><br><b>How to read.</b> Watts are your targets <b>on climbs</b>. The <b style='color:var(--gold)'>pass time</b> (gold) is the estimated clock time at each summit. Grey lines = descents/valleys, with aid stations (blue). After Sarenne it's a descent to Alpe d'Huez (Rif Nel 700 m at 7.5%).<br><br><b>Times are estimates</b> (physics model, ~8 kg bike). +20 to 40 min of aid-station stops not included. Pace by power and feel, never by heart rate in the heat.",
+  wxSumTitle:"Weather — {date}",wxSumSub:"Race-day overview. Hour-by-hour, per-climb detail in the Weather tab.",
+  wxValley:"🌡️ Valley · Bourg-d'Oisans",wxSummits:"🏔️ Summits · Galibier",wxDetail:"Per-climb detail →",
+  wxAdvHot:"<b>High heat in the valley ({t}°)</b>: hydrate ++ and add salt, pace by power (HR will climb).",
+  wxAdvWarm:"Moderate valley heat ({t}°): steady hydration and salt.",
+  wxAdvMild:"Mild valley temperatures ({t}°).",
+  wxAdvCold:"Cold/windy up high ({lo}–{hi}° at the Galibier, wind {w} km/h): <b>a wind vest is a must</b> on the descents.",
+  wxAdvCool:"Cool summits ({lo}–{hi}° at the Galibier): a light wind vest still helps on descents.",
+  wxAdvRain:"Rain risk ({p}%): careful on descents, bring a waterproof.",
+  foot:"<b>Time cut-offs.</b> 4 checkpoints (red = behind the estimate, green = within time, based on your start time). Overall time limit: <b>11h45</b> to reach the finish.<br><br><b>How to read.</b> Watts are your targets <b>on climbs</b>. The <b style='color:var(--gold)'>pass time</b> (gold) is the estimated clock time at each summit. Grey lines = descents/valleys, with aid stations (blue). After Sarenne it's a descent to Alpe d'Huez (Rif Nel 700 m at 7.5%).<br><br><b>Times are estimates</b> (physics model, ~8 kg bike). +20 to 40 min of aid-station stops not included. Pace by power and feel, never by heart rate in the heat.<br><br><b>Wave times.</b> Estimated (anchored on wave 4 → 7:00 and wave 10 → 7:45, i.e. ~7.5 min between waves). The official time is in your email confirmation.",
   mTitle:"Top-tube sticker",mClose:"Close ✕",mDl:"📄 Download sticker (PDF)",
   mHint:"Based on your settings (FTP + goal). ~35 mm wide. Cut, laminate, stick on the frame. 2 copies.",
   stValley:"Valley",stWarm:"warm up",stDesc:"desc",stDrink:"drink",stMantra1:"Croix de Fer & Galibier: hold back.",stMantra2:"Pace by power not HR · 60-80g+salt/h",
   stNote:"35 mm wide · print at 100% (actual size) · cut, laminate, stick on the top-tube.",
   pdfMoving:"Estimated moving time:",pdfArr:"arrival ~",pdfStart:"Start",pdfNut:"Nutrition",
-  pdfNutLine:"Need ~{need} g of carbs ({gph} g/h) · carrying {c} g. Add sodium/electrolytes.",
+  pdfNutLine:"Need ~{need} g of carbs ({gph} g/h) · carrying {c} g.",
+  pdfNutCarry:"To carry: {nGel} gels/bars · {nBidon} iso bottles. Add sodium / electrolytes.",
   pdfN1:"Estimate (physics model, ~8 kg bike). Descents, wind and groups vary it. +20 to 40 min of aid stops not included.",
   pdfN2:"Pace by power and feel, never by HR in the heat. Cut-offs = time limits (overall limit 11h45).",
   pdfN3:"After Sarenne: descent to Alpe d'Huez (last kicker Rif Nel 700 m at 7.5%)."}
@@ -348,10 +404,42 @@ var SEG=[
 ];
 var BASE={chill:0.68,diesel:0.75,perf:0.80};
 var CHECK=[
- {g:{fr:"Vélo",en:"Bike"},items:[{fr:"Vélo révisé (transmission, freins)",en:"Bike serviced (drivetrain, brakes)"},{fr:"Pneus + pression vérifiés",en:"Tyres + pressure checked"},{fr:"2 bidons",en:"2 bottles"},{fr:"Compteur chargé + parcours GPX",en:"Computer charged + GPX route"},{fr:"Kit réparation (chambre, démonte-pneus, pompe/CO2)",en:"Repair kit (tube, levers, pump/CO2)"},{fr:"Multi-outil",en:"Multi-tool"}]},
- {g:{fr:"Nutrition",en:"Nutrition"},items:[{fr:"Gels / barres (selon le calcul)",en:"Gels / bars (per the calc)"},{fr:"Boisson iso préparée",en:"Iso drink prepared"},{fr:"Pastilles de sel / électrolytes",en:"Salt tabs / electrolytes"},{fr:"Petit-déjeuner prévu (3-4 h avant)",en:"Breakfast planned (3-4 h before)"}]},
- {g:{fr:"Vêtements",en:"Clothing"},items:[{fr:"Cuissard + maillot",en:"Bibs + jersey"},{fr:"Coupe-vent (descentes froides en altitude)",en:"Wind vest (cold high-altitude descents)"},{fr:"Gants",en:"Gloves"},{fr:"Casque",en:"Helmet"},{fr:"Lunettes",en:"Glasses"},{fr:"Crème solaire",en:"Sunscreen"}]},
- {g:{fr:"Logistique",en:"Logistics"},items:[{fr:"Dossard + plaque de cadre",en:"Bib + frame plate"},{fr:"Puce chrono",en:"Timing chip"},{fr:"Licence / certificat",en:"Licence / medical cert."},{fr:"Heure de départ SAS notée",en:"Start wave time noted"},{fr:"Sac d'après-course",en:"Post-race bag"},{fr:"Accès / parking repérés",en:"Access / parking checked"}]}
+ {g:{fr:"Dossard & Village",en:"Bib & Village"},items:[
+   {fr:"Dossard, plaque de guidon et puce récupérés",en:"Bib, handlebar plate and chip collected"},
+   {fr:"Sac coureur récupéré",en:"Rider bag collected"},
+   {fr:"Numéro de SAS repéré",en:"Start wave number noted",h:{fr:"partir dans un SAS antérieur = disqualification",en:"starting in an earlier wave = disqualification"}}]},
+ {g:{fr:"Vélo",en:"Bike"},items:[
+   {fr:"Vélo révisé (transmission, freins)",en:"Bike serviced (drivetrain, brakes)"},
+   {fr:"Pneus + pression vérifiés",en:"Tyres + pressure checked"},
+   {fr:"Kit crevaison + multi-outil",en:"Puncture kit + multi-tool",h:{fr:"chambre, démonte-pneus, pompe ou CO₂",en:"tube, levers, pump or CO₂"}},
+   {fr:"2 bidons + compteur chargé (trace GPX)",en:"2 bottles + computer charged (GPX)"}]},
+ {g:{fr:"Équipement",en:"Kit"},items:[
+   {fr:"Casque + lunettes",en:"Helmet + glasses"},
+   {fr:"Coupe-vent",en:"Wind vest",h:{fr:"indispensable : descentes d'altitude froides (Galibier, Lautaret)",en:"essential: cold high-altitude descents (Galibier, Lautaret)"}},
+   {fr:"Gants + crème solaire",en:"Gloves + sunscreen"}]},
+ {g:{fr:"Nutrition",en:"Nutrition"},items:[
+   {fr:"Gels / barres (selon le calcul de l'onglet Plan)",en:"Gels / bars (per the Plan tab calc)"},
+   {fr:"Boisson iso préparée",en:"Iso drink prepared"},
+   {fr:"Pastilles de sel / électrolytes",en:"Salt tabs / electrolytes"},
+   {fr:"Petit-déjeuner 3-4 h avant",en:"Breakfast 3-4 h before"}]},
+ {g:{fr:"Jour J",en:"Race day"},items:[
+   {fr:"Sac déposé à la consigne",en:"Bag handed in at drop"},
+   {fr:"Accès + parking repérés",en:"Access + parking scouted"},
+   {fr:"Dans le SAS avant sa fermeture",en:"In the wave before it closes"}]}
+];
+var INFO=[
+ {ic:"📍",fr:["Retrait des dossards","Village au Stade Olympique, Alpe d'Huez (Av. de Brandes). Jeu 16 : <b>14h–19h</b> · Ven 17 & Sam 18 : <b>10h–19h</b>. Pas de retrait le dimanche matin. Sac coureur (Maurten) remis avec le dossard."],
+      en:["Bib pickup","Village at the Olympic Stadium, Alpe d'Huez (Av. de Brandes). Thu 16: <b>2–7pm</b> · Fri 17 & Sat 18: <b>10am–7pm</b>. No pickup on Sunday morning. Rider bag (Maurten) handed out with the bib."]},
+ {ic:"🎫",fr:["SAS de départ","17 SAS échelonnés, numéro reçu par mail. Plaque de guidon contrôlée à l'entrée (accès par l'arrière du SAS). Partir dans un SAS antérieur = disqualification automatique."],
+      en:["Start waves","17 staggered waves, number sent by email. Handlebar plate checked at the entrance (access from the rear). Starting in an earlier wave = automatic disqualification."]},
+ {ic:"🍽️",fr:["Petit-déjeuner & consigne","Offerts dès <b>5h</b> au rond-point D1091/D211 (Le Bourg-d'Oisans). Seul le sac L'Étape est accepté à la consigne ; étiquette fournie dans l'enveloppe dossard ; ne rien laisser de valeur."],
+      en:["Breakfast & bag drop","Free from <b>5am</b> at the D1091/D211 roundabout (Le Bourg-d'Oisans). Only the official Étape bag is accepted at bag drop; tag provided in the bib envelope; leave no valuables."]},
+ {ic:"🚧",fr:["Routes fermées (accès à vélo)","D1091 : <b>5h30–9h</b> · D211 : <b>4h30–8h</b> · D1091B : <b>4h–10h</b> · D526 : <b>7h15–12h45</b>. Les axes menant au départ sont réservés aux cyclistes."],
+      en:["Road closures (bike access)","D1091: <b>5:30–9am</b> · D211: <b>4:30–8am</b> · D1091B: <b>4–10am</b> · D526: <b>7:15am–12:45pm</b>. Roads to the start are bike-only."]},
+ {ic:"⛔",fr:["Barrières horaires","Croix de Fer <b>11h28</b> · Saint-Michel <b>13h15</b> · Valloire <b>15h36</b> · pied du Sarenne <b>18h10</b>. Temps limite total : <b>11h45</b> pour l'arrivée."],
+      en:["Time cut-offs","Croix de Fer <b>11:28</b> · Saint-Michel <b>13:15</b> · Valloire <b>15:36</b> · foot of Sarenne <b>18:10</b>. Overall limit: <b>11h45</b> to the finish."]},
+ {ic:"🗣️",fr:["Race briefing (FR)","<b>14h30–15h</b> les jeu/ven/sam, salle Philippe de Broca (Agoralp, à côté du Village). Inscription obligatoire via le lien reçu par mail."],
+      en:["Race briefing (FR)","<b>2:30–3pm</b> Thu/Fri/Sat, Philippe de Broca theatre (Agoralp, next to the Village). Registration required via the emailed link."]}
 ];
 var obj="diesel", totalSec=0;
 function NM(x){return typeof x==='string'?x:x[lang];}
@@ -388,7 +476,8 @@ function climbSpeed(power,mass,gradPct){var g=9.81,Crr=0.005,rho=1.2,CdA=0.34,ef
 function fmtDur(s){var h=Math.floor(s/3600),m=Math.round((s%3600)/60);return m===60?(h+1)+"h00":h+"h"+String(m).padStart(2,'0');}
 function fmtClock(s){s=((s%86400)+86400)%86400;var h=Math.floor(s/3600),m=Math.floor((s%3600)/60);return String(h).padStart(2,'0')+":"+String(m).padStart(2,'0');}
 function parseStart(){var v=document.getElementById('start').value||"07:45";var p=v.split(':').map(Number);return p[0]*3600+p[1]*60;}
-function sasToClock(n){var sec=(6*3600+30*60)+(n-1)*500,h=Math.floor(sec/3600),m=Math.round((sec%3600)/60);return String(h).padStart(2,'0')+":"+String(m).padStart(2,'0');}
+// Horaires SAS estimés : calés sur 2 points réels (SAS 4 = 7h00, SAS 10 = 7h45) → intervalle 7,5 min/SAS.
+function sasToClock(n){var sec=25200+(n-4)*450,h=Math.floor(sec/3600),m=Math.round((sec%3600)/60);return String(h).padStart(2,'0')+":"+String(m).padStart(2,'0');}
 
 function compute(){
   var ftp=Math.max(60,+document.getElementById('ftp').value||0);
@@ -446,8 +535,9 @@ function computePlanData(){
     if(s.type==='climb'){idx++;nClimb++;wkgSum+=s.w/kg;rows.push({type:'climb',idx:idx,name:NM(s.name),from:s.from,to:s.to,grad:s.grad,pct:s.pct,w:s.w,wkg:s.w/kg,key:s.key,cue:s.cue[lang],tSec:t2,passSec:startSec+cum,rav:rav,bar:bar});}
     else rows.push({type:'liaison',name:NM(s.name),from:s.from,to:s.to,tSec:t2,passSec:startSec+cum,rav:rav,bar:bar});
   });
-  var nutri={gph:+document.getElementById('gph').value||0};nutri.need=Math.round(nutri.gph*(cum/3600));
-  nutri.carried=(+document.getElementById('nGel').value)*(+document.getElementById('gGel').value||0)+(+document.getElementById('nBidon').value)*(+document.getElementById('gBidon').value||0);
+  var nGel=+document.getElementById('nGel').value||0,nBidon=+document.getElementById('nBidon').value||0;
+  var nutri={gph:+document.getElementById('gph').value||0,nGel:nGel,nBidon:nBidon};nutri.need=Math.round(nutri.gph*(cum/3600));
+  nutri.carried=nGel*(+document.getElementById('gGel').value||0)+nBidon*(+document.getElementById('gBidon').value||0);
   return {ftp:ftp,kg:kg,startSec:startSec,totalSec:cum,arrival:startSec+cum,avgWkg:wkgSum/(nClimb||1),rows:rows,nutri:nutri};
 }
 function objLabel(){return t('o'+(obj==='chill'?'1':obj==='diesel'?'2':'3'));}
@@ -464,26 +554,36 @@ function generatePlanPDF(){
   doc.setFontSize(9.5);doc.setTextColor.apply(doc,ink);doc.text(pdfSafe("FTP "+d.ftp+" W  ·  "+d.kg+" kg  ·  "+objLabel()+"  ·  "+t('pdfStart')+" "+fmtClock(d.startSec)),M,y);y+=7;
   doc.setFont('helvetica','bold');doc.setFontSize(15);doc.setTextColor.apply(doc,gold);doc.text(pdfSafe(t('pdfMoving')+" "+fmtDur(d.totalSec)),M,y);
   doc.setFontSize(10);doc.setTextColor.apply(doc,ink);doc.text(pdfSafe(t('pdfArr')+fmtClock(d.arrival)),Wp-M,y,{align:'right'});y+=8;
+  var LH=4.3;
   d.rows.forEach(function(r){
-    if(y>272){doc.addPage();y=18;}
+    var nl=(r.type==='climb'?2:1)+(r.cue?1:0)+(r.rav&&r.rav.length?2:0)+(r.bar?1:0);
+    if(y+nl*LH+6>287){doc.addPage();y=18;}
     if(r.type==='climb'){
-      doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor.apply(doc,ink);doc.text(pdfSafe(r.idx+". "+r.name),M,y);
+      doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor.apply(doc,ink);doc.text(pdfSafe(r.idx+". "+r.name),M,y);
       doc.setTextColor.apply(doc,r.key?red:gold);doc.text(r.w+" W",Wp-M,y,{align:'right'});
-      doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor.apply(doc,gray);y+=4;
+      y+=5;
+      doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor.apply(doc,gray);
       doc.text((r.to-r.from).toFixed(1)+" km · "+r.grad+"% · "+Math.round(r.pct*100)+"% FTP",M,y);
       doc.text(pdfSafe(r.wkg.toFixed(1)+" W/kg · "+t('tlCol')+" "+fmtDur(r.tSec)+" · "+t('tlPass')+" "+fmtClock(r.passSec)),Wp-M,y,{align:'right'});
-      if(r.cue){y+=3.6;doc.setTextColor(90,120,150);doc.text(pdfSafe(r.cue),M,y);}
-    } else {doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor.apply(doc,gray);doc.text(pdfSafe(r.name),M,y);
-      doc.text(pdfSafe("~"+fmtDur(r.tSec)+" · "+t('tlPass')+" "+fmtClock(r.passSec)),Wp-M,y,{align:'right'});}
-    if(r.rav&&r.rav.length){y+=3.8;doc.setFontSize(7.6);doc.setTextColor.apply(doc,blue);doc.text(pdfSafe(r.rav.map(function(x){return x.k+" (km "+x.km+") "+x.t;}).join("   |   ")),M,y);}
-    if(r.bar){y+=3.8;doc.setFontSize(7.6);doc.setTextColor.apply(doc,r.bar.ok?green:red);doc.text(pdfSafe(fmtn(t('tlBarr'),{label:r.bar.label,km:r.bar.km,time:r.bar.time,pass:fmtClock(r.bar.pass),m:(r.bar.ok?t('tlMargin'):t('tlLate'))+fmtDur(r.bar.margin)})),M,y);}
-    y+=6;doc.setDrawColor(235,235,235);doc.line(M,y-2.5,Wp-M,y-2.5);
+      y+=LH;
+      if(r.cue){doc.setFontSize(8);doc.setTextColor(90,120,150);doc.text(pdfSafe(r.cue),M,y);y+=LH;}
+    } else {
+      doc.setFont('helvetica','bold');doc.setFontSize(9.5);doc.setTextColor.apply(doc,ink);doc.text(pdfSafe(r.name),M,y);
+      doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor.apply(doc,gray);doc.text(pdfSafe("~"+fmtDur(r.tSec)+" · "+t('tlPass')+" "+fmtClock(r.passSec)),Wp-M,y,{align:'right'});
+      y+=LH;
+    }
+    if(r.rav&&r.rav.length){doc.setFont('helvetica','normal');doc.setFontSize(7.6);doc.setTextColor.apply(doc,blue);
+      var rt=doc.splitTextToSize(pdfSafe(r.rav.map(function(x){return x.k+" (km "+x.km+") "+x.t;}).join("    |    ")),Wp-2*M);
+      doc.text(rt,M,y);y+=rt.length*3.7+0.6;}
+    if(r.bar){doc.setFont('helvetica','normal');doc.setFontSize(7.6);doc.setTextColor.apply(doc,r.bar.ok?green:red);doc.text(pdfSafe(fmtn(t('tlBarr'),{label:r.bar.label,km:r.bar.km,time:r.bar.time,pass:fmtClock(r.bar.pass),m:(r.bar.ok?t('tlMargin'):t('tlLate'))+fmtDur(r.bar.margin)})),M,y);y+=LH;}
+    y+=1.6;doc.setDrawColor(232,232,232);doc.line(M,y,Wp-M,y);y+=4;
   });
-  if(y>250){doc.addPage();y=18;}y+=2;
-  doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor.apply(doc,ink);doc.text(t('pdfNut'),M,y);y+=5;
-  doc.setFont('helvetica','normal');doc.setFontSize(8.6);doc.setTextColor.apply(doc,gray);doc.text(pdfSafe(fmtn(t('pdfNutLine'),{need:d.nutri.need,gph:d.nutri.gph,c:d.nutri.carried})),M,y);y+=6;
-  doc.setFontSize(7.3);doc.setTextColor(140,140,140);
-  [t('pdfN1'),t('pdfN2'),t('pdfN3')].forEach(function(n){var w=doc.splitTextToSize(pdfSafe(n),Wp-2*M);doc.text(w,M,y);y+=w.length*3.4+1;});
+  if(y+30>287){doc.addPage();y=18;}else{y+=3;}
+  doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor.apply(doc,ink);doc.text(t('pdfNut'),M,y);y+=5.5;
+  doc.setFont('helvetica','normal');doc.setFontSize(8.6);doc.setTextColor.apply(doc,gray);doc.text(pdfSafe(fmtn(t('pdfNutLine'),{need:d.nutri.need,gph:d.nutri.gph,c:d.nutri.carried})),M,y);y+=4.7;
+  doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor.apply(doc,ink);doc.text(pdfSafe(fmtn(t('pdfNutCarry'),{nGel:d.nutri.nGel,nBidon:d.nutri.nBidon})),M,y);y+=6.5;
+  doc.setFont('helvetica','normal');doc.setFontSize(7.3);doc.setTextColor(140,140,140);
+  [t('pdfN1'),t('pdfN2'),t('pdfN3')].forEach(function(n){var w=doc.splitTextToSize(pdfSafe(n),Wp-2*M);doc.text(w,M,y);y+=w.length*3.4+1.2;});
   dl(doc.output('blob'),'sas-to-summit-plan.pdf');
 }
 function stickerRows(){var ftp=Math.max(60,+document.getElementById('ftp').value||0),base=BASE[obj];var rows=[{t:'f',km:'0-14',nm:t('stValley'),w:t('stWarm'),rav:''}];
@@ -528,7 +628,7 @@ function wxSeries(){if(!WX.data)return null;var segc=currentSegc(),startSec=pars
       code:H.weather_code[hp],wind:H.wind_speed_10m[hp],gust:H.wind_gusts_10m[hp],wdir:H.wind_direction_10m[hp],pop:H.precipitation_probability[hp]};});}
 function fmtHM(dt){return String(dt.getHours()).padStart(2,'0')+':'+String(dt.getMinutes()).padStart(2,'0');}
 function wxUrl(){var la=WXPTS.map(function(p){return p.lat;}).join(','),lo=WXPTS.map(function(p){return p.lon;}).join(','),el=WXPTS.map(function(p){return p.alt;}).join(',');
-  return 'https://api.open-meteo.com/v1/forecast?latitude='+la+'&longitude='+lo+'&elevation='+el+'&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m&start_date='+RACE_DATE+'&end_date='+RACE_DATE+'&timezone=Europe%2FParis';}
+  return 'https://api.open-meteo.com/v1/forecast?latitude='+la+'&longitude='+lo+'&elevation='+el+'&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m&daily=temperature_2m_max,temperature_2m_min,weather_code,precipitation_probability_max,wind_speed_10m_max,wind_direction_10m_dominant&start_date='+RACE_DATE+'&end_date='+RACE_DATE+'&timezone=Europe%2FParis';}
 function fetchWeather(){WX.loading=true;WX.error=false;renderWeather();
   fetch(wxUrl()).then(function(r){if(!r.ok)throw new Error('http '+r.status);return r.json();})
     .then(function(j){WX.data=Array.isArray(j)?j:[j];WX.loading=false;WX.fetchedAt=new Date();autoTemp();renderWeather();})
@@ -550,10 +650,34 @@ function renderWeather(){var grid=document.getElementById('wxGrid'),msg=document
       '<div class="wxdesc">'+ci[lang]+'</div>'+
       '<div class="wxrow"><span>'+t('wxWind')+' <b>'+Math.round(x.wind)+'</b> km/h '+windDir(x.wdir)+' '+windArrow(x.wdir)+'</span><span>'+t('wxGust')+' '+Math.round(x.gust)+'</span></div>'+
       '<div class="wxrow"><span>'+t('wxFeels')+' '+Math.round(x.feels)+'°</span><span class="wxrain">'+t('wxRain')+' <b>'+Math.round(x.pop)+'%</b></span></div>'+
-      '</div>';}).join('');}
+      '</div>';}).join('');
+  renderSummary();}
+function renderSummary(){
+  var body=document.getElementById('wxSumBody'),msg=document.getElementById('wxSumMsg'),upd=document.getElementById('wxSumUpd');if(!body)return;
+  if(WX.loading){msg.textContent=t('wxLoading');msg.style.display='';body.innerHTML='';upd.textContent='';return;}
+  var V=WX.data&&WX.data[0]&&WX.data[0].daily,S=WX.data&&WX.data[3]&&WX.data[3].daily;
+  if(WX.error||!V||!S){msg.textContent=t('wxError');msg.style.display='';body.innerHTML='';upd.textContent='';return;}
+  msg.style.display='none';upd.textContent=WX.fetchedAt?fmtn(t('wxUpd'),{t:fmtHM(WX.fetchedAt)}):'';
+  function card(loc,alt,dl){var ci=wxCodeInfo(dl.weather_code[0]),wind=Math.round(dl.wind_speed_10m_max[0]),
+      dir=dl.wind_direction_10m_dominant?dl.wind_direction_10m_dominant[0]:null,pop=Math.round(dl.precipitation_probability_max[0]);
+    return '<div class="wcard"><div class="wloc">'+loc+' <span>'+alt+' m</span></div>'+
+      '<div class="wtemp"><span class="mn">'+Math.round(dl.temperature_2m_min[0])+'°</span><span class="sep"> / </span><span class="mx">'+Math.round(dl.temperature_2m_max[0])+'°</span></div>'+
+      '<div class="wcond">'+ci.i+' '+ci[lang]+' · '+t('wxWind')+' '+wind+(dir!=null?' '+windDir(dir)+windArrow(dir):'')+' · '+t('wxRain')+' '+pop+'%</div></div>';}
+  var vMax=Math.round(V.temperature_2m_max[0]),sMin=Math.round(S.temperature_2m_min[0]),sMax=Math.round(S.temperature_2m_max[0]),
+      pop=Math.max(Math.round(V.precipitation_probability_max[0]),Math.round(S.precipitation_probability_max[0])),wind=Math.round(S.wind_speed_10m_max[0]);
+  var adv=[];
+  if(vMax>=30)adv.push(fmtn(t('wxAdvHot'),{t:vMax}));else if(vMax>=25)adv.push(fmtn(t('wxAdvWarm'),{t:vMax}));else adv.push(fmtn(t('wxAdvMild'),{t:vMax}));
+  if(sMax<=10||wind>=30)adv.push(fmtn(t('wxAdvCold'),{lo:sMin,hi:sMax,w:wind}));else adv.push(fmtn(t('wxAdvCool'),{lo:sMin,hi:sMax}));
+  if(pop>=40)adv.push(fmtn(t('wxAdvRain'),{p:pop}));
+  body.innerHTML='<div class="wgrid">'+card(t('wxValley'),713,V)+card(t('wxSummits'),2642,S)+'</div>'+
+    '<div class="wadvice">'+adv.join(' ')+'</div>'+
+    '<div class="wmeta"><span>Open-Meteo</span><button class="wxlink" id="wxToDetail">'+t('wxDetail')+'</button></div>';
+  var b=document.getElementById('wxToDetail');if(b)b.onclick=function(){showTab('weather');};}
 function chkState(){try{return JSON.parse(localStorage.getItem('edt-check')||'{}');}catch(e){return {};}}
 function chkSave(st){try{localStorage.setItem('edt-check',JSON.stringify(st));}catch(e){}}
-function renderChecklist(){var st=chkState();var h='';CHECK.forEach(function(g,gi){h+='<div class="chk-group"><h4>'+g.g[lang]+'</h4>';g.items.forEach(function(it,ii){var id='c'+gi+'_'+ii;h+='<div class="chk-item '+(st[id]?'done':'')+'"><input type="checkbox" id="'+id+'" '+(st[id]?'checked':'')+'><label for="'+id+'">'+it[lang]+'</label></div>';});h+='</div>';});var box=document.getElementById('chkList');box.innerHTML=h;
+function renderInfo(){var box=document.getElementById('infoList');if(!box)return;
+  box.innerHTML=INFO.map(function(x){return '<div class="info-item"><span class="info-ic">'+x.ic+'</span><div><div class="info-t">'+x[lang][0]+'</div><div class="info-d">'+x[lang][1]+'</div></div></div>';}).join('');}
+function renderChecklist(){var st=chkState();var h='';CHECK.forEach(function(g,gi){h+='<div class="chk-group"><h4>'+g.g[lang]+'</h4>';g.items.forEach(function(it,ii){var id='c'+gi+'_'+ii;h+='<div class="chk-item '+(st[id]?'done':'')+'"><input type="checkbox" id="'+id+'" '+(st[id]?'checked':'')+'><label for="'+id+'">'+it[lang]+(it.h?'<span class="chk-hint">'+it.h[lang]+'</span>':'')+'</label></div>';});h+='</div>';});var box=document.getElementById('chkList');box.innerHTML=h;
   box.querySelectorAll('input').forEach(function(cb){cb.addEventListener('change',function(){var st=chkState();st[cb.id]=cb.checked;chkSave(st);cb.closest('.chk-item').classList.toggle('done',cb.checked);});});}
 // ---- application de la langue ----
 function setText(id,k){var e=document.getElementById(id);if(e)e.textContent=t(k);}
@@ -571,11 +695,15 @@ function applyLang(){
   document.getElementById('route').innerHTML="<b>Le Bourg-d'Oisans</b> → <b>Alpe d'Huez</b> · 170 km · 5 400 m D+ · "+t('cols')+" · "+t('date');
   document.getElementById('themeBtn').textContent=(document.documentElement.getAttribute('data-theme')==='light')?t('theme_dark'):t('theme_light');
   // SAS options
-  var sel=document.getElementById('sas');var cur=sel.value||'10';var o='';for(var n=1;n<=17;n++){o+='<option value="'+n+'"'+(String(n)===String(cur)?' selected':'')+'>SAS '+n+' — ~'+sasToClock(n)+'</option>';}sel.innerHTML=o;
-  setText('labTemp','labTemp');setText('tabPlan','tabPlan');setText('tabCheck','tabCheck');setText('chkTitle','chkTitle');setText('chkReset','chkReset');
+  var sel=document.getElementById('sas');var cur=sel.value||'10';var o='';for(var n=1;n<=17;n++){o+='<option value="'+n+'"'+(String(n)===String(cur)?' selected':'')+'>SAS '+n+' — ~'+sasToClock(n)+'</option>';}sel.innerHTML=o;sel.value=cur;
+  setText('labTemp','labTemp');setText('tabPlan','tabPlan');setText('tabNutri','tabNutri');setText('tabCheck','tabCheck');setText('chkTitle','chkTitle');setText('chkReset','chkReset');
+  setText('infoTitle','infoTitle');document.getElementById('infoIntro').textContent=t('infoIntro');renderInfo();
   document.getElementById('chkIntro').textContent=t('chkIntro');
-  setText('wxTitle','wxTitle');document.getElementById('wxRefresh').textContent=t('wxRefresh');
+  setText('wxTitle','wxTitle');setText('tabWx','tabWx');
+  document.getElementById('wxRefresh').textContent=t('wxRefresh');document.getElementById('wxSumRefresh').textContent=t('wxRefresh');
   document.getElementById('wxSub').innerHTML=fmtn(t('wxSub'),{date:t('wxDate')});
+  document.getElementById('wxSumTitle').textContent=fmtn(t('wxSumTitle'),{date:t('wxDate')});
+  document.getElementById('wxSumSub').textContent=t('wxSumSub');
   renderChecklist();
   document.querySelectorAll('.langsel button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.l===lang);});
   try{localStorage.setItem('edt-lang',lang);}catch(e){}
@@ -589,7 +717,9 @@ document.getElementById('obj').addEventListener('click',function(e){var b=e.targ
 ['gph','gGel','gBidon','nGel','nBidon'].forEach(function(id){document.getElementById(id).addEventListener('input',computeNutrition);});
 document.getElementById('temp').addEventListener('input',function(){tempTouched=true;updateWx();});
 document.getElementById('wxRefresh').addEventListener('click',fetchWeather);
-document.querySelectorAll('.tab').forEach(function(tb){tb.addEventListener('click',function(){var w=tb.dataset.tab;document.getElementById('viewPlan').style.display=(w==='plan')?'':'none';document.getElementById('viewCheck').style.display=(w==='check')?'':'none';document.querySelectorAll('.tab').forEach(function(x){x.setAttribute('aria-pressed',x===tb);});});});
+document.getElementById('wxSumRefresh').addEventListener('click',fetchWeather);
+function showTab(w){document.getElementById('viewPlan').style.display=(w==='plan')?'':'none';document.getElementById('viewNutrition').style.display=(w==='nutri')?'':'none';document.getElementById('viewWeather').style.display=(w==='weather')?'':'none';document.getElementById('viewCheck').style.display=(w==='check')?'':'none';document.querySelectorAll('.tab').forEach(function(x){x.setAttribute('aria-pressed',x.dataset.tab===w);});}
+document.querySelectorAll('.tab').forEach(function(tb){tb.addEventListener('click',function(){showTab(tb.dataset.tab);});});
 document.getElementById('chkReset').addEventListener('click',function(){chkSave({});renderChecklist();});
 document.querySelectorAll('.langsel button').forEach(function(b){b.addEventListener('click',function(){lang=b.dataset.l;applyLang();});});
 document.getElementById('pdfBtn').addEventListener('click',function(){var done=busy(this,t('busy'));try{generatePlanPDF();}catch(e){alert('PDF error: '+e.message);}setTimeout(done,600);});
