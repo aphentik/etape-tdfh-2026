@@ -114,6 +114,27 @@
   .verdict .em{font-family:'JetBrains Mono';font-weight:700}
   .verdict.short .em{color:var(--flamme)} .verdict.good .em{color:var(--ok)} .verdict.over .em{color:var(--gold)}
   .sodium{margin-top:14px;font-size:.78rem;color:var(--muted)} .sodium b{color:var(--ice)}
+  .nsel{display:flex;gap:8px;margin-top:6px}
+  .nsel button{flex:1;font-family:'Inter';font-weight:600;font-size:.82rem;color:var(--muted);background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 6px;cursor:pointer;line-height:1.2}
+  .nsel button[aria-pressed="true"]{background:var(--gold);color:#1a1206;border-color:var(--gold)}
+  .nchips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .nchips button{font-family:'JetBrains Mono';font-weight:700;font-size:.78rem;color:var(--muted);background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:8px 12px;cursor:pointer}
+  .nchips button[aria-pressed="true"]{background:var(--ice);color:#08222b;border-color:var(--ice)}
+  .nblock{margin-top:22px}
+  .nblock-t{font-family:'Barlow Condensed';font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:.8rem;color:var(--gold);margin-bottom:8px}
+  .nrate{font-size:.92rem;color:var(--ink);line-height:1.7}
+  .nrate b{color:var(--gold);font-family:'JetBrains Mono';font-weight:700}
+  .ncl{font-size:.95rem;color:var(--ink);margin:3px 0}
+  .ncl b{font-family:'JetBrains Mono';font-weight:700;color:var(--gold);font-size:1.15rem;margin-right:2px}
+  .nc-note{font-size:.78rem;color:var(--muted);margin-top:9px;line-height:1.45}
+  .nleg{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:10px 4px;border-bottom:1px solid var(--line)}
+  .nleg .nlk{font-family:'Barlow Condensed';font-weight:700;font-size:1.1rem;color:var(--ice);width:36px;text-align:center}
+  .nleg .nlh{font-family:'JetBrains Mono';font-size:.74rem;color:var(--ink)}
+  .nleg .nls{font-family:'JetBrains Mono';font-size:.72rem;color:var(--muted);margin-top:2px}
+  .nleg .nlwarn{font-size:.72rem;color:var(--flamme);font-weight:600;margin-top:2px}
+  .nleg .nlact{font-size:.72rem;color:var(--ice);text-align:right;white-space:nowrap}
+  .nleg.warn{background:rgba(226,80,59,.07)}
+  .nleg.opt{opacity:.45} .nleg.opt .nlact{color:var(--muted)}
   .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
   .actionbar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--bg2);border-top:1px solid var(--line);box-shadow:0 -8px 26px rgba(0,0,0,.3);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
   .actionbar-inner{max-width:960px;margin:0 auto;padding:12px clamp(16px,4vw,32px);display:flex;gap:10px;justify-content:center}
@@ -299,19 +320,19 @@
       <div class="fields3">
         <div><label id="labGph"></label><div class="inp"><input id="gph" type="number" inputmode="numeric" value="75" min="20" max="120"><span class="unit">g/h</span></div></div>
         <div><label id="labGel"></label><div class="inp"><input id="gGel" type="number" inputmode="numeric" value="45" min="5" max="80"><span class="unit">g</span></div></div>
-        <div><label id="labBidon"></label><div class="inp"><input id="gBidon" type="number" inputmode="numeric" value="90" min="0" max="150"><span class="unit">g</span></div></div>
+        <div><label id="labBidon"></label><div class="inp"><input id="gBidon" type="number" inputmode="numeric" value="40" min="0" max="150"><span class="unit">g</span></div></div>
+        <div><label id="labBsize"></label><div class="inp"><input id="bsize" type="number" inputmode="decimal" value="0.6" min="0.3" max="1.2" step="0.05"><span class="unit">L</span></div></div>
       </div>
-      <div class="sliders">
-        <div class="slider-row"><div class="shead"><span class="slabel" id="slabGel"></span><span class="sval"><span id="nGelV">10</span> <small id="unGel"></small></span></div><input type="range" id="nGel" min="0" max="24" value="10"></div>
-        <div class="slider-row"><div class="shead"><span class="slabel" id="slabBidon"></span><span class="sval"><span id="nBidonV">5</span> <small id="unBid"></small></span></div><input type="range" id="nBidon" min="0" max="12" value="5"></div>
+      <div style="margin-top:16px"><label id="nutIsoTitle"></label>
+        <div class="slider-row"><div class="shead"><span class="slabel" id="nutIsoLab"></span><span class="sval"><span id="isoPctV">50</span> %</span></div><input type="range" id="isoPct" min="0" max="100" step="10" value="50"></div>
       </div>
-      <div class="gauge-wrap">
-        <div class="gauge-top"><span id="gCarried"></span><span id="nGph"></span></div>
-        <div class="gauge" id="gauge"><div class="gauge-fill" id="gaugeFill"></div></div>
-        <div class="verdict" id="verdict"></div>
-        <div class="sodium" id="sodium"></div>
-        <div class="wxnote" id="wxNote"></div>
+      <div style="margin-top:14px"><label id="nutRvTitle"></label>
+        <div class="nsel" id="nutRv"><button data-rv="ravitos" id="rv1"></button><button data-rv="autonome" id="rv2"></button></div>
       </div>
+      <div class="nblock"><div class="nblock-t" id="nutRatesT"></div><div id="nutRates"></div></div>
+      <div class="nblock"><div class="nblock-t" id="nutCarryT"></div><div id="nutCarry"></div></div>
+      <div class="nblock"><div class="nblock-t" id="nutPlanT"></div><div id="nutPlan"></div></div>
+      <div class="gauge-wrap"><div class="sodium" id="sodium"></div><div class="wxnote" id="wxNote"></div></div>
     </div>
   </div>
   <div id="viewWeather" style="display:none">
@@ -368,14 +389,14 @@ var L={
   advLow:"très prudent",advOk:"dans la plage conseillée",advHigh:"agressif pour la distance",
   metaLine:"temps roulé estimé (hors arrêts)",metaArr:"arrivée vers",metaAvg1:"moyenne",metaAvg2:"W/kg en montée",
   nutTitle:"Ravitaillement : que faut-il emporter ?",
-  nutSub:"Sur {dur} de course, il faut ≈ {need} de glucides. 7 ravitos sur le parcours (eau + solides) ; prévoir ses propres gels/iso pour tenir la cadence entre les ravitos.",
-  labGph:"Cible glucides par heure",labGel:"Glucides par gel ou barre",labBidon:"Glucides par bidon iso",
+  nutSub:"Sur {dur} de course : ≈ {need} de glucides et ~{water} d'eau à couvrir.",
+  labGph:"Cible glucides par heure",labGel:"Glucides par gel ou barre",labBidon:"Glucides par bidon iso",labBsize:"Taille d'un bidon",nutSrcTitle:"Source des glucides",nm1:"Gels / barres",nm2:"Les deux",nm3:"Iso",nutRvTitle:"Nourriture",rv1:"Utiliser les ravitos",rv2:"Autonome",nutRatesT:"Cibles horaires",nutCarryT:"À emporter au départ",nutPlanT:"Plan par ravito",nutIsoTitle:"Bidons : eau plate ↔ iso",nutIsoLab:"Part des bidons en iso",nutStopsTitle:"Arrêts ravito prévus",nbWater:"eau plate",nbIso:"tout iso",nbMix:"{p}% en iso",nrTarget:"Objectif : {g} g/h de glucides · {l} L/h d'eau",nrGel2:"Gels/barres : ~{gc} g/h → 1 ~toutes les {m} min",nrGelNone:"Gels/barres : au besoin (glucides couverts par l'iso)",nrIso2:"Iso : ~{ic} g/h de glucides",nrBottles:"Bidons : 1 ({size} L) ~toutes les {m} min · {split}",nlSkip:"sautable",nlNone:"aucun",nrGelRhythm:"Rythme : ~1 gel/barre toutes les {m} min",ncIsoB:"bidons d'iso à préparer",ncWaterB:"bidons d'eau claire",ncBike:"2 bidons sur le vélo, refaits aux arrêts conseillés.",nlSummary:"Arrêts conseillés : {req} · sautables : {opt}",nrGel:"{g} g/h de glucides → 1 gel/barre ~toutes les {m} min",nrGelIso:"{g} g/h de glucides, couverts par l'iso",nrWater:"{l} L/h d'eau → 1 bidon ({size} L) ~toutes les {m} min",ncGels:"gels/barres à emporter",ncIso:"doses d'iso (pour refaire les bidons)",ncBottles:"bidons sur le vélo",ncRavitoNote:"En plus : ~{n} gels/barres à prendre aux ravitos (Maurten Gel 100 = 25 g dispo). On remplit les bidons à chaque ravito.",ncAutoNote:"Mode autonome : tout est sur toi ; les ravitos ne servent qu'au plein d'eau.",nlLeg:"Sur ce tronçon ({d}) : boire ~{l} L · manger {g} gel(s)",nlRefill:"puis plein d'eau",nlRefillFood:"puis plein eau + solides",nlFinish:"arrivée",nlTooLong:"⚠ tronçon long : 2 bidons peuvent ne pas suffire (rationner / point d'eau)",
   slabGel:"Gels / barres à emporter",slabBidon:"Bidons iso (bus sur toute la course)",unGel:"unités",unBid:"bidons",
   gCarried:"emporté : {c}",gGph:"soit {n} g/h",
   vShort:"Il manque {miss} g, soit ~{n} gels de plus pour couvrir le besoin.",
   vGood:"Parfait : {pct}% du besoin couvert ({gph} g/h). ✓",
   vOver:"Large : {pct}% du besoin ({gph} g/h). Possible d'alléger ou de garder la marge.",
-  sodium:"Penser au <b>sodium</b> (électrolytes / pastilles de sel) en plus des glucides, important sur une longue épreuve par forte chaleur. Aux ravitos : remplir directement les bidons, garder 2 bidons max sur le vélo. <b>Prévoir un 2e bidon vide</b> ou une éco-cup.",
+  sodium:"Penser au <b>sodium</b> (électrolytes / pastilles de sel) en plus des glucides, important sur une longue épreuve par forte chaleur.",
   btnPdf:"📄 Télécharger le plan (PDF)",btnSticker:"🏷️ Générer un sticker",
   tlCol:"col ≈",tlPass:"passage",tlRecup:"récup + ravito",tlMargin:"marge +",tlLate:"RETARD ",
   tlBarr:"Barrière {label} (km {km}) {time} · passage ~{pass} ({m})",
@@ -394,14 +415,14 @@ var L={
   wxAdvCool:"Sommets frais ({lo}–{hi}° au Galibier) : un coupe-vent léger reste utile en descente.",
   wxAdvRain:"Risque de pluie ({p}%) : prudence en descente, pense au coupe-vent imperméable.",
   foot:"<b>Barrières horaires.</b> 4 points de coupure (rouge = en retard sur l'estimation, vert = dans les temps, selon l'heure de départ). Temps limite total : <b>11h45</b> pour rejoindre l'arrivée.<br><br><b>Comment lire.</b> Les watts sont les cibles <b>en montée</b>. Le <b style='color:var(--gold)'>passage</b> (or) est l'heure estimée au sommet de chaque col. Lignes grises = descentes/vallées, avec les ravitos (bleu). Après le Sarenne, c'est une descente jusqu'à l'Alpe d'Huez (Rif Nel 700 m à 7,5 %).<br><br><b>Le temps est une estimation</b> (modèle physique, vélo ~8 kg). +20 à 40 min d'arrêts ravitos non inclus. Pace à la puissance et au ressenti, jamais à la FC quand il fait chaud.<br><br><b>Horaires SAS.</b> Officiels (roadbook) : départs échelonnés toutes les 7 min 30, du SAS 0 (6h30) au SAS 16 (8h30). Se placer dans le SAS avant sa fermeture.",
-  mTitle:"Générateur de sticker",mClose:"✕",mDl:"📄 Télécharger le sticker (PDF)",soP:"Portrait · top tube",soL:"Paysage · cintre",stSOS:"SOS +33 9 72 45 60 01",mSizeW:"Largeur (mm)",mSizeH:"Hauteur (mm)",stNut1:"≈ {g}/h barres · {b}/h bidons iso",stNut2:"{gph} g/h · {water} L eau/h · sel",stNoteP:"Imprimer à 100 % · découper, plastifier, coller sur le top tube.",stNoteL:"Imprimer à 100 % · découper, plastifier, coller sur la potence / le cintre.",
+  mTitle:"Générateur de sticker",mClose:"✕",mDl:"📄 Télécharger le sticker (PDF)",soP:"Portrait · top tube",soL:"Paysage · cintre",stSOS:"SOS +33 9 72 45 60 01",mSizeW:"Largeur (mm)",mSizeH:"Hauteur (mm)",stNut1:"≈ {g}/h barres · {b}/h bidons",stNut2:"{gph} g/h · {water} L eau/h · sel",stNoteP:"Imprimer à 100 % · découper, plastifier, coller sur le top tube.",stNoteL:"Imprimer à 100 % · découper, plastifier, coller sur la potence / le cintre.",
   gpxBtn:"🗺️ Export GPS",gxTitle:"Export GPS perso",gxHint:"Trace + points utiles (ravitos, pied/sommet de col avec cible watts, dangers, barrières), selon les réglages (FTP, SAS, objectif). Choisir le compteur.",gxAutre:"Autre",gxDlGpx:"⬇ Télécharger le GPX",gxDlTcx:"⬇ Télécharger le TCX",gxLoading:"Préparation du fichier…",gxError:"Trace indisponible (fonctionne sur le site en ligne).",gxPied:"pied de col",gxSummit:"sommet",gxAt:"à",gxAim:"viser",gxPass:"passage estimé",gxBarrier:"Barrière",gxBarrierShort:"Barriere",gxDanger:"Danger",gxDangerShort:"Danger",gxNote_coros:"<b>Coros</b> : ouvrir le GPX depuis l'app COROS puis enregistrer la route. Les waypoints s'affichent (page dédiée + distance au prochain).",gxNote_wahoo:"<b>Wahoo</b> : importer le GPX (app ELEMNT, ou via komoot / RideWithGPS). Waypoints affichés sur BOLT 3 / ROAM 3 / ELEMNT ACE ; sur les anciens, en liste de repères.",gxNote_garmin:"<b>Garmin</b> : fichier <b>TCX</b>. <span class='warn'>Ne pas passer par Garmin Connect</span> (il supprime les points à l'import). Brancher le compteur en USB et copier le TCX dans le dossier <b>Garmin/NewFiles</b> : les points (ravito, sommet, danger, barrière) apparaîtront pendant la navigation. Sans USB : importer le parcours dans <b>RideWithGPS</b> puis synchroniser avec Garmin (les points passent en course points).",gxNote_hammerhead:"<span class='warn'>Hammerhead Karoo</span> : le Karoo n'affiche pas les points d'un GPX chargé directement. Importer d'abord la route dans <b>RideWithGPS</b> (les points sont conservés), puis synchroniser avec le Karoo.",gxNote_autre:"GPX standard avec waypoints, compatible avec la plupart des apps/compteurs qui lisent les waypoints GPX.",
   mHint:"Basé sur les réglages (FTP, objectif, nutrition). Choisir l'orientation et la taille. PDF vectoriel à imprimer à 100 %, à découper et plastifier.",
   stValley:"Vallee",stWarm:"echauffe",stDesc:"desc",stDrink:"boire",stMantra1:"Croix Fer & Galibier : se retenir.",stMantra2:"Pace watts pas FC · 60-80g+sel/h",
   stNote:"Largeur 35 mm · imprimer à 100% (taille réelle) · découper, plastifier, coller sur le top-tube.",
   pdfMoving:"Temps roulé estimé :",pdfArr:"arrivée ~",pdfStart:"Départ",pdfNut:"Ravitaillement",
-  pdfNutLine:"Besoin ~{need} g de glucides ({gph} g/h) · emporté {c} g · boire ~{water} L/h.",
-  pdfNutCarry:"À emporter : {nGel} gels/barres · {nBidon} bidons iso. Ajouter du sodium / électrolytes.",
+  pdfNutLine:"Besoin ~{need} g de glucides ({gph} g/h) · boire ~{water} L/h.",
+  pdfNutCarry:"À emporter : {gels} gels/barres · {iso}. Penser au sodium / électrolytes.",
   pdfN1:"Estimation (modèle physique, vélo ~8 kg). Descentes, vent et groupes font varier. +20 à 40 min d'arrêts ravitos non inclus.",
   pdfN2:"Pace à la puissance et au ressenti, jamais à la FC quand il fait chaud. Barrières = heures limites (temps total 11h45).",
   pdfN3:"Après le Sarenne : descente jusqu'à l'Alpe d'Huez (dernière bosse Rif Nel 700 m à 7,5 %)."},
@@ -413,14 +434,14 @@ var L={
   advLow:"very conservative",advOk:"within the suggested range",advHigh:"aggressive for the distance",
   metaLine:"estimated moving time (excl. stops)",metaArr:"arrival around",metaAvg1:"avg",metaAvg2:"W/kg on climbs",
   nutTitle:"Nutrition: what to carry?",
-  nutSub:"Over {dur}, you need ≈ {need} of carbs. 7 aid stations on course (water + food), but carry your own gels/iso to keep your intake between them.",
-  labGph:"Target carbs per hour",labGel:"Carbs per gel or bar",labBidon:"Carbs per iso bottle",
+  nutSub:"Over {dur}: ≈ {need} of carbs and ~{water} of water to cover.",
+  labGph:"Target carbs per hour",labGel:"Carbs per gel or bar",labBidon:"Carbs per iso bottle",labBsize:"Bottle size",nutSrcTitle:"Carb source",nm1:"Gels / bars",nm2:"Both",nm3:"Iso",nutRvTitle:"Food",rv1:"Use aid stations",rv2:"Self-sufficient",nutRatesT:"Hourly targets",nutCarryT:"Pack at the start",nutPlanT:"Aid-station plan",nutIsoTitle:"Bottles: plain water ↔ iso",nutIsoLab:"Share of bottles as iso",nutStopsTitle:"Planned aid-station stops",nbWater:"plain water",nbIso:"all iso",nbMix:"{p}% iso",nrTarget:"Target: {g} g/h carbs · {l} L/h water",nrGel2:"Gels/bars: ~{gc} g/h → 1 ~every {m} min",nrGelNone:"Gels/bars: as needed (carbs from iso)",nrIso2:"Iso: ~{ic} g/h of carbs",nrBottles:"Bottles: 1 ({size} L) ~every {m} min · {split}",nlSkip:"skippable",nlNone:"none",nrGelRhythm:"Rhythm: ~1 gel/bar every {m} min",ncIsoB:"iso bottles to prepare",ncWaterB:"plain-water bottles",ncBike:"2 bottles on the bike, refilled at the recommended stops.",nlSummary:"Recommended stops: {req} · skippable: {opt}",nrGel:"{g} g/h of carbs → 1 gel/bar ~every {m} min",nrGelIso:"{g} g/h of carbs, covered by iso",nrWater:"{l} L/h of water → 1 bottle ({size} L) ~every {m} min",ncGels:"gels/bars to carry",ncIso:"iso doses (to refill bottles)",ncBottles:"bottles on the bike",ncRavitoNote:"Plus ~{n} gels/bars to grab at aid stations (Maurten Gel 100 = 25 g available). Refill bottles at every stop.",ncAutoNote:"Self-sufficient: carry it all; aid stations only for water refills.",nlLeg:"On this leg ({d}): drink ~{l} L · eat {g} gel(s)",nlRefill:"then refill water",nlRefillFood:"then refill water + food",nlFinish:"finish",nlTooLong:"⚠ long leg: 2 bottles may not be enough (ration / water point)",
   slabGel:"Gels / bars to carry",slabBidon:"Iso bottles (over the whole race)",unGel:"units",unBid:"bottles",
   gCarried:"carried: {c}",gGph:"= {n} g/h",
   vShort:"You're short {miss} g, about {n} more gels to cover your need.",
   vGood:"Perfect: you cover {pct}% of the need ({gph} g/h). ✓",
   vOver:"Plenty: {pct}% of the need ({gph} g/h). You can lighten up or keep the margin.",
-  sodium:"Add <b>sodium</b> (electrolytes / salt tabs) on top of carbs, key on a long event in the heat. At aid stations: refill your bottles, keep 2 bottles max on the bike. <b>Bring a 2nd empty bottle</b> or an eco-cup.",
+  sodium:"Add <b>sodium</b> (electrolytes / salt tabs) on top of carbs, key on a long event in the heat.",
   btnPdf:"📄 Download plan (PDF)",btnSticker:"🏷️ Generate a sticker",
   tlCol:"climb ≈",tlPass:"at",tlRecup:"recovery + aid",tlMargin:"margin +",tlLate:"LATE ",
   tlBarr:"Cut-off {label} (km {km}) {time} · you pass ~{pass} ({m})",
@@ -439,14 +460,14 @@ var L={
   wxAdvCool:"Cool summits ({lo}–{hi}° at the Galibier): a light wind vest still helps on descents.",
   wxAdvRain:"Rain risk ({p}%): careful on descents, bring a waterproof.",
   foot:"<b>Time cut-offs.</b> 4 checkpoints (red = behind the estimate, green = within time, based on your start time). Overall time limit: <b>11h45</b> to reach the finish.<br><br><b>How to read.</b> Watts are your targets <b>on climbs</b>. The <b style='color:var(--gold)'>pass time</b> (gold) is the estimated clock time at each summit. Grey lines = descents/valleys, with aid stations (blue). After Sarenne it's a descent to Alpe d'Huez (Rif Nel 700 m at 7.5%).<br><br><b>Times are estimates</b> (physics model, ~8 kg bike). +20 to 40 min of aid-station stops not included. Pace by power and feel, never by heart rate in the heat.<br><br><b>Wave times.</b> Official (roadbook): starts every 7 min 30 s, from wave 0 (6:30) to wave 16 (8:30). Be in your wave before it closes.",
-  mTitle:"Sticker generator",mClose:"✕",mDl:"📄 Download sticker (PDF)",soP:"Portrait · top tube",soL:"Landscape · bar",stSOS:"SOS +33 9 72 45 60 01",mSizeW:"Width (mm)",mSizeH:"Height (mm)",stNut1:"≈ {g}/h bars · {b}/h iso bottles",stNut2:"{gph} g/h · {water} L water/h · salt",stNoteP:"Print at 100% · cut, laminate, stick on the top-tube.",stNoteL:"Print at 100% · cut, laminate, stick on the stem / bar.",
+  mTitle:"Sticker generator",mClose:"✕",mDl:"📄 Download sticker (PDF)",soP:"Portrait · top tube",soL:"Landscape · bar",stSOS:"SOS +33 9 72 45 60 01",mSizeW:"Width (mm)",mSizeH:"Height (mm)",stNut1:"≈ {g}/h bars · {b}/h bottles",stNut2:"{gph} g/h · {water} L water/h · salt",stNoteP:"Print at 100% · cut, laminate, stick on the top-tube.",stNoteL:"Print at 100% · cut, laminate, stick on the stem / bar.",
   gpxBtn:"🗺️ GPS export",gxTitle:"Custom GPS export",gxHint:"Route + useful points (aid stations, climb foot/summit with power target, hazards, cut-offs), based on your settings (FTP, wave, goal). Pick your head unit.",gxAutre:"Other",gxDlGpx:"⬇ Download GPX",gxDlTcx:"⬇ Download TCX",gxLoading:"Preparing file…",gxError:"Route unavailable (works on the live site).",gxPied:"climb foot",gxSummit:"summit",gxAt:"at",gxAim:"aim",gxPass:"est. pass",gxBarrier:"Cut-off",gxBarrierShort:"Cut-off",gxDanger:"Hazard",gxDangerShort:"Hazard",gxNote_coros:"<b>Coros</b>: open the GPX from the COROS app, then save the route. Waypoints show up (dedicated page + distance to next).",gxNote_wahoo:"<b>Wahoo</b>: import the GPX (ELEMNT app, or via komoot / RideWithGPS). Waypoints show on BOLT 3 / ROAM 3 / ELEMNT ACE; on older units, in the cue list.",gxNote_garmin:"<b>Garmin</b>: <b>TCX</b> file. <span class='warn'>Do not use Garmin Connect</span> (it strips course points on import). Plug the unit via USB and copy the TCX into the <b>Garmin/NewFiles</b> folder: the points (aid station, summit, hazard, cut-off) show up during navigation. No USB: import the route into <b>RideWithGPS</b>, then sync to Garmin (points carry over as course points).",gxNote_hammerhead:"<span class='warn'>Hammerhead Karoo</span>: the Karoo does not show points from a directly-loaded GPX. First import the route into <b>RideWithGPS</b> (points are kept), then sync to the Karoo.",gxNote_autre:"Standard GPX with waypoints, works with most apps/units that read GPX waypoints.",
   mHint:"Based on your settings (FTP, goal, nutrition). Pick orientation and size. Vector PDF to print at 100%, then cut and laminate.",
   stValley:"Valley",stWarm:"warm up",stDesc:"desc",stDrink:"drink",stMantra1:"Croix de Fer & Galibier: hold back.",stMantra2:"Pace by power not HR · 60-80g+salt/h",
   stNote:"35 mm wide · print at 100% (actual size) · cut, laminate, stick on the top-tube.",
   pdfMoving:"Estimated moving time:",pdfArr:"arrival ~",pdfStart:"Start",pdfNut:"Nutrition",
-  pdfNutLine:"Need ~{need} g of carbs ({gph} g/h) · carrying {c} g · drink ~{water} L/h.",
-  pdfNutCarry:"To carry: {nGel} gels/bars · {nBidon} iso bottles. Add sodium / electrolytes.",
+  pdfNutLine:"Need ~{need} g of carbs ({gph} g/h) · drink ~{water} L/h.",
+  pdfNutCarry:"To carry: {gels} gels/bars · {iso}. Add sodium / electrolytes.",
   pdfN1:"Estimate (physics model, ~8 kg bike). Descents, wind and groups vary it. +20 to 40 min of aid stops not included.",
   pdfN2:"Pace by power and feel, never by HR in the heat. Cut-offs = time limits (overall limit 11h45).",
   pdfN3:"After Sarenne: descent to Alpe d'Huez (last kicker Rif Nel 700 m at 7.5%)."}
@@ -598,23 +619,70 @@ function compute(){
   document.getElementById('totalMeta').innerHTML=t('metaLine')+'<br>'+t('metaArr')+' <b>'+fmtClock(startSec+cum)+'</b> · '+t('metaAvg1')+' <b>'+(wkgSum/(nClimb||1)).toFixed(1)+'</b> '+t('metaAvg2');
   totalSec=cum; computeNutrition(); updateWx(); renderWeather();
 }
-function computeNutrition(){
-  var hrs=totalSec/3600;
+var nutIsoPct=50,nutRavito='ravitos',RAVITO_GEL_G=25;
+function nutritionPlan(){
+  var hrs=(totalSec||0)/3600;
   var gph=Math.max(0,+document.getElementById('gph').value||0);
-  var gGel=Math.max(0,+document.getElementById('gGel').value||0);
+  var gGel=Math.max(1,+document.getElementById('gGel').value||45);
   var gBidon=Math.max(0,+document.getElementById('gBidon').value||0);
-  var nGel=+document.getElementById('nGel').value,nBidon=+document.getElementById('nBidon').value;
-  document.getElementById('nGelV').textContent=nGel;document.getElementById('nBidonV').textContent=nBidon;
-  var need=Math.round(gph*hrs),carried=nGel*gGel+nBidon*gBidon,realGph=hrs>0?carried/hrs:0,cover=need>0?carried/need:0;
-  document.getElementById('nutSub').innerHTML=fmtn(t('nutSub'),{dur:'<b>'+fmtDur(totalSec)+'</b>',need:'<b>'+need+' g</b>'});
-  document.getElementById('gCarried').innerHTML=fmtn(t('gCarried'),{c:'<b>'+carried+' g</b>'});
-  document.getElementById('nGph').textContent=fmtn(t('gGph'),{n:Math.round(realGph)});
-  var fill=document.getElementById('gaugeFill'),gauge=document.getElementById('gauge'),v=document.getElementById('verdict');
-  fill.style.width=Math.min(cover,1)*100+'%';gauge.classList.remove('short','good');v.classList.remove('short','good','over');
-  var miss=need-carried,perGel=gGel||45;
-  if(cover<0.9){gauge.classList.add('short');v.classList.add('short');v.innerHTML=fmtn(t('vShort'),{miss:'<span class="em">'+miss+'</span>',n:Math.ceil(miss/perGel)});}
-  else if(cover<=1.15){gauge.classList.add('good');v.classList.add('good');v.innerHTML=fmtn(t('vGood'),{pct:'<span class="em">'+Math.round(cover*100)+'</span>',gph:Math.round(realGph)});}
-  else{v.classList.add('over');v.innerHTML=fmtn(t('vOver'),{pct:'<span class="em">'+Math.round(cover*100)+'</span>',gph:Math.round(realGph)});}
+  var bsize=Math.max(0.3,+document.getElementById('bsize').value||0.6);
+  var water=waterLPerH(),bottlesPerH=bsize>0?water/bsize:0;
+  var isoFrac=Math.max(0,Math.min(1,nutIsoPct/100));
+  var isoCarbsH=Math.min(gph,bottlesPerH*isoFrac*gBidon),gelCarbsH=Math.max(0,gph-isoCarbsH);
+  var gelsPerH=gGel>0?gelCarbsH/gGel:0;
+  var need=Math.round(gph*hrs),totalWater=water*hrs,gelCarbsTot=gelCarbsH*hrs;
+  var isoDoses=Math.ceil(totalWater/bsize*isoFrac);
+  var segc=currentSegc(),startSec=parseStart(),finKm=SEG[SEG.length-1].to,C=2*bsize;
+  var ravs=[];SEG.forEach(function(s){(s.ravitos||[]).forEach(function(r){if(r.k!=='ARR')ravs.push({k:r.k,km:r.km,sec:startSec+cumSecAt(segc,r.km)});});});
+  ravs.sort(function(a,b){return a.km-b.km;});
+  var finSec=startSec+cumSecAt(segc,finKm),startS=startSec+cumSecAt(segc,0);
+  function wB(a,b){return water*(b-a)/3600;}
+  // arrêts nécessaires : glouton pour ne jamais dépasser 2 bidons entre 2 pleins
+  var req={},last=startS,guard=0;
+  while(wB(last,finSec)>C+1e-6&&guard++<30){var pick=-1,j;
+    for(j=0;j<ravs.length;j++){if(ravs[j].sec>last+1&&wB(last,ravs[j].sec)<=C)pick=j;}
+    if(pick<0){for(j=0;j<ravs.length;j++){if(ravs[j].sec>last+1){pick=j;break;}}}
+    if(pick<0)break;req[ravs[pick].k]=1;last=ravs[pick].sec;}
+  var stops=[],lastReq=startS,maxLegGels=0,reqCodes=[],optCodes=[];
+  ravs.forEach(function(r){
+    if(req[r.k]){var dur=r.sec-lastReq,lh=dur/3600,wl=water*lh,gl=gelCarbsH*lh/gGel;if(gl>maxLegGels)maxLegGels=gl;
+      stops.push({code:r.k,km:r.km,clock:fmtClock(r.sec),required:true,durSec:dur,waterL:wl,gels:gl,tooLong:wl>C});lastReq=r.sec;reqCodes.push(r.k);}
+    else{stops.push({code:r.k,km:r.km,clock:fmtClock(r.sec),required:false});optCodes.push(r.k);}});
+  var fd=finSec-lastReq,fl=fd/3600,fw=water*fl,fg=gelCarbsH*fl/gGel;if(fg>maxLegGels)maxLegGels=fg;
+  stops.push({code:'ARR',km:finKm,clock:fmtClock(finSec),required:true,finish:true,durSec:fd,waterL:fw,gels:fg,tooLong:fw>C});
+  var gelsToCarry=(nutRavito==='autonome')?Math.ceil(gelCarbsTot/gGel):Math.max(0,Math.ceil(maxLegGels)+1);
+  var ravitoGels=(nutRavito==='ravitos')?Math.ceil(Math.max(0,gelCarbsTot-gelsToCarry*gGel)/RAVITO_GEL_G):0;
+  return {hrs:hrs,gph:gph,water:water,bsize:bsize,ravito:nutRavito,isoPct:Math.round(isoFrac*100),need:need,totalWater:totalWater,
+    gelCarbsH:gelCarbsH,isoCarbsH:isoCarbsH,gelsPerH:gelsPerH,bottlesPerH:bottlesPerH,
+    perGelMin:gelsPerH>0?60/gelsPerH:0,perBottleMin:bottlesPerH>0?60/bottlesPerH:0,
+    gelsToCarry:gelsToCarry,isoDoses:isoDoses,waterBottles:Math.max(0,Math.ceil(totalWater/bsize*(1-isoFrac))),ravitoGels:ravitoGels,stops:stops,reqCodes:reqCodes,optCodes:optCodes};
+}
+function bottleSplitTxt(p){return p.isoPct<=0?t('nbWater'):(p.isoPct>=100?t('nbIso'):fmtn(t('nbMix'),{p:p.isoPct}));}
+function nutSync(){
+  var iv=document.getElementById('isoPctV');if(iv)iv.textContent=nutIsoPct;
+  var ir=document.getElementById('isoPct');if(ir)ir.value=nutIsoPct;
+  document.querySelectorAll('#nutRv button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.rv===nutRavito);});
+}
+function computeNutrition(){
+  if(!document.getElementById('nutRates'))return;
+  var p=nutritionPlan(),bs=(lang==='en')?String(p.bsize):String(p.bsize).replace('.',',');
+  document.getElementById('nutSub').innerHTML=fmtn(t('nutSub'),{dur:'<b>'+fmtDur(totalSec)+'</b>',need:'<b>'+p.need+' g</b>',water:'<b>'+p.totalWater.toFixed(1)+' L</b>'});
+  var rates='<div class="nrate">🎯 '+fmtn(t('nrTarget'),{g:p.gph,l:p.water.toFixed(1)})+'</div>'
+    +(p.gelsPerH>0.05?'<div class="nrate">🍬 '+fmtn(t('nrGelRhythm'),{m:Math.round(p.perGelMin)})+'</div>':'');
+  document.getElementById('nutRates').innerHTML=rates;
+  var carry='<div class="ncl"><b>'+p.gelsToCarry+'</b> '+t('ncGels')+'</div>'
+    +(p.isoDoses>0?'<div class="ncl"><b>'+p.isoDoses+'</b> '+t('ncIsoB')+'</div>':'')
+    +(p.waterBottles>0?'<div class="ncl"><b>'+p.waterBottles+'</b> '+t('ncWaterB')+'</div>':'');
+  document.getElementById('nutCarry').innerHTML=carry+'<div class="nc-note">'+t('ncBike')+' '+(p.ravito==='ravitos'?fmtn(t('ncRavitoNote'),{n:p.ravitoGels}):t('ncAutoNote'))+'</div>';
+  var sum='<div class="nc-note" style="margin:0 0 10px">'+fmtn(t('nlSummary'),{req:p.reqCodes.join(', ')||t('nlNone'),opt:p.optCodes.join(', ')||t('nlNone')})+'</div>';
+  document.getElementById('nutPlan').innerHTML=sum+p.stops.map(function(l){
+    if(!l.required)return '<div class="nleg opt"><div class="nlk">'+l.code+'</div><div class="nlmid"><div class="nlh">km '+l.km+' · '+l.clock+'</div></div><div class="nlact">'+t('nlSkip')+'</div></div>';
+    var act=l.finish?t('nlFinish'):(p.ravito==='ravitos'?t('nlRefillFood'):t('nlRefill'));
+    return '<div class="nleg'+(l.tooLong?' warn':'')+'"><div class="nlk">'+l.code+'</div><div class="nlmid">'
+      +'<div class="nlh">km '+l.km+' · '+l.clock+'</div>'
+      +'<div class="nls">'+fmtn(t('nlLeg'),{d:fmtDur(l.durSec),l:l.waterL.toFixed(1),g:Math.round(l.gels)})+'</div>'
+      +(l.tooLong?'<div class="nlwarn">'+t('nlTooLong')+'</div>':'')+'</div><div class="nlact">'+act+'</div></div>';
+  }).join('');
 }
 
 // ---- PDF ----
@@ -629,9 +697,8 @@ function computePlanData(){
     if(s.type==='climb'){idx++;nClimb++;wkgSum+=s.w/kg;rows.push({type:'climb',idx:idx,name:NM(s.name),from:s.from,to:s.to,grad:s.grad,pct:s.pct,w:s.w,wkg:s.w/kg,key:s.key,cue:s.cue[lang],tSec:t2,passSec:startSec+cum,rav:rav,bar:bar});}
     else rows.push({type:'liaison',name:NM(s.name),from:s.from,to:s.to,tSec:t2,passSec:startSec+cum,rav:rav,bar:bar});
   });
-  var nGel=+document.getElementById('nGel').value||0,nBidon=+document.getElementById('nBidon').value||0;
-  var nutri={gph:+document.getElementById('gph').value||0,nGel:nGel,nBidon:nBidon,water:waterLPerH().toFixed(1)};nutri.need=Math.round(nutri.gph*(cum/3600));
-  nutri.carried=nGel*(+document.getElementById('gGel').value||0)+nBidon*(+document.getElementById('gBidon').value||0);
+  var np=nutritionPlan();
+  var nutri={gph:np.gph,need:np.need,water:np.water.toFixed(1),gels:np.gelsToCarry,iso:np.isoDoses,ravitoGels:np.ravitoGels,ravito:np.ravito};
   return {ftp:ftp,kg:kg,startSec:startSec,totalSec:cum,arrival:startSec+cum,avgWkg:wkgSum/(nClimb||1),rows:rows,nutri:nutri};
 }
 function objLabel(){return t('o'+(obj==='chill'?'1':obj==='diesel'?'2':'3'));}
@@ -674,8 +741,10 @@ function generatePlanPDF(){
   });
   if(y+30>287){doc.addPage();y=18;}else{y+=3;}
   doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor.apply(doc,ink);doc.text(t('pdfNut'),M,y);y+=5.5;
-  doc.setFont('helvetica','normal');doc.setFontSize(8.6);doc.setTextColor.apply(doc,gray);doc.text(pdfSafe(fmtn(t('pdfNutLine'),{need:d.nutri.need,gph:d.nutri.gph,c:d.nutri.carried,water:d.nutri.water})),M,y);y+=4.7;
-  doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor.apply(doc,ink);doc.text(pdfSafe(fmtn(t('pdfNutCarry'),{nGel:d.nutri.nGel,nBidon:d.nutri.nBidon})),M,y);y+=6.5;
+  doc.setFont('helvetica','normal');doc.setFontSize(8.6);doc.setTextColor.apply(doc,gray);doc.text(pdfSafe(fmtn(t('pdfNutLine'),{need:d.nutri.need,gph:d.nutri.gph,water:d.nutri.water})),M,y);y+=4.7;
+  var isoTxt=d.nutri.iso>0?(d.nutri.iso+(lang==='en'?' iso doses':' doses iso')):(lang==='en'?'plain-water bottles':'bidons eau plate');
+  var gelsTxt=d.nutri.gels+(d.nutri.ravito==='ravitos'&&d.nutri.ravitoGels>0?(lang==='en'?' (+~'+d.nutri.ravitoGels+' at aid stations)':' (+~'+d.nutri.ravitoGels+' aux ravitos)'):'');
+  doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor.apply(doc,ink);doc.text(pdfSafe(fmtn(t('pdfNutCarry'),{gels:gelsTxt,iso:isoTxt})),M,y);y+=6.5;
   doc.setFont('helvetica','normal');doc.setFontSize(7.3);doc.setTextColor(140,140,140);
   [t('pdfN1'),t('pdfN2'),t('pdfN3')].forEach(function(n){var w=doc.splitTextToSize(pdfSafe(n),Wp-2*M);doc.text(w,M,y);y+=w.length*3.4+1.2;});
   dl(doc.output('blob'),'sas-to-summit-plan.pdf');
@@ -689,8 +758,8 @@ function stickerCells(){
   SEG.forEach(function(s){var rav=(s.ravitos||[]).map(function(r){return r.k+' km'+Math.round(r.km);}).join('  ');var wn=s.warn?' · '+s.warn[lang]:'';
     if(s.type==='climb'){var pct=Math.max(0.55,base+s.delta),w=Math.round(ftp*pct),spd=climbSpeed(w,kg+8,s.grad),t2=(s.to-s.from)*1000/spd;cells.push({t:s.key?'k':'c',km:Math.round(s.from)+'-'+Math.round(s.to),nm:NM(s.name)+wn,w:w+'w',tm:fmtDur(t2),pass:fmtClock(startSec+cumSecAt(segc,s.to)),rav:rav});}
     else if(rav){cells.push({t:'d',km:Math.round(s.from)+'-'+Math.round(s.to),nm:t('stDesc')+wn,w:t('stDrink'),rav:rav});}});
-  var hrs=(totalSec||0)/3600||1,nGel=+document.getElementById('nGel').value||0,nBidon=+document.getElementById('nBidon').value||0,gph=+document.getElementById('gph').value||0;
-  var nutri={l1:fmtn(t('stNut1'),{g:(nGel/hrs).toFixed(1),b:(nBidon/hrs).toFixed(1)}),l2:fmtn(t('stNut2'),{gph:gph,water:waterLPerH().toFixed(1)})};
+  var np=nutritionPlan();
+  var nutri={l1:fmtn(t('stNut1'),{g:np.gelsPerH.toFixed(1),b:np.bottlesPerH.toFixed(1)}),l2:fmtn(t('stNut2'),{gph:np.gph,water:np.water.toFixed(1)})};
   return {ftp:ftp,cells:cells,nutri:nutri};}
 var STBG={k:[255,244,214],c:[251,233,233],d:[238,244,250],f:[245,245,245]};
 function drawStickerPortrait(doc,sc){
@@ -819,8 +888,9 @@ function applyLang(){
   setText('labFtp','labFtp');setText('labKg','labKg');setText('labSas','labSas');setText('goalTitle','goalTitle');
   setText('o1','o1');setText('o1s','o1s');setText('o2','o2');setText('o2s','o2s');setText('o3','o3');setText('o3s','o3s');setText('o4','o4');setText('o4s','o4s');
   setText('advLabel','advLabel');setText('advUnit','advUnit');document.getElementById('advWrap').style.display=(obj==='adv')?'':'none';updateAdv();
-  setText('nutTitle','nutTitle');setText('labGph','labGph');setText('labGel','labGel');setText('labBidon','labBidon');
-  setText('slabGel','slabGel');setText('slabBidon','slabBidon');setText('unGel','unGel');setText('unBid','unBid');
+  setText('nutTitle','nutTitle');setText('labGph','labGph');setText('labGel','labGel');setText('labBidon','labBidon');setText('labBsize','labBsize');
+  setText('nutIsoTitle','nutIsoTitle');setText('nutIsoLab','nutIsoLab');setText('nutRvTitle','nutRvTitle');setText('rv1','rv1');setText('rv2','rv2');
+  setText('nutRatesT','nutRatesT');setText('nutCarryT','nutCarryT');setText('nutPlanT','nutPlanT');nutSync();
   setText('pdfBtn','btnPdf');setText('stickerBtn','btnSticker');setText('stickerPdfBtn','mDl');
   setText('mTitle','mTitle');setText('mClose','mClose');setText('mHint','mHint');setText('soP','soP');setText('soL','soL');stSyncControls();
   setText('gpxBtn','gpxBtn');setText('gxTitle','gxTitle');setText('gxAutre','gxAutre');setText('gxClose','mClose');document.getElementById('gxHint').textContent=t('gxHint');gxSync();
@@ -897,7 +967,9 @@ function updateAdv(){var r=document.getElementById('advRange'),v=+r.value;docume
   var el=document.getElementById('advVal'),c=v<65?'var(--ice)':(v>80?'var(--flamme)':'var(--ok)');el.style.color=c;
   var k=v<65?'advLow':(v>80?'advHigh':'advOk');document.getElementById('advReco').innerHTML=t('advReco')+' <b style="color:'+c+'">('+t(k)+')</b>';}
 ['ftp','kg'].forEach(function(id){document.getElementById(id).addEventListener('input',compute);});
-['gph','gGel','gBidon','nGel','nBidon'].forEach(function(id){document.getElementById(id).addEventListener('input',computeNutrition);});
+['gph','gGel','gBidon','bsize'].forEach(function(id){document.getElementById(id).addEventListener('input',computeNutrition);});
+document.getElementById('isoPct').addEventListener('input',function(){nutIsoPct=+this.value;nutSync();computeNutrition();});
+document.getElementById('nutRv').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;nutRavito=b.dataset.rv;nutSync();computeNutrition();});
 document.getElementById('wxRefresh').addEventListener('click',fetchWeather);
 document.getElementById('wxSumRefresh').addEventListener('click',fetchWeather);
 document.getElementById('wxSumDetail').addEventListener('click',function(){showTab('weather');});
