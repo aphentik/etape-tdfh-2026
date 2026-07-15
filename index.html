@@ -33,7 +33,9 @@
   .profile{margin:26px 0 8px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,#0f1e2b,#0c1824);overflow:hidden;position:relative}
   .profile svg{display:block;width:100%;height:auto}
   .prof-cap{position:absolute;top:10px;left:14px;font-family:'Barlow Condensed';font-weight:600;letter-spacing:.18em;text-transform:uppercase;font-size:.7rem;color:#89a2b4;z-index:2;pointer-events:none}
-  .prof-dl{position:absolute;top:9px;right:11px;z-index:2;font-family:'JetBrains Mono';font-weight:700;font-size:.66rem;color:#cfe0ea;background:rgba(12,22,32,.62);border:1px solid #3a5a76;border-radius:999px;padding:5px 11px;text-decoration:none;backdrop-filter:blur(3px)}
+  .prof-ctrls{position:absolute;top:9px;right:11px;z-index:2;display:flex;gap:6px}
+  .prof-dl,.prof-tog{font-family:'JetBrains Mono';font-weight:700;font-size:.66rem;color:#cfe0ea;background:rgba(12,22,32,.62);border:1px solid #3a5a76;border-radius:999px;padding:5px 11px;text-decoration:none;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);cursor:pointer}
+  .prof-tog[aria-pressed="true"]{background:#3ad6a2;border-color:#3ad6a2;color:#08221a}
   .prof-dl:hover{border-color:#f2b43d;color:#f2b43d}
   .prof-plot{position:relative;cursor:crosshair}
   .prof-cross{position:absolute;top:0;bottom:0;width:1px;background:#74bccd;opacity:.6;pointer-events:none;display:none}
@@ -173,6 +175,9 @@
   .gx-note b{color:#1c5e8c}
   .gx-note .warn{color:#c23b27;font-weight:700}
   .gx-msg{font-family:Arial,sans-serif;font-size:12px;color:#777;text-align:center;margin-top:10px;min-height:1em}
+  .gx-fount{margin-top:12px;text-align:center}
+  .gx-fount button{font-family:Arial,sans-serif;font-weight:700;font-size:12px;color:#555;background:#f2f2f2;border:1px solid #ccc;border-radius:8px;padding:9px 14px;cursor:pointer}
+  .gx-fount button[aria-pressed="true"]{background:#2fae86;color:#fff;border-color:#2fae86}
   .ttl{border:1px dashed #999;border-radius:6px;overflow-x:auto;max-width:100%;font-family:Arial,sans-serif}
   .ttl .hh{background:#1c5e8c;color:#fff;text-align:center;font-size:8px;font-weight:700;padding:4px}
   .ttl .lrow{display:flex}
@@ -266,7 +271,7 @@
   <div class="event" id="event">L'ÉTAPE DU TOUR 2026</div>
   <div class="route" id="route"></div>
   <div class="profile"><div class="prof-cap" id="profcap"></div>
-    <a class="prof-dl" id="profDl" download href="etape-du-tour-2026.gpx">⬇ GPX</a>
+    <div class="prof-ctrls"><button class="prof-tog" id="profFount"></button><a class="prof-dl" id="profDl" download href="etape-du-tour-2026.gpx">⬇ GPX</a></div>
     <div class="prof-plot" id="profPlot">
     <svg viewBox="0 0 1000 320" preserveAspectRatio="none" role="img" aria-label="profil" id="profSvg"></svg>
     <div class="prof-cross" id="profCross"></div><div class="prof-dot" id="profDot"></div><div class="prof-tip" id="profTip"></div>
@@ -375,6 +380,7 @@
   <h3 id="gxTitle"></h3><p class="hint" id="gxHint"></p>
   <div class="gx-dev" id="gxDev"><button data-dev="coros">Coros</button><button data-dev="wahoo">Wahoo</button><button data-dev="garmin">Garmin</button><button data-dev="hammerhead">Hammerhead</button><button data-dev="autre" id="gxAutre"></button></div>
   <div class="gx-note" id="gxNote"></div>
+  <div class="gx-fount"><button id="gxFount" aria-pressed="false"></button></div>
   <div class="gx-msg" id="gxMsg"></div>
   <div style="text-align:center;margin-top:16px"><button class="actbtn prim" id="gxDl"></button></div>
 </div></div>
@@ -416,7 +422,7 @@ var L={
   wxAdvRain:"Risque de pluie ({p}%) : prudence en descente, pense au coupe-vent imperméable.",
   foot:"<b>Barrières horaires.</b> 4 points de coupure (rouge = en retard sur l'estimation, vert = dans les temps, selon l'heure de départ). Temps limite total : <b>11h45</b> pour rejoindre l'arrivée.<br><br><b>Comment lire.</b> Les watts sont les cibles <b>en montée</b>. Le <b style='color:var(--gold)'>passage</b> (or) est l'heure estimée au sommet de chaque col. Lignes grises = descentes/vallées, avec les ravitos (bleu). Après le Sarenne, c'est une descente jusqu'à l'Alpe d'Huez (Rif Nel 700 m à 7,5 %).<br><br><b>Le temps est une estimation</b> (modèle physique, vélo ~8 kg). +20 à 40 min d'arrêts ravitos non inclus. Pace à la puissance et au ressenti, jamais à la FC quand il fait chaud.<br><br><b>Horaires SAS.</b> Officiels (roadbook) : départs échelonnés toutes les 7 min 30, du SAS 0 (6h30) au SAS 16 (8h30). Se placer dans le SAS avant sa fermeture.",
   mTitle:"Générateur de sticker",mClose:"✕",mDl:"📄 Télécharger le sticker (PDF)",soP:"Portrait · top tube",soL:"Paysage · cintre",stSOS:"SOS +33 9 72 45 60 01",mSizeW:"Largeur (mm)",mSizeH:"Hauteur (mm)",stNut1:"≈ {g}/h barres · {b}/h bidons",stNut2:"{gph} g/h · {water} L eau/h · sel",stNoteP:"Imprimer à 100 % · découper, plastifier, coller sur le top tube.",stNoteL:"Imprimer à 100 % · découper, plastifier, coller sur la potence / le cintre.",
-  gpxBtn:"🗺️ Export GPS",gxTitle:"Export GPS perso",gxHint:"Trace + points utiles (ravitos, pied/sommet de col avec cible watts, dangers, barrières), selon les réglages (FTP, SAS, objectif). Choisir le compteur.",gxAutre:"Autre",gxDlGpx:"⬇ Télécharger le GPX",gxDlTcx:"⬇ Télécharger le TCX",gxLoading:"Préparation du fichier…",gxError:"Trace indisponible (fonctionne sur le site en ligne).",gxPied:"pied de col",gxRavito:"ravito",gxSummit:"sommet",gxAt:"à",gxAim:"viser",gxPass:"passage estimé",gxBarrier:"Barrière",gxBarrierShort:"Barriere",gxDanger:"Danger",gxDangerShort:"Danger",gxNote_coros:"<b>Coros</b> : ouvrir le GPX depuis l'app COROS puis enregistrer la route. Les waypoints s'affichent (page dédiée + distance au prochain).",gxNote_wahoo:"<b>Wahoo</b> : importer le GPX (app ELEMNT, ou via komoot / RideWithGPS). Waypoints affichés sur BOLT 3 / ROAM 3 / ELEMNT ACE ; sur les anciens, en liste de repères.",gxNote_garmin:"<b>Garmin</b> : fichier <b>TCX</b>. <span class='warn'>Ne pas passer par Garmin Connect</span> (il supprime les points à l'import). Brancher le compteur en USB et copier le TCX dans le dossier <b>Garmin/NewFiles</b> : les points (ravito, sommet, danger, barrière) apparaîtront pendant la navigation. Sans USB : importer le parcours dans <b>RideWithGPS</b> puis synchroniser avec Garmin (les points passent en course points).",gxNote_hammerhead:"<span class='warn'>Hammerhead Karoo</span> : le Karoo n'affiche pas les points d'un GPX chargé directement. Importer d'abord la route dans <b>RideWithGPS</b> (les points sont conservés), puis synchroniser avec le Karoo.",gxNote_autre:"GPX standard avec waypoints, compatible avec la plupart des apps/compteurs qui lisent les waypoints GPX.",
+  gpxBtn:"🗺️ Export GPS",gxTitle:"Export GPS perso",gxHint:"Trace + points utiles (ravitos, pied/sommet de col avec cible watts, dangers, barrières), selon les réglages (FTP, SAS, objectif). Choisir le compteur.",gxAutre:"Autre",gxDlGpx:"⬇ Télécharger le GPX",gxDlTcx:"⬇ Télécharger le TCX",gxLoading:"Préparation du fichier…",gxError:"Trace indisponible (fonctionne sur le site en ligne).",gxPied:"pied de col",gxRavito:"ravito",gxFount:"Fontaine",gxFountDesc:"point d'eau (non officiel)",gxFountBtn:"💧 Fontaines",gxFountInc:"💧 Ajouter les fontaines (points d'eau non officiels)",gxSummit:"sommet",gxAt:"à",gxAim:"viser",gxPass:"passage estimé",gxBarrier:"Barrière",gxBarrierShort:"Barriere",gxDanger:"Danger",gxDangerShort:"Danger",gxNote_coros:"<b>Coros</b> : ouvrir le GPX depuis l'app COROS puis enregistrer la route. Les waypoints s'affichent (page dédiée + distance au prochain).",gxNote_wahoo:"<b>Wahoo</b> : importer le GPX (app ELEMNT, ou via komoot / RideWithGPS). Waypoints affichés sur BOLT 3 / ROAM 3 / ELEMNT ACE ; sur les anciens, en liste de repères.",gxNote_garmin:"<b>Garmin</b> : fichier <b>TCX</b>. <span class='warn'>Ne pas passer par Garmin Connect</span> (il supprime les points à l'import). Brancher le compteur en USB et copier le TCX dans le dossier <b>Garmin/NewFiles</b> : les points (ravito, sommet, danger, barrière) apparaîtront pendant la navigation. Sans USB : importer le parcours dans <b>RideWithGPS</b> puis synchroniser avec Garmin (les points passent en course points).",gxNote_hammerhead:"<span class='warn'>Hammerhead Karoo</span> : le Karoo n'affiche pas les points d'un GPX chargé directement. Importer d'abord la route dans <b>RideWithGPS</b> (les points sont conservés), puis synchroniser avec le Karoo.",gxNote_autre:"GPX standard avec waypoints, compatible avec la plupart des apps/compteurs qui lisent les waypoints GPX.",
   mHint:"Basé sur les réglages (FTP, objectif, nutrition). Choisir l'orientation et la taille. PDF vectoriel à imprimer à 100 %, à découper et plastifier.",
   stValley:"Vallee",stWarm:"echauffe",stDesc:"desc",stDrink:"boire",stMantra1:"Croix Fer & Galibier : se retenir.",stMantra2:"Pace watts pas FC · 60-80g+sel/h",
   stNote:"Largeur 35 mm · imprimer à 100% (taille réelle) · découper, plastifier, coller sur le top-tube.",
@@ -461,7 +467,7 @@ var L={
   wxAdvRain:"Rain risk ({p}%): careful on descents, bring a waterproof.",
   foot:"<b>Time cut-offs.</b> 4 checkpoints (red = behind the estimate, green = within time, based on your start time). Overall time limit: <b>11h45</b> to reach the finish.<br><br><b>How to read.</b> Watts are your targets <b>on climbs</b>. The <b style='color:var(--gold)'>pass time</b> (gold) is the estimated clock time at each summit. Grey lines = descents/valleys, with aid stations (blue). After Sarenne it's a descent to Alpe d'Huez (Rif Nel 700 m at 7.5%).<br><br><b>Times are estimates</b> (physics model, ~8 kg bike). +20 to 40 min of aid-station stops not included. Pace by power and feel, never by heart rate in the heat.<br><br><b>Wave times.</b> Official (roadbook): starts every 7 min 30 s, from wave 0 (6:30) to wave 16 (8:30). Be in your wave before it closes.",
   mTitle:"Sticker generator",mClose:"✕",mDl:"📄 Download sticker (PDF)",soP:"Portrait · top tube",soL:"Landscape · bar",stSOS:"SOS +33 9 72 45 60 01",mSizeW:"Width (mm)",mSizeH:"Height (mm)",stNut1:"≈ {g}/h bars · {b}/h bottles",stNut2:"{gph} g/h · {water} L water/h · salt",stNoteP:"Print at 100% · cut, laminate, stick on the top-tube.",stNoteL:"Print at 100% · cut, laminate, stick on the stem / bar.",
-  gpxBtn:"🗺️ GPS export",gxTitle:"Custom GPS export",gxHint:"Route + useful points (aid stations, climb foot/summit with power target, hazards, cut-offs), based on your settings (FTP, wave, goal). Pick your head unit.",gxAutre:"Other",gxDlGpx:"⬇ Download GPX",gxDlTcx:"⬇ Download TCX",gxLoading:"Preparing file…",gxError:"Route unavailable (works on the live site).",gxPied:"climb foot",gxRavito:"aid station",gxSummit:"summit",gxAt:"at",gxAim:"aim",gxPass:"est. pass",gxBarrier:"Cut-off",gxBarrierShort:"Cut-off",gxDanger:"Hazard",gxDangerShort:"Hazard",gxNote_coros:"<b>Coros</b>: open the GPX from the COROS app, then save the route. Waypoints show up (dedicated page + distance to next).",gxNote_wahoo:"<b>Wahoo</b>: import the GPX (ELEMNT app, or via komoot / RideWithGPS). Waypoints show on BOLT 3 / ROAM 3 / ELEMNT ACE; on older units, in the cue list.",gxNote_garmin:"<b>Garmin</b>: <b>TCX</b> file. <span class='warn'>Do not use Garmin Connect</span> (it strips course points on import). Plug the unit via USB and copy the TCX into the <b>Garmin/NewFiles</b> folder: the points (aid station, summit, hazard, cut-off) show up during navigation. No USB: import the route into <b>RideWithGPS</b>, then sync to Garmin (points carry over as course points).",gxNote_hammerhead:"<span class='warn'>Hammerhead Karoo</span>: the Karoo does not show points from a directly-loaded GPX. First import the route into <b>RideWithGPS</b> (points are kept), then sync to the Karoo.",gxNote_autre:"Standard GPX with waypoints, works with most apps/units that read GPX waypoints.",
+  gpxBtn:"🗺️ GPS export",gxTitle:"Custom GPS export",gxHint:"Route + useful points (aid stations, climb foot/summit with power target, hazards, cut-offs), based on your settings (FTP, wave, goal). Pick your head unit.",gxAutre:"Other",gxDlGpx:"⬇ Download GPX",gxDlTcx:"⬇ Download TCX",gxLoading:"Preparing file…",gxError:"Route unavailable (works on the live site).",gxPied:"climb foot",gxRavito:"aid station",gxFount:"Fountain",gxFountDesc:"water point (unofficial)",gxFountBtn:"💧 Fountains",gxFountInc:"💧 Add fountains (unofficial water points)",gxSummit:"summit",gxAt:"at",gxAim:"aim",gxPass:"est. pass",gxBarrier:"Cut-off",gxBarrierShort:"Cut-off",gxDanger:"Hazard",gxDangerShort:"Hazard",gxNote_coros:"<b>Coros</b>: open the GPX from the COROS app, then save the route. Waypoints show up (dedicated page + distance to next).",gxNote_wahoo:"<b>Wahoo</b>: import the GPX (ELEMNT app, or via komoot / RideWithGPS). Waypoints show on BOLT 3 / ROAM 3 / ELEMNT ACE; on older units, in the cue list.",gxNote_garmin:"<b>Garmin</b>: <b>TCX</b> file. <span class='warn'>Do not use Garmin Connect</span> (it strips course points on import). Plug the unit via USB and copy the TCX into the <b>Garmin/NewFiles</b> folder: the points (aid station, summit, hazard, cut-off) show up during navigation. No USB: import the route into <b>RideWithGPS</b>, then sync to Garmin (points carry over as course points).",gxNote_hammerhead:"<span class='warn'>Hammerhead Karoo</span>: the Karoo does not show points from a directly-loaded GPX. First import the route into <b>RideWithGPS</b> (points are kept), then sync to the Karoo.",gxNote_autre:"Standard GPX with waypoints, works with most apps/units that read GPX waypoints.",
   mHint:"Based on your settings (FTP, goal, nutrition). Pick orientation and size. Vector PDF to print at 100%, then cut and laminate.",
   stValley:"Valley",stWarm:"warm up",stDesc:"desc",stDrink:"drink",stMantra1:"Croix de Fer & Galibier: hold back.",stMantra2:"Pace by power not HR · 60-80g+salt/h",
   stNote:"35 mm wide · print at 100% (actual size) · cut, laminate, stick on the top-tube.",
@@ -894,6 +900,7 @@ function applyLang(){
   setText('pdfBtn','btnPdf');setText('stickerBtn','btnSticker');setText('stickerPdfBtn','mDl');
   setText('mTitle','mTitle');setText('mClose','mClose');setText('mHint','mHint');setText('soP','soP');setText('soL','soL');stSyncControls();
   setText('gpxBtn','gpxBtn');setText('gxTitle','gxTitle');setText('gxAutre','gxAutre');setText('gxClose','mClose');document.getElementById('gxHint').textContent=t('gxHint');gxSync();
+  setText('profFount','gxFountBtn');document.getElementById('gxFount').textContent=t('gxFountInc');document.getElementById('profFount').setAttribute('aria-pressed',showFountains);document.getElementById('gxFount').setAttribute('aria-pressed',showFountains);
   document.getElementById('sodium').innerHTML=t('sodium');
   document.getElementById('foot').innerHTML=t('foot');
   document.getElementById('route').innerHTML="<b>Le Bourg-d'Oisans</b> → <b>Alpe d'Huez</b> · 170 km · 5 400 m D+ · "+t('cols')+" · "+t('date');
@@ -940,6 +947,7 @@ function buildWpts(){
     if(s.warn){var wk=s.type==='climb'?s.from+0.2:s.to-0.8;out.push({km:wk,sym:'Danger Area',pt:'Danger',lab:t('gxDangerShort'),name:t('gxDanger')+' - '+s.warn[lang],desc:NM(s.name)});}
     if(s.barrier)out.push({km:s.barrier.km,sym:'Flag, Blue',pt:'Generic',lab:t('gxBarrierShort'),name:t('gxBarrier')+' '+NM(s.barrier.label)+' '+s.barrier.time,desc:'km '+s.barrier.km});
   });
+  if(showFountains)FOUNTAINS.forEach(function(fk){out.push({km:fk,sym:'Water Source',pt:'Water',name:t('gxFount')+' - km '+Math.round(fk),desc:t('gxFountDesc')});});
   out.sort(function(a,b){return a.km-b.km;});return out;}
 function buildGPX(w){
   var W=w.map(function(p){var ll=llAtKm(p.km);return '  <wpt lat="'+ll.lat.toFixed(6)+'" lon="'+ll.lon.toFixed(6)+'">\n    <ele>'+ll.ele.toFixed(1)+'</ele>\n    <name>'+xesc(p.name)+'</name>\n    <desc>'+xesc(p.desc)+'</desc>\n    <sym>'+p.sym+'</sym>\n  </wpt>';}).join('\n');
@@ -984,6 +992,9 @@ document.getElementById('stSize').addEventListener('input',function(){var mn=stO
 document.getElementById('mClose').addEventListener('click',function(){document.getElementById('stickerModal').classList.remove('open');});
 document.getElementById('gpxBtn').addEventListener('click',function(){document.getElementById('gxMsg').textContent='';gxSync();document.getElementById('gpxModal').classList.add('open');fetchTrack().catch(function(){document.getElementById('gxMsg').textContent=t('gxError');});});
 document.getElementById('gxClose').addEventListener('click',function(){document.getElementById('gpxModal').classList.remove('open');});
+function setFountains(v){showFountains=v;var a=document.getElementById('profFount'),b=document.getElementById('gxFount');if(a)a.setAttribute('aria-pressed',v);if(b)b.setAttribute('aria-pressed',v);buildProfile();}
+document.getElementById('profFount').addEventListener('click',function(){setFountains(!showFountains);});
+document.getElementById('gxFount').addEventListener('click',function(){setFountains(!showFountains);});
 document.querySelectorAll('#gxDev button').forEach(function(b){b.addEventListener('click',function(){gxDev=b.dataset.dev;gxSync();});});
 document.getElementById('gxDl').addEventListener('click',function(){var done=busy(this,t('gxLoading'));generateExport().then(done,done);});
 document.addEventListener('click',function(e){var tt=(e.target.closest&&e.target.closest('#stickerPdfBtn'));if(!tt)return;var done=busy(tt,t('busy'));try{generateStickerPDF();}catch(err){alert('PDF error: '+err.message);}setTimeout(done,600);});
@@ -1003,6 +1014,7 @@ function gradAtKm(km){var s=profSeg(km),a=s[0],b=s[1];return (b[1]-a[1])/((b[0]-
 function profX(km){return km/PTOTAL*1000;}
 function profY(alt){var t=32,b=300,d=(PALT.max-PALT.min)||1;return t+(PALT.max-alt)/d*(b-t);}
 function localMaxKm(km,win){var best=km,ba=-1e9;for(var i=0;i<PROFILE.length;i++){var p=PROFILE[i];if(Math.abs(p[0]-km)<=win&&p[1]>ba){ba=p[1];best=p[0];}}return best;}
+var FOUNTAINS=[20.8,46.1,80.9,83.6,86.0,98.6,100.8,107.9,116.4,153.5,161.9],showFountains=false;
 function buildProfile(){var svg=document.getElementById('profSvg');if(!svg)return;
   var mn=1e9,mx=-1e9,i;for(i=0;i<PROFILE.length;i++){if(PROFILE[i][1]<mn)mn=PROFILE[i][1];if(PROFILE[i][1]>mx)mx=PROFILE[i][1];}PALT.min=mn;PALT.max=mx;
   var line='';for(i=0;i<PROFILE.length;i++){line+=(i?' L':'M')+profX(PROFILE[i][0]).toFixed(1)+','+profY(PROFILE[i][1]).toFixed(1);}
@@ -1018,7 +1030,8 @@ function buildProfile(){var svg=document.getElementById('profSvg');if(!svg)retur
       '<text x="'+x.toFixed(1)+'" y="'+(y-22).toFixed(1)+'" fill="'+col+'" font-size="10.5" text-anchor="middle" font-family="JetBrains Mono">'+c.alt+' m</text>';});
   cols+='</g>';
   var rav='<g>';for(i=0;i<SEG.length;i++){(SEG[i].ravitos||[]).forEach(function(r){var x=profX(r.km),y=profY(altAtKm(r.km));var ta=x>950?'end':(x<50?'start':'middle'),tx=x>950?998:(x<50?2:x);rav+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="3" fill="#74bccd" stroke="#0c1620" stroke-width="1"/><text x="'+tx.toFixed(1)+'" y="'+(y+13).toFixed(1)+'" fill="#74bccd" font-size="9.5" font-weight="700" text-anchor="'+ta+'" font-family="JetBrains Mono">'+r.k+'</text>';});}rav+='</g>';
-  svg.innerHTML=defs+grid+fill+stroke+cols+rav;}
+  var fount=showFountains?('<g fill="#3ad6a2" stroke="#0c1620" stroke-width="0.8">'+FOUNTAINS.map(function(fk){var x=profX(fk),y=profY(altAtKm(fk));return '<path d="M'+x.toFixed(1)+','+(y-3.2).toFixed(1)+' L'+(x+3.2).toFixed(1)+','+y.toFixed(1)+' L'+x.toFixed(1)+','+(y+3.2).toFixed(1)+' L'+(x-3.2).toFixed(1)+','+y.toFixed(1)+' Z"/>';}).join('')+'</g>'):'';
+  svg.innerHTML=defs+grid+fill+stroke+fount+cols+rav;}
 function segNameAtKm(km){for(var i=0;i<SEG.length;i++){if(km<=SEG[i].to+1e-6)return NM(SEG[i].name);}return NM(SEG[SEG.length-1].name);}
 function initProfile(){
   var plot=document.getElementById('profPlot');if(!plot)return;
